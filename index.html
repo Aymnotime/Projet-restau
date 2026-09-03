@@ -1,97 +1,99 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>coder-app-name</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Le Monde du Goût — Sandwichs inspirés du monde à Saint-Denis (93)</title>
+    <meta
+      name="description"
+      content="Le Monde du Goût, street-food à Saint-Denis : sandwichs inspirés des cuisines du monde, viandes et sauces maison, frites maison. Livraison et retrait sur place. Ouvert 7j/7 de 11h30 à 5h00."
     />
-    <style>
-      /* 内联样式确保主题色立即生效，避免闪烁 */
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-      }
-      html.light,
-      html.light body {
-        background-color: #ffffff !important;
-        color: #000000;
-      }
-      html.dark,
-      html.dark body {
-        background-color: #1a1a1a !important;
-        color: #ffffff;
-      }
-    </style>
-    <script>
-      // 在 React 加载前立即设置主题，避免闪烁
-      (function () {
-        const isInIframe = window.self !== window.top;
+    <meta
+      name="keywords"
+      content="Le Monde du Goût, restaurant Saint-Denis, sandwich Saint-Denis, sandwich halal Saint-Denis, street food Saint-Denis, restaurant halal Saint-Denis, sandwich maison Saint-Denis, livraison sandwich Saint-Denis"
+    />
+    <link rel="canonical" href="https://www.lemondedugout.fr/" />
 
-        function applyThemeToDOM(theme) {
-          document.documentElement.classList.remove("light", "dark");
-          document.documentElement.classList.add(theme);
-          document.documentElement.setAttribute("data-theme", theme);
-        }
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Le Monde du Goût" />
+    <meta property="og:title" content="Le Monde du Goût — Sandwichs inspirés du monde à Saint-Denis" />
+    <meta
+      property="og:description"
+      content="Des sandwichs inspirés des cuisines du monde, préparés avec passion à Saint-Denis. Fait maison. Livraison & retrait sur place."
+    />
+    <meta property="og:url" content="https://www.lemondedugout.fr/" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta
+      property="og:image"
+      content="https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png"
+    />
 
-        if (isInIframe) {
-          // 监听父窗口主动推送的主题消息
-          window.addEventListener("message", function (event) {
-            if (event.data && typeof event.data.theme === "string") {
-              const theme = event.data.theme;
-              if (theme === "light" || theme === "dark") {
-                applyThemeToDOM(theme);
-              }
-            }
-          });
-        } else {
-          // 非 iframe 环境，使用默认 light 主题
-          applyThemeToDOM("light");
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Le Monde du Goût — Sandwichs inspirés du monde à Saint-Denis" />
+    <meta
+      name="twitter:description"
+      content="Le goût comme guide. Le monde comme destination. Street-food premium à Saint-Denis (93)."
+    />
+    <meta
+      name="twitter:image"
+      content="https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png"
+    />
+
+    <meta name="theme-color" content="#111111" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111111'/%3E%3Ccircle cx='32' cy='32' r='17' fill='none' stroke='%23E85D04' stroke-width='3'/%3E%3Cpath d='M15 32h34M32 15c-6 5-6 29 0 34M32 15c6 5 6 29 0 34' fill='none' stroke='%23E85D04' stroke-width='2'/%3E%3C/svg%3E"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": ["Restaurant", "FoodEstablishment"],
+        "@id": "https://www.lemondedugout.fr/#restaurant",
+        "name": "Le Monde du Goût",
+        "slogan": "Le goût comme guide. Le monde comme destination.",
+        "image": "https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png",
+        "telephone": "+33987417873",
+        "email": "contact@lemondedugout.fr",
+        "priceRange": "€ - €€",
+        "servesCuisine": ["Street food", "Sandwichs", "Cuisine du monde"],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "45 Rue de la Boulangerie",
+          "postalCode": "93200",
+          "addressLocality": "Saint-Denis",
+          "addressCountry": "FR"
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "11:30",
+          "closes": "05:00"
+        },
+        "hasMenu": {
+          "@type": "Menu",
+          "name": "Carte Le Monde du Goût",
+          "hasMenuSection": [
+            { "@type": "MenuSection", "name": "Sandwichs", "numberOfItems": 19 },
+            { "@type": "MenuSection", "name": "Boissons", "numberOfItems": 11 },
+            { "@type": "MenuSection", "name": "Desserts", "numberOfItems": 2 }
+          ]
         }
-      })();
-    </script>
-      <script>
-      (function () {
-        if (window.self === window.top) return;
-        var reported = {};
-        window.addEventListener("error", function (event) {
-          // 资源加载失败的 error 事件没有 message，此处仅上报 JS 运行时错误
-          if (!event || !event.message) return;
-          var key =
-            event.message + "|" + (event.filename || "") + "|" + (event.lineno || 0);
-          if (reported[key]) return; // 相同错误只上报一次，避免渲染循环刷屏
-          reported[key] = true;
-          try {
-            window.parent.postMessage(
-              {
-                type: "sandbox-runtime-error",
-                payload: {
-                  message: String(event.message).slice(0, 500),
-                  filename: event.filename || "",
-                  lineno: event.lineno || 0,
-                  colno: event.colno || 0,
-                  stack:
-                    event.error && event.error.stack
-                      ? String(event.error.stack).slice(0, 2000)
-                      : ""
-                }
-              },
-              "*"
-            );
-          } catch (e) {
-            /* 上报失败不影响页面运行 */
-          }
-        });
-      })();
+      }
     </script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
