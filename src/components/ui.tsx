@@ -106,7 +106,7 @@ export function Marquee({ items, className = "" }: { items: string[]; className?
     <div aria-hidden={hidden || undefined} className="flex shrink-0 items-center">
       {items.map((t, i) => (
         <span key={i} className="flex items-center">
-          <span className="whitespace-nowrap px-6 font-display text-2xl tracking-[0.08em] text-cream/85 sm:text-3xl">
+          <span className="whitespace-nowrap px-6 font-display text-2xl tracking-[0.08em] text-white/90 sm:text-3xl">
             {t}
           </span>
           <span className="inline-block h-2 w-2 rotate-45 bg-ember" />
@@ -115,7 +115,7 @@ export function Marquee({ items, className = "" }: { items: string[]; className?
     </div>
   );
   return (
-    <div className={`overflow-hidden border-y border-graphite bg-soot py-4 ${className}`} aria-label={items.join(", ")}>
+    <div className={`overflow-hidden border-y border-border bg-soot py-4 ${className}`} aria-label={items.join(", ")}>
       <div className="flex w-max animate-marquee motion-reduce:animate-none">
         {row(false)}
         {row(true)}
@@ -129,7 +129,7 @@ export function Kicker({ children, tone = "ember" }: { children: ReactNode; tone
   return (
     <p
       className={`flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.32em] ${
-        tone === "ember" ? "text-ember" : "text-sand"
+        tone === "ember" ? "text-ember" : "text-text-muted"
       }`}
     >
       <span className="inline-block h-[2px] w-8 bg-current" />
@@ -160,20 +160,20 @@ export function ProductImage({
 
   if (!product.image || failed) {
     return (
-      <div className={`dot-grid relative overflow-hidden bg-graphite/70 ${className}`} role="img" aria-label={`${product.name} — visuel à venir`}>
+      <div className={`dot-grid relative overflow-hidden bg-sand ${className}`} role="img" aria-label={`${product.name} — visuel à venir`}>
         <span className="absolute left-3 top-3 h-3 w-3 border-l-2 border-t-2 border-ember/70" />
         <span className="absolute right-3 bottom-3 h-3 w-3 border-r-2 border-b-2 border-ember/70" />
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
-          <span className="font-display text-6xl leading-none tracking-wide text-cream/12">{initials}</span>
-          <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-sand/60">
-            <LogoMark className="h-4 w-4 text-sand/50" /> Visuel non fourni
+          <span className="font-display text-6xl leading-none tracking-wide text-text-dark/10">{initials}</span>
+          <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-text-muted">
+            <LogoMark className="h-4 w-4 text-text-muted/50" /> Visuel non fourni
           </span>
         </div>
       </div>
     );
   }
   return (
-    <div className={`relative overflow-hidden bg-graphite ${className}`}>
+    <div className={`relative overflow-hidden bg-sand ${className}`}>
       <img
         src={product.image}
         alt={`${product.name} — sandwich ${product.category === "sandwichs" ? "du Monde du Goût" : ""}`.trim()}
@@ -205,19 +205,19 @@ export function OrderButton({
     lg: "px-8 py-4 text-base",
   }[size];
   const variants = {
-    solid: "bg-ember text-coal hover:bg-ember-dark border border-ember hover:border-ember-dark",
-    outline: "border border-sand/40 text-cream hover:border-ember hover:text-ember",
-    onOrange: "bg-coal text-cream hover:bg-graphite border border-coal",
-    ghost: "text-ember hover:text-cream",
+    solid: "bg-ember text-white hover:bg-ember-dark border-2 border-ember hover:border-ember-dark",
+    outline: "border-2 border-text-dark text-text-dark hover:bg-text-dark hover:text-white",
+    onOrange: "bg-coal text-white hover:bg-graphite border-2 border-coal",
+    ghost: "text-ember hover:text-ember-dark",
   }[variant];
   return (
     <button
       onClick={openOrder}
-      className={`group inline-flex items-center justify-center gap-3 font-display tracking-[0.14em] transition-all duration-300 active:scale-[0.97] ${sizes} ${variants} ${className}`}
+      className={`group inline-flex items-center justify-center gap-3 font-display font-bold tracking-[0.08em] uppercase transition-all duration-200 active:scale-[0.98] ${sizes} ${variants} ${className}`}
     >
       {children}
       {variant !== "ghost" && (
-        <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        <IconArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
       )}
     </button>
   );
@@ -235,10 +235,10 @@ export function LinkArrow({
   return (
     <Link
       to={to}
-      className={`group inline-flex items-center gap-3 border border-sand/40 px-6 py-3 font-display text-sm tracking-[0.14em] text-cream transition-all duration-300 hover:border-ember hover:text-ember active:scale-[0.97] ${className}`}
+      className={`group inline-flex items-center gap-3 border-2 border-text-dark px-6 py-3 font-display font-bold tracking-[0.08em] uppercase text-text-dark transition-all duration-200 hover:bg-text-dark hover:text-white active:scale-[0.98] ${className}`}
     >
       {children}
-      <IconArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+      <IconArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
     </Link>
   );
 }
@@ -288,12 +288,12 @@ export function SectionMark({
     <Reveal className={className}>
       <div className="flex items-center gap-4">
         <span className="font-display text-lg tracking-[0.2em] text-ember">( {n} )</span>
-        <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.32em] text-sand">
+        <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.32em] text-text-muted">
           {label}
         </span>
         <span className="hairline min-w-8 flex-1" aria-hidden />
         {right && (
-          <span className="hidden text-[10px] font-bold uppercase tracking-[0.26em] text-muted md:block">
+          <span className="hidden text-[10px] font-bold uppercase tracking-[0.26em] text-text-muted md:block">
             {right}
           </span>
         )}
@@ -306,7 +306,7 @@ export function SectionMark({
 export function PriceLine({ name, price, className = "" }: { name: ReactNode; price: number; className?: string }) {
   return (
     <div className={`flex items-baseline gap-3 ${className}`}>
-      <span className="font-display text-2xl tracking-wide text-cream">{name}</span>
+      <span className="font-display text-2xl tracking-wide text-text-dark">{name}</span>
       <span className="leader" />
       <span className="font-display text-2xl tracking-wide text-ember">{formatPrice(price)}</span>
     </div>

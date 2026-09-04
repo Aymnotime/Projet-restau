@@ -1,5 +1,183 @@
+```gitignore
+# Dependencies
 node_modules/
-.next/
+
+# Build outputs
 dist/
 build/
+*.js.map
+*.css.map
+
+# Environment variables
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
 *.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.ENV
+.python-version
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+*.coveragerc
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+.nyc_output/
+coverage-final.json
+
+# Distribution / packaging
+.Python
+*.so
+*.egg-info/
+.eggs/
+
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+node_modules/
+jspm_packages/
+
+# Bower
+bower_components/
+
+# Grunt
+.grunt
+
+# Gulp
+.gulp
+gulp-build/
+
+# Webpack
+webpack-stats.json
+*.bundle.js
+*.chunk.js
+
+# Browser-sync
+.browser-sync*
+
+# Jekyll
+_site/
+
+# Ruby/Rails
+*.gem
+*.rbc
+.bundle/
+.jruby-graalvm-native-image/
+config.ru
+db/*.sqlite3
+db/*.sqlite3-journal
+public/system/
+vendor/bundle/
+Gemfile.lock
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.prof
+go.mod
+go.sum
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+# Gradle
+.gradle/
+build/
+
+# C/C++
+*.o
+*.a
+*.obj
+*.lib
+*.ilk
+*.pdb
+*.gch
+*.gtest
+*.cache
+*.stackdump
+*.idb
+*.aps
+*.ncb
+*.opt
+*.plg
+*.mdb
+*.core
+*.stackdump
+*.map
+
+# Rust
+target/
+Cargo.lock
+
+# Zig
+zig-cache/
+zig-out/
+
+# Julia
+julia-*/
+
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+```

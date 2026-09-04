@@ -44,7 +44,7 @@ export default function Navbar() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "border-b border-graphite bg-coal/85 backdrop-blur-md"
+            ? "border-b border-border bg-cream/95 backdrop-blur-md"
             : "bg-gradient-to-b from-coal/80 via-coal/30 to-transparent"
         }`}
       >
@@ -53,7 +53,7 @@ export default function Navbar() {
             scrolled ? "h-16" : "h-20 lg:h-24"
           }`}
         >
-          <Link to="/" aria-label="Le Monde du Goût — accueil" className="text-cream transition-opacity hover:opacity-80">
+          <Link to="/" aria-label="Le Monde du Goût — accueil" className={`${scrolled ? "text-text-dark" : "text-cream"} transition-opacity hover:opacity-80`}>
             <span className="sm:hidden">
               <LogoMark className={scrolled ? "h-9 w-9" : "h-11 w-11"} />
             </span>
@@ -69,7 +69,7 @@ export default function Navbar() {
                 to={item.to}
                 className={({ isActive }) =>
                   `group relative font-display text-sm tracking-[0.22em] transition-colors ${
-                    isActive ? "text-ember" : "text-sand hover:text-cream"
+                    isActive ? "text-ember" : scrolled ? "text-text-body hover:text-text-dark" : "text-sand hover:text-cream"
                   }`
                 }
               >
@@ -93,7 +93,7 @@ export default function Navbar() {
               onClick={() => setOpen(true)}
               aria-label="Ouvrir le menu"
               aria-expanded={open}
-              className="p-2 text-cream transition-colors hover:text-ember lg:hidden"
+              className={`p-2 transition-colors hover:text-ember lg:hidden ${scrolled ? "text-text-dark" : "text-cream"}`}
             >
               <IconMenu className="h-7 w-7" />
             </button>
