@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { geoGraticule10, geoOrthographic, geoPath } from "d3-geo";
+import { geoDistance, geoGraticule10, geoOrthographic, geoPath } from "d3-geo";
 import { countriesFromTopo, loadWorldTopo } from "../lib/geo";
 import { DESTINATIONS, getProduct } from "../data/products";
 
@@ -79,7 +79,7 @@ export default function MobileGlobe() {
         onPointerMove={handlePointerMove}
         onPointerUp={stopDragging}
         onPointerCancel={stopDragging}
-        onPointerLeave={stopDragging}
+        onLostPointerCapture={stopDragging}
       >
         <defs>
           <radialGradient id="globe-fill" cx="34%" cy="28%">
@@ -116,6 +116,8 @@ export default function MobileGlobe() {
         </g>
         <g aria-label="Destinations culinaires">
           {DESTINATIONS.map((destination) => {
+            const center = projection.invert?.([WIDTH / 2, HEIGHT / 2]);
+            if (!center || geoDistance([destination.lon, destination.lat], center) > Math.PI / 2) return null;
             const point = projection([destination.lon, destination.lat]);
             if (!point) return null;
             const [x, y] = point;
