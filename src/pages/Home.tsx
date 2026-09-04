@@ -13,6 +13,7 @@ import {
 import atelierVideo from "../../video-promo/Alors  Team bœuf ou team poulet  🍗🥩📍 Saint-Denis45 Rue de la Boulangerie, 93200 Saint-Denis📞.mp4";
 
 const WorldMap = lazy(() => import("../components/WorldMap"));
+const MobileGlobe = lazy(() => import("../components/MobileGlobe"));
 
 /* Carte montée immédiatement (chunk dédié, code-splitting conservé).
    Aucun gating IntersectionObserver : le rendu est déterministe. */
@@ -20,16 +21,9 @@ function MapGate() {
   return (
     <>
       <div className="md:hidden">
-        <div className="mobile-globe-wrap" role="img" aria-label="Globe animé des inspirations culinaires du Monde du Goût">
-          <div className="mobile-globe">
-            <div className="mobile-globe-surface" />
-            <span className="mobile-globe-pin mobile-globe-pin--fr">FR</span>
-            <span className="mobile-globe-pin mobile-globe-pin--dz">DZ</span>
-          </div>
-          <p className="mt-6 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
-            09 escales · un monde de saveurs
-          </p>
-        </div>
+        <Suspense fallback={<div className="mobile-globe-real" aria-hidden="true" />}>
+          <MobileGlobe />
+        </Suspense>
       </div>
       <div className="hidden md:block">
         <Suspense

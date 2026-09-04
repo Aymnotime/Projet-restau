@@ -152,54 +152,32 @@ body {
     inset 0 1px color-mix(in srgb, var(--color-cream) 5%, transparent);
 }
 
-.mobile-globe-wrap {
+.mobile-globe-real {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 0 1rem;
+  padding: 1rem 0;
 }
 
-.mobile-globe {
-  position: relative;
-  width: min(68vw, 270px);
-  aspect-ratio: 1;
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--color-ember) 70%, transparent);
-  border-radius: 50%;
-  background: radial-gradient(circle at 34% 28%, #454545 0, #202020 34%, #080808 72%);
-  box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-ember) 8%, transparent),
-    0 0 60px color-mix(in srgb, var(--color-ember) 22%, transparent),
-    inset -22px -14px 34px #000, inset 14px 12px 24px color-mix(in srgb, var(--color-cream) 13%, transparent);
+.mobile-globe-real svg {
+  display: block;
+  width: min(88vw, 360px);
+  touch-action: none;
+  cursor: grab;
 }
 
-.mobile-globe-surface {
-  position: absolute;
-  inset: -8% -35%;
-  background-image: repeating-radial-gradient(ellipse at 50% 50%, transparent 0 25px, color-mix(in srgb, var(--color-cream) 28%, transparent) 26px 27px),
-    repeating-linear-gradient(90deg, transparent 0 42px, color-mix(in srgb, var(--color-cream) 22%, transparent) 43px 44px);
-  opacity: 0.5;
-  animation: globe-spin 9s linear infinite alternate;
+.mobile-globe-real.is-dragging svg {
+  cursor: grabbing;
 }
 
-.mobile-globe-pin {
-  position: absolute;
-  z-index: 1;
-  display: grid;
-  width: 2.4rem;
-  height: 2.4rem;
-  place-items: center;
-  border: 1px solid var(--color-ember);
-  border-radius: 50%;
-  background: var(--color-coal);
-  color: var(--color-cream);
-  font-size: 0.6rem;
+.mobile-globe-real__hint {
+  margin-top: 0.25rem;
+  color: var(--color-muted);
+  font-size: 0.625rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
-  box-shadow: 0 0 18px color-mix(in srgb, var(--color-ember) 50%, transparent);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
 }
-
-.mobile-globe-pin--fr { top: 31%; right: 24%; }
-.mobile-globe-pin--dz { top: 52%; left: 25%; }
 
 /* Film grain — signature texture */
 .grain::after {
