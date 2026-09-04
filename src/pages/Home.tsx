@@ -2,7 +2,7 @@ import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
-import { RESTAURANT, SITE_URL } from "../data/site";
+import { IMAGES, RESTAURANT, SITE_URL } from "../data/site";
 import {
   Counter, Kicker, MaskLines, OrderButton, ProductImage, Reveal,
   SectionMark, usePageMeta, WordsReveal,
@@ -10,6 +10,7 @@ import {
 import {
   IconArrowRight, IconBag, IconFlame, IconGlobe, IconPlane, IconScooter,
 } from "../components/Icons";
+import atelierVideo from "../../video-promo/Alors  Team bœuf ou team poulet  🍗🥩📍 Saint-Denis45 Rue de la Boulangerie, 93200 Saint-Denis📞.mp4";
 
 const WorldMap = lazy(() => import("../components/WorldMap"));
 
@@ -66,7 +67,7 @@ function Hero() {
       <motion.div className="absolute inset-0" style={reduce ? undefined : { y }}>
         <div className="animate-kenburns motion-reduce:animate-none absolute inset-0">
           <img
-            src="https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png"
+            src={IMAGES.hero}
             alt="Sandwich généreux du Monde du Goût, fromage fondant, lumières urbaines en arrière-plan"
             className="h-full w-full object-cover"
             fetchPriority="high"
@@ -352,13 +353,17 @@ function FaitMaison() {
             <Reveal>
               <figure className="relative overflow-hidden border border-graphite">
                 <div className="animate-kenburns motion-reduce:animate-none">
-                  <img
-                    src="https://image.qwenlm.ai/generated-images/8c677b09-9811-446a-b55e-54c8c7f0f86c/_result.png"
-                    alt="L'atelier du Monde du Goût : viandes maison, sauces et frites en préparation"
-                    className="aspect-[4/5] w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                    <video
+                      src={atelierVideo}
+                      poster={IMAGES.atelier}
+                      aria-label="L'atelier du Monde du Goût : équipe bœuf ou poulet à Saint-Denis"
+                      className="aspect-[4/5] w-full object-cover"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      controls
+                    />
                 </div>
                 <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-coal via-coal/70 to-transparent px-5 pb-4 pt-14 text-[10px] font-bold uppercase tracking-[0.26em] text-sand/80">
                   <span>L'atelier — fait maison</span>

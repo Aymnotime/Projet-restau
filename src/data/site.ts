@@ -1,3 +1,23 @@
+import dzImage from "../../image-sandwich/le-dz.jpeg";
+import camaroImage from "../../image-sandwich/le-camaro.jpeg";
+import zyentImage from "../../image-sandwich/le-bollywood.jpeg";
+import latinosImage from "../../image-sandwich/le-latinos.jpeg";
+import ricainImage from "../../image-sandwich/le-ricain.jpeg";
+import suissardImage from "../../image-sandwich/LE-SUISSARD.jpeg";
+import panameImage from "../../image-sandwich/LE-PANAME.jpeg";
+import indienImage from "../../image-sandwich/L'INDIEN.jpeg";
+import chinaTownImage from "../../image-sandwich/chinatown.jpeg";
+import vikingImage from "../../image-sandwich/le-viking.jpeg";
+import orientalImage from "../../image-sandwich/L'ORIENTAL.jpeg";
+import mgImage from "../../image-sandwich/le-mg.jpeg";
+import africanaImage from "../../image-sandwich/MG ROUGE.jpeg";
+import gauloisImage from "../../image-sandwich/le-normand.jpeg";
+import frenchyImage from "../../image-sandwich/LE FRENCHY.jpeg";
+import introImage from "../../image-sandwich/FRENCHYKEN.jpeg";
+import ritalImage from "../../image-sandwich/le-rital.jpeg";
+import heroImage from "../../image-sandwich/multi-image.jpeg";
+import logoImage from "../../logo/logo.png";
+
 /* ============================================================
    LE MONDE DU GOÛT — Configuration centrale du site
    Modifiez ce fichier pour mettre à jour les informations.
@@ -41,19 +61,29 @@ export const NAV = [
 ] as const;
 
 /* ============================================================
-   📷 ZONE IMAGES — Remplacez ces visuels par les photos
-   officielles du restaurant (mêmes clés, mêmes emplacements).
+  📷 ZONE IMAGES — Photos officielles du restaurant.
    ============================================================ */
 export const IMAGES = {
-  hero: "https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png",
-  intro: "https://image.qwenlm.ai/generated-images/0c613848-0805-4f58-bc5a-ecc09a56c865/_result.png",
-  atelier: "https://image.qwenlm.ai/generated-images/8c677b09-9811-446a-b55e-54c8c7f0f86c/_result.png",
-  mg: "https://image.qwenlm.ai/generated-images/896372ce-46c9-4e4c-afe1-b0ff8656863c/_result.png",
-  indien: "https://image.qwenlm.ai/generated-images/d6002850-169a-4fa7-85f9-244b2556faa5/_result.png",
-  ricain: "https://image.qwenlm.ai/generated-images/9cf8ed81-50b4-437c-83aa-0c21e6f0712f/_result.png",
-  chinaTown: "https://image.qwenlm.ai/generated-images/1f690726-ff4e-43ae-a2ed-4c5f3a26a7c8/_result.png",
-  suissard: "https://image.qwenlm.ai/generated-images/39039bce-6c94-4138-8b7b-2193e7e7dd30/_result.png",
-  frenchy: "https://image.qwenlm.ai/generated-images/6c26dc4c-2bc5-4a7a-aeab-734195bff207/_result.png",
+  hero: heroImage,
+  intro: introImage,
+  atelier: mgImage,
+  logo: logoImage,
+  dz: dzImage,
+  camaro: camaroImage,
+  zyent: zyentImage,
+  latinos: latinosImage,
+  mg: mgImage,
+  indien: indienImage,
+  ricain: ricainImage,
+  chinaTown: chinaTownImage,
+  suissard: suissardImage,
+  frenchy: frenchyImage,
+  paname: panameImage,
+  viking: vikingImage,
+  oriental: orientalImage,
+  africana: africanaImage,
+  gaulois: gauloisImage,
+  rital: ritalImage,
 };
 
 export const MICROCOPY = [

@@ -138,7 +138,7 @@ export function Kicker({ children, tone = "ember" }: { children: ReactNode; tone
   );
 }
 
-/* — Image produit avec visuel d'attente élégant — */
+/* — Image produit avec visuel de remplacement si nécessaire — */
 export function ProductImage({
   product,
   className = "",
@@ -166,7 +166,7 @@ export function ProductImage({
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
           <span className="font-display text-6xl leading-none tracking-wide text-cream/12">{initials}</span>
           <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-sand/60">
-            <LogoMark className="h-4 w-4 text-sand/50" /> Photo à venir
+            <LogoMark className="h-4 w-4 text-sand/50" /> Visuel non fourni
           </span>
         </div>
       </div>

@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-coal: #111111;
-  --color-soot: #171715;
-  --color-graphite: #262626;
-  --color-line: #3a3833;
-  --color-cream: #f5f1e8;
-  --color-sand: #d9d0c1;
-  --color-muted: #9b948a;
-  --color-ember: #e85d04;
-  --color-ember-dark: #b83b00;
+  --color-coal: #121212;
+  --color-soot: #1b1b1b;
+  --color-graphite: #292929;
+  --color-line: #424242;
+  --color-cream: #ffffff;
+  --color-sand: #e3e3e3;
+  --color-muted: #a2a2a2;
+  --color-ember: #e30613;
+  --color-ember-dark: #a90410;
+  --color-page-accent: #d2d2d2;
 
   --font-display: "Bebas Neue", "Oswald", "Arial Narrow", sans-serif;
   --font-body: "Manrope", "Segoe UI", sans-serif;
@@ -109,6 +110,42 @@ body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+/* Les pages restent sobres ; le rouge est réservé aux actions et à la navigation. */
+.page-surface .text-ember {
+  color: var(--color-page-accent) !important;
+}
+
+.page-surface section {
+  background-image: radial-gradient(
+    circle at 92% 8%,
+    color-mix(in srgb, var(--color-ember) 8%, transparent),
+    transparent 22rem
+  );
+  box-shadow: inset 0 1px color-mix(in srgb, var(--color-cream) 7%, transparent),
+    inset 0 -1px color-mix(in srgb, var(--color-coal) 55%, transparent);
+}
+
+.page-surface article {
+  background-image: linear-gradient(145deg, color-mix(in srgb, var(--color-cream) 4%, transparent), transparent 42%);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--color-coal) 45%, transparent),
+    inset 0 1px color-mix(in srgb, var(--color-cream) 6%, transparent);
+  transition: box-shadow 0.45s var(--ease-expo), border-color 0.45s var(--ease-expo), transform 0.45s var(--ease-expo);
+}
+
+.page-surface article:hover {
+  box-shadow: 0 16px 42px color-mix(in srgb, var(--color-ember) 14%, transparent);
+}
+
+.page-surface .border-ember {
+  box-shadow: 0 0 22px color-mix(in srgb, var(--color-ember) 18%, transparent);
+}
+
+.page-surface .bg-soot {
+  background-image: linear-gradient(145deg, color-mix(in srgb, var(--color-cream) 3%, transparent), transparent 45%);
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--color-coal) 40%, transparent),
+    inset 0 1px color-mix(in srgb, var(--color-cream) 5%, transparent);
 }
 
 /* Film grain — signature texture */

@@ -30,6 +30,7 @@ function Page({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
   return (
     <motion.main
+      className="page-surface"
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       exit={reduce ? { opacity: 1 } : { opacity: 0, y: -8 }}

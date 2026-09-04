@@ -4,9 +4,9 @@ import { Kicker, LinkArrow, MaskLines, OrderButton, Reveal, usePageMeta, WordsRe
 import { IconCompass } from "../components/Icons";
 
 const GALLERY = [
-  { src: IMAGES.hero, alt: "Sandwich signature du Monde du Goût sur ardoise", tag: "Signature", span: "md:col-span-2 md:row-span-2" },
-  { src: IMAGES.intro, alt: "Sandwich au poulet mariné, cœur fondant", tag: "Poulet mariné", span: "" },
-  { src: IMAGES.atelier, alt: "L'atelier : préparation maison chaque jour", tag: "L'atelier", span: "" },
+  { src: IMAGES.hero, alt: "Sélection de sandwichs du Monde du Goût", tag: "Nos recettes", span: "md:col-span-2 md:row-span-2" },
+  { src: IMAGES.intro, alt: "Sandwich généreux au poulet et au fromage", tag: "Poulet mariné", span: "" },
+  { src: IMAGES.atelier, alt: "Le MG, sandwich au poulet et aux steaks maison", tag: "Le MG", span: "" },
   { src: IMAGES.suissard, alt: "Le Suissard, raclette fondante", tag: "Le Suissard", span: "md:col-span-2" },
   { src: IMAGES.mg, alt: "Le MG, double steak et sauce Boursin", tag: "Le MG", span: "" },
   { src: IMAGES.frenchy, alt: "Le Frenchy, chèvre et miel", tag: "Le Frenchy", span: "" },
@@ -108,7 +108,7 @@ export default function Histoire() {
             </div>
             <Reveal delay={0.2}>
               <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-muted">
-                Photos d'illustration — à remplacer par les visuels officiels
+                Photos officielles — nos recettes signatures
               </p>
             </Reveal>
           </div>

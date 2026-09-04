@@ -169,7 +169,7 @@ function FlightLayer({ started, reduce, viewRef, viewStr }: {
           ref={(el) => { arcRefs.current[i] = el; }}
           d={leg.d}
           fill="none"
-          stroke="#E85D04"
+          stroke="#E30613"
           strokeWidth={1.1}
           strokeLinecap="round"
           vectorEffect="non-scaling-stroke"
@@ -180,7 +180,7 @@ function FlightLayer({ started, reduce, viewRef, viewStr }: {
       ))}
       {!reduce && (
         <g ref={planeRef} opacity="0">
-          <path d={PLANE_PATH} fill="#E85D04" />
+          <path d={PLANE_PATH} fill="#E30613" />
           <path d={PLANE_PATH} fill="none" stroke="#111111" strokeWidth="0.6" opacity="0.5" />
         </g>
       )}
@@ -356,7 +356,7 @@ export default function WorldMap() {
                         d={d}
                         fill={lit ? "#FFFFFF" : "#F5F1E8"}
                         fillOpacity={lit ? 1 : 0.92}
-                        stroke={lit ? "#E85D04" : "#111111"}
+                        stroke={lit ? "#E30613" : "#080808"}
                         strokeWidth={lit ? 1.3 : 0.6}
                         vectorEffect="non-scaling-stroke"
                         className={
@@ -412,7 +412,7 @@ export default function WorldMap() {
                 <g>
                   {/* Saint-Denis */}
                   <g transform={`translate(${T(HOME_PT)[0]},${T(HOME_PT)[1]})`}>
-                    <rect x={-5} y={-5} width={10} height={10} fill="#E85D04" transform="rotate(45)" />
+                    <rect x={-5} y={-5} width={10} height={10} fill="#E30613" transform="rotate(45)" />
                     <rect x={-2} y={-2} width={4} height={4} fill="#111111" transform="rotate(45)" />
                   </g>
                   <text
@@ -439,8 +439,8 @@ export default function WorldMap() {
                           cx={x}
                           cy={y}
                           r={active ? 5 : 3.8}
-                          fill={active ? "#E85D04" : "#111111"}
-                          stroke="#E85D04"
+                          fill={active ? "#E30613" : "#080808"}
+                          stroke="#E30613"
                           strokeWidth={1.8}
                           style={{ transition: "r .25s ease, fill .25s ease" }}
                         />
@@ -463,7 +463,7 @@ export default function WorldMap() {
                               x={x + lab.dx}
                               y={y + lab.dy}
                               textAnchor={lab.anchor}
-                              fill={active ? "#E85D04" : "#D9D0C1"}
+                              fill={active ? "#E30613" : "#E3E3E3"}
                               fontSize={14}
                               fontFamily="Bebas Neue"
                               letterSpacing={2}
@@ -509,7 +509,7 @@ export default function WorldMap() {
               {!topo && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-coal/80 backdrop-blur-[2px]">
                   <svg width="120" height="24" viewBox="0 0 120 24" aria-hidden>
-                    <path d="M4 18 Q 60 -8 116 14" fill="none" stroke="#E85D04" strokeWidth="1.6" strokeDasharray="5 6" className="dash-crawl" />
+                    <path d="M4 18 Q 60 -8 116 14" fill="none" stroke="#E30613" strokeWidth="1.6" strokeDasharray="5 6" className="dash-crawl" />
                   </svg>
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
                     Traçage des routes aériennes…
