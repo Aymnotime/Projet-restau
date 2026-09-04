@@ -60,7 +60,7 @@ function Shell() {
       </AnimatePresence>
       <Footer />
       <FloatingOrder />
-      <div className="h-16 md:hidden" aria-hidden />
+      <div className="h-24 md:hidden" aria-hidden />
     </div>
   );
 }

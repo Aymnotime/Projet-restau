@@ -85,13 +85,13 @@ function Hero() {
         48.9362° N — 2.3574° E · Saint-Denis, France
       </p>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-24 sm:px-6 lg:px-8 lg:pb-28">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-36 sm:px-6 sm:pb-24 lg:px-8 lg:pb-28">
         <Reveal delay={0.15}>
           <Kicker>Street-food internationale · Saint-Denis (93)</Kicker>
         </Reveal>
         <h1 className="mt-6 font-display leading-[0.88] tracking-wide text-cream">
           <MaskLines
-            className="block text-[clamp(2.75rem,13vw,10.5rem)]"
+            className="block text-[clamp(2.35rem,11vw,10.5rem)]"
             startDelay={0.25}
             lines={[
               <>LE GOÛT</>,
@@ -99,7 +99,7 @@ function Hero() {
             ]}
           />
           <MaskLines
-            className="mt-3 block text-[clamp(2.75rem,13vw,10.5rem)] sm:mt-4"
+            className="mt-3 block text-[clamp(2.35rem,11vw,10.5rem)] sm:mt-4"
             startDelay={0.55}
             lines={[
               <>LE MONDE</>,
