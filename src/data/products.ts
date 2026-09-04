@@ -37,22 +37,22 @@ export const PRODUCTS: Product[] = [
   {
     id: "dz", slug: "dz", name: "Le DZ", category: "sandwichs", price: 8.9,
     description: "Viande hachée maison / Omelette / Fromage / Sauce maison.",
-    note: F, image: null, short: "Viande hachée maison, omelette, fromage, sauce maison.",
+    note: F, image: IMAGES.dz, short: "Viande hachée maison, omelette, fromage, sauce maison.",
   },
   {
     id: "camaro", slug: "camaro", name: "Le Camaro", category: "sandwichs", price: 8.9,
     description: "Poulet mariné aux oignons, poivrons et olives en sauce maison.",
-    note: F, image: null, short: "Poulet mariné aux oignons, poivrons et olives, sauce maison.",
+    note: F, image: IMAGES.camaro, short: "Poulet mariné aux oignons, poivrons et olives, sauce maison.",
   },
   {
     id: "zyent", slug: "zyent", name: "Le Zyent", category: "sandwichs", price: 8.9,
     description: "Thon / Pommes de terre / Sauce épicée / Olives / Œuf.",
-    note: F, image: null, short: "Thon, pommes de terre, sauce épicée, olives, œuf.",
+    note: F, image: IMAGES.zyent, short: "Thon, pommes de terre, sauce épicée, olives, œuf.",
   },
   {
     id: "latinos", slug: "latinos", name: "Le Latinos", category: "sandwichs", price: 8.9,
     description: "Poulet mariné / Sauce épicée / Piment / Cheddar.",
-    note: F, image: null, short: "Poulet mariné, sauce épicée, piment, cheddar.",
+    note: F, image: IMAGES.latinos, short: "Poulet mariné, sauce épicée, piment, cheddar.",
   },
   {
     id: "ricain", slug: "ricain", name: "Le Ricain", category: "sandwichs", price: 12.5,
@@ -69,7 +69,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "paname", slug: "paname", name: "Le Paname", category: "sandwichs", price: 10.9,
     description: "3 steaks maison / Champignons / Sauce moutarde à l'ancienne / Jambon de dinde / Cheddar.",
-    note: F, image: null, short: "3 steaks maison, champignons, moutarde à l'ancienne, cheddar.",
+    note: F, image: IMAGES.paname, short: "3 steaks maison, champignons, moutarde à l'ancienne, cheddar.",
   },
   {
     id: "indien", slug: "indien", name: "L'Indien", category: "sandwichs", price: 8.9,
@@ -86,12 +86,12 @@ export const PRODUCTS: Product[] = [
   {
     id: "viking", slug: "viking", name: "Le Viking", category: "sandwichs", price: 10.9,
     description: "Saumon fumé / Sauce maison / Galette de pommes de terre / Boursin / Oignons rouges / Citron.",
-    note: F, image: null, short: "Saumon fumé, Boursin, galette de pommes de terre, citron.",
+    note: F, image: IMAGES.viking, short: "Saumon fumé, Boursin, galette de pommes de terre, citron.",
   },
   {
     id: "oriental", slug: "oriental", name: "L'Oriental", category: "sandwichs", price: 10.9,
     description: "Poulet mariné aux épices / Steak maison / Merguez / Poivrons / Œuf.",
-    note: F, image: null, short: "Poulet mariné aux épices, steak maison, merguez, poivrons.",
+    note: F, image: IMAGES.oriental, short: "Poulet mariné aux épices, steak maison, merguez, poivrons.",
   },
   {
     id: "mg", slug: "mg", name: "Le MG", category: "sandwichs", price: 11.9,
@@ -102,12 +102,12 @@ export const PRODUCTS: Product[] = [
   {
     id: "africana", slug: "africana", name: "L'Africana", category: "sandwichs", price: 8.9,
     description: "Poulet mariné / Sauce Nokoss / Cheddar.",
-    note: F, image: null, short: "Poulet mariné, sauce Nokoss, cheddar.",
+    note: F, image: IMAGES.africana, short: "Poulet mariné, sauce Nokoss, cheddar.",
   },
   {
     id: "gaulois", slug: "gaulois", name: "Le Gaulois", category: "sandwichs", price: 10.9,
     description: "3 steaks maison / Sauce au poivre / Œuf.",
-    note: F, image: null, short: "3 steaks maison, sauce au poivre, œuf.",
+    note: F, image: IMAGES.gaulois, short: "3 steaks maison, sauce au poivre, œuf.",
   },
   {
     id: "vege", slug: "vege", name: "Le Végé", category: "sandwichs", price: 8.9,

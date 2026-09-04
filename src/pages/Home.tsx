@@ -1,16 +1,18 @@
-import { useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
-import { RESTAURANT, SITE_URL } from "../data/site";
+import { IMAGES, RESTAURANT, SITE_URL } from "../data/site";
 import {
   Counter, Kicker, MaskLines, OrderButton, ProductImage, Reveal,
   SectionMark, usePageMeta, WordsReveal,
 } from "../components/ui";
 import {
-  IconArrowRight, IconBag, IconFlame, IconGlobe, IconPlane, IconScooter,
+  IconArrowRight, IconBag, IconFlame, IconGlobe, IconPhone, IconPlane, IconScooter,
 } from "../components/Icons";
 import WorldMap from "../components/WorldMap";
+import atelierVideo from "../../video-promo/Alors  Team bœuf ou team poulet  🍗🥩📍 Saint-Denis45 Rue de la Boulangerie, 93200 Saint-Denis📞.mp4";
+const MobileGlobe = lazy(() => import("../components/MobileGlobe"));
 
 /* Carte importée statiquement : le code + les données Natural Earth
    voyagent dans le bundle principal, garantissant un rendu déterministe
@@ -20,6 +22,21 @@ const MARQUEE = [
   "Fait maison", "Saint-Denis", "Livraison & retrait", "Saveurs du monde",
   "Recettes généreuses", "Commande en ligne",
 ];
+
+function MapGate() {
+  return (
+    <>
+      <div className="md:hidden">
+        <Suspense fallback={<div className="mobile-globe-real" aria-hidden="true" />}>
+          <MobileGlobe />
+        </Suspense>
+      </div>
+      <div className="hidden md:block">
+        <WorldMap />
+      </div>
+    </>
+  );
+}
 
 function Marquee() {
   return (
@@ -40,6 +57,36 @@ function Marquee() {
   );
 }
 
+function BusinessStrip() {
+  return (
+    <section className="border-b border-graphite bg-soot" aria-label="Informations pratiques">
+      <div className="mx-auto grid max-w-7xl divide-y divide-graphite px-4 sm:px-6 md:grid-cols-3 md:divide-x md:divide-y-0 lg:px-8">
+        <div className="flex items-center gap-3 py-4 md:px-6 md:py-5 md:first:pl-0">
+          <IconScooter className="h-5 w-5 shrink-0 text-ember" />
+          <div>
+            <p className="font-display text-lg leading-none text-cream">LIVRAISON</p>
+            <p className="mt-1 text-xs text-muted">Saint-Denis (93)</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 py-4 md:px-6 md:py-5">
+          <IconFlame className="h-5 w-5 shrink-0 text-ember" />
+          <div>
+            <p className="font-display text-lg leading-none text-cream">FAIT MAISON</p>
+            <p className="mt-1 text-xs text-muted">Sandwichs et frites préparés sur place</p>
+          </div>
+        </div>
+        <a href={RESTAURANT.phoneHref} className="flex items-center gap-3 py-4 transition-colors hover:text-ember md:px-6 md:py-5 md:last:pr-0">
+          <IconPhone className="h-5 w-5 shrink-0 text-ember" />
+          <div>
+            <p className="font-display text-lg leading-none text-cream">OUVERT 7J/7</p>
+            <p className="mt-1 text-xs text-muted">{RESTAURANT.hoursShort} · {RESTAURANT.phoneDisplay}</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -51,7 +98,7 @@ function Hero() {
       <motion.div className="absolute inset-0" style={reduce ? undefined : { y }}>
         <div className="animate-kenburns motion-reduce:animate-none absolute inset-0">
           <img
-            src="https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png"
+            src={IMAGES.hero}
             alt="Sandwich généreux du Monde du Goût, fromage fondant, lumières urbaines en arrière-plan"
             className="h-full w-full object-cover"
             fetchPriority="high"
@@ -198,7 +245,7 @@ function MapSection() {
           </Reveal>
         </div>
         <div className="mt-12">
-          <WorldMap />
+          <MapGate />
         </div>
       </div>
     </section>
@@ -228,11 +275,11 @@ function Signatures() {
         </Reveal>
       </div>
 
-      {/* mobile / tablette : swipe */}
-      <div className="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 md:hidden">
+      {/* mobile : liste verticale lisible */}
+      <div className="mt-12 grid gap-6 md:hidden">
         {featured.map((p, i) => (
-          <article key={p.id} className="w-[78vw] max-w-[340px] shrink-0 snap-start border border-graphite bg-soot">
-            <SignatureInner p={p} i={i} alwaysCta />
+          <article key={p.id} className="group overflow-hidden border border-graphite bg-soot">
+            <SignatureInner p={p} i={i} />
           </article>
         ))}
       </div>
@@ -266,7 +313,7 @@ function Signatures() {
   );
 }
 
-function SignatureInner({ p, i, alwaysCta }: { p: (typeof featured)[number]; i: number; alwaysCta?: boolean }) {
+function SignatureInner({ p, i }: { p: (typeof featured)[number]; i: number }) {
   const dest = inspirationOf(p.id);
   return (
     <>
@@ -290,15 +337,11 @@ function SignatureInner({ p, i, alwaysCta }: { p: (typeof featured)[number]; i: 
           <h3 className="font-display text-3xl tracking-wide text-cream transition-colors duration-300 group-hover:text-ember sm:text-4xl">
             {p.name.toUpperCase()}
           </h3>
-          <span className="leader" />
+          <span className="leader hidden sm:block" />
           <span className="font-display text-2xl text-ember sm:text-3xl">{formatPrice(p.price)}</span>
         </div>
         {p.short && <p className="mt-3 text-sm leading-relaxed text-muted">{p.short}</p>}
-        <div
-          className={`mt-5 transition-all duration-500 ${
-            alwaysCta ? "" : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100"
-          }`}
-        >
+        <div className="mt-5">
           <OrderButton size="sm">COMMANDER</OrderButton>
         </div>
       </div>
@@ -336,13 +379,18 @@ function FaitMaison() {
           <div className="lg:sticky lg:top-32 lg:self-start">
             <Reveal>
               <figure className="relative overflow-hidden border border-graphite">
-                <div className="animate-kenburns motion-reduce:animate-none">
-                  <img
-                    src="https://image.qwenlm.ai/generated-images/8c677b09-9811-446a-b55e-54c8c7f0f86c/_result.png"
-                    alt="L'atelier du Monde du Goût : viandes maison, sauces et frites en préparation"
+                <div>
+                  <video
+                    src={atelierVideo}
+                    poster={IMAGES.atelier}
+                    aria-label="L'atelier du Monde du Goût : équipe bœuf ou poulet à Saint-Denis"
                     className="aspect-[4/5] w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="none"
+                    controls
                   />
                 </div>
                 <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-coal via-coal/70 to-transparent px-5 pb-4 pt-14 text-[10px] font-bold uppercase tracking-[0.26em] text-sand/80">
@@ -495,6 +543,7 @@ export default function Home() {
     <>
       <Hero />
       <Marquee />
+      <BusinessStrip />
       <Intro />
       <MapSection />
       <Signatures />

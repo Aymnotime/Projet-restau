@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import logoImage from "../../logo/logo.png";
 
 type P = SVGProps<SVGSVGElement>;
 const base = (props: P): P => ({
@@ -149,19 +150,7 @@ export const IconPlane = (p: P) => (
 
 /* — Logo — */
 export function LogoMark({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <rect x="1.5" y="1.5" width="45" height="45" rx="10" fill="none" stroke="currentColor" strokeOpacity="0.25" />
-      <circle cx="24" cy="24" r="12.5" fill="none" stroke="#E85D04" strokeWidth="2.2" />
-      <path
-        d="M11.5 24h25M24 11.5c-4.4 3.7-4.4 21.3 0 25M24 11.5c4.4 3.7 4.4 21.3 0 25"
-        fill="none"
-        stroke="#E85D04"
-        strokeWidth="1.5"
-      />
-      <circle cx="33" cy="15" r="2.4" fill="#E85D04" />
-    </svg>
-  );
+  return <img src={logoImage} className={className} alt="" aria-hidden="true" />;
 }
 
 export function Wordmark({ compact = false }: { compact?: boolean }) {
