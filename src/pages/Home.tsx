@@ -362,7 +362,7 @@ function FaitMaison() {
           <div className="lg:sticky lg:top-32 lg:self-start">
             <Reveal>
               <figure className="relative overflow-hidden border border-graphite">
-                <div className="animate-kenburns motion-reduce:animate-none">
+                <div>
                     <video
                       src={atelierVideo}
                       poster={IMAGES.atelier}
