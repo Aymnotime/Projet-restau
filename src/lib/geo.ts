@@ -1,163 +1,87 @@
 /* ============================================================
    Moteur cartographique — Le Monde du Goût
-   Projection Natural Earth I (coefficients publiés par Tom
-   Patterson & Jenny, repris par d3-geo), décodage TopoJSON
-   (world-atlas / Natural Earth 110m) et arcs grands-cercles.
-   Aucune donnée dessinée à la main : frontières réelles.
+   Projection Natural Earth I via d3-geo, frontières réelles
+   Natural Earth 110m (world-atlas) embarquées dans le build,
+   décodage TopoJSON via topojson-client, arcs grands-cercles
+   par interpolation sphérique.
+   Aucune donnée dessinée à la main. Aucune dépendance réseau
+   au runtime : la carte s'affiche de manière déterministe.
    ============================================================ */
+
+import { geoNaturalEarth1, geoPath, geoGraticule10, type GeoProjection } from "d3-geo";
+import { feature } from "topojson-client";
+// Données Natural Earth 110m — réelles, embarquées à la compilation.
+import worldTopoJson from "world-atlas/countries-110m.json";
 
 export type Pt = [number, number]; // [lon, lat]
 export type ScreenPt = [number, number];
 
-/* ——— Natural Earth I (d3-geo naturalEarth1Raw) ——— */
-const A0 = 0.8707, A1 = -0.131979, A2 = -0.013791, A3 = 0.003971, A4 = -0.001529;
-const B0 = 1.007226, B1 = 0.015085, B2 = -0.044475, B3 = 0.028874, B4 = -0.005916;
-const RAD = Math.PI / 180;
+const worldTopo: any = worldTopoJson;
 
-function rawProject(lon: number, lat: number): ScreenPt {
-  const phi = lat * RAD;
-  const lambda = lon * RAD;
-  const p2 = phi * phi, p4 = p2 * p2;
-  return [
-    lambda * (A0 + p2 * (A1 + p2 * (A2 + p2 * (A3 + p2 * A4)))),
-    phi * (B0 + p2 * (B1 + p2 * (B2 + p2 * (B3 + p2 * B4)))),
-  ];
+/* ——— Chargement des données (immédiat, jamais en échec) ——— */
+export function loadWorldTopo(): Promise<any> {
+  return Promise.resolve(worldTopo);
 }
 
-/** Étendue brute de la sphère en coordonnées projetées. */
-const RAW_W = Math.PI * A0 * 2; // φ = 0, λ = ±π
-const RAW_H = Math.PI * (B0 + B1 + B2 + B3 + B4); // λ = 0, φ = ±π/2
-
-export class Projection {
-  k = 1;
-  tx = 0;
-  ty = 0;
-
-  constructor(x0: number, y0: number, x1: number, y1: number) {
-    this.k = Math.min((x1 - x0) / RAW_W, (y1 - y0) / RAW_H);
-    this.tx = (x0 + x1) / 2;
-    this.ty = (y0 + y1) / 2;
-  }
-
-  project([lon, lat]: Pt): ScreenPt {
-    const [x, y] = rawProject(lon, lat);
-    return [this.tx + this.k * x, this.ty - this.k * y]; // nord en haut
-  }
-}
-
-/* ——— Décodage TopoJSON (quantisé, delta-encodé — spec topojson) ——— */
+/* ——— Décodage TopoJSON → pays ——— */
 export interface Country {
-  id: string;
+  id: string; // ISO 3166-1 numérique (ex : « 250 » = France)
   name: string;
   polygons: Pt[][][]; // polygones → anneaux → points [lon, lat]
 }
 
-function decodeArcs(topo: any): Pt[][] {
-  const t = topo.transform;
-  return topo.arcs.map((arc: number[][]) => {
-    let x = 0, y = 0;
-    return arc.map(([dx, dy]) => {
-      x += dx; y += dy;
-      return t
-        ? ([x * t.scale[0] + t.translate[0], y * t.scale[1] + t.translate[1]] as Pt)
-        : ([x, y] as Pt);
-    });
-  });
-}
-
-function ringFromArcs(arcs: Pt[][], indices: number[]): Pt[] {
-  const pts: Pt[] = [];
-  for (const idx of indices) {
-    const arc = idx < 0 ? arcs[~idx].slice().reverse() : arcs[idx];
-    for (let i = pts.length ? 1 : 0; i < arc.length; i++) pts.push(arc[i]);
-  }
-  return pts;
-}
-
-function geometryPolygons(geom: any, arcs: Pt[][]): Pt[][][] {
-  const build = (ringIdxs: number[][]) => ringIdxs.map((r) => ringFromArcs(arcs, r));
-  if (geom.type === "Polygon") return [build(geom.arcs)];
-  if (geom.type === "MultiPolygon") return geom.arcs.map((p: number[][]) => build(p));
-  if (geom.type === "GeometryCollection")
-    return geom.geometries.flatMap((g: any) => geometryPolygons(g, arcs));
-  return [];
-}
-
 export function countriesFromTopo(topo: any): Country[] {
-  const arcs = decodeArcs(topo);
-  const obj = topo.objects.countries ?? topo.objects.land;
-  const geoms: any[] = obj.geometries ?? [];
-  return geoms
-    .map((g) => ({
-      id: String(g.id ?? ""),
-      name: String(g.properties?.name ?? ""),
-      polygons: geometryPolygons(g, arcs),
+  const fc: any = feature(topo, topo.objects.countries);
+  const feats: any[] = fc?.features ?? [];
+  return feats
+    .map((f) => ({
+      id: String(f.id ?? ""),
+      name: String(f.properties?.name ?? ""),
+      polygons: (f.geometry?.coordinates ?? []) as Pt[][][],
     }))
     .filter((c) => c.polygons.length > 0);
 }
 
-/* ——— Génération de tracé avec ré-échantillonnage adaptatif ——— */
-const TOL = 3.4; // unités viewBox
-const r2 = (n: number) => Math.round(n * 100) / 100;
+/* ——— Projection Natural Earth I ——— */
+export class Projection {
+  private projection: GeoProjection;
+  private path: ReturnType<typeof geoPath>;
 
-function subdivide(
-  a: ScreenPt, b: ScreenPt, proj: Projection, la: Pt, lb: Pt, depth: number, out: ScreenPt[]
-) {
-  const dx = b[0] - a[0], dy = b[1] - a[1];
-  if (depth < 6 && dx * dx + dy * dy > TOL * TOL) {
-    const mLon = (la[0] + lb[0]) / 2, mLat = (la[1] + lb[1]) / 2;
-    const m: Pt = [mLon, mLat];
-    const pm = proj.project(m);
-    subdivide(a, pm, proj, la, m, depth + 1, out);
-    out.push(pm);
-    subdivide(pm, b, proj, m, lb, depth + 1, out);
+  constructor(x0: number, y0: number, x1: number, y1: number) {
+    this.projection = geoNaturalEarth1().fitExtent(
+      [
+        [x0, y0],
+        [x1, y1],
+      ],
+      { type: "Sphere" }
+    );
+    this.path = geoPath(this.projection);
+  }
+
+  project([lon, lat]: Pt): ScreenPt {
+    return (this.projection([lon, lat]) as ScreenPt) ?? [0, 0];
+  }
+
+  geoPath(): ReturnType<typeof geoPath> {
+    return this.path;
   }
 }
 
+/* ——— Génération de tracés (gérée par d3-geo : découpage de
+   l'antiméridien, clip sphérique, précision des côtes) ——— */
 export function countryPath(polygons: Pt[][][], proj: Projection): string {
-  let d = "";
-  for (const rings of polygons) {
-    for (const ring of rings) {
-      if (ring.length < 3) continue;
-      const pts: ScreenPt[] = [];
-      let prev = ring[0];
-      let pp = proj.project(prev);
-      pts.push(pp);
-      for (let i = 1; i < ring.length; i++) {
-        const cur = ring[i];
-        const cp = proj.project(cur);
-        subdivide(pp, cp, proj, prev, cur, 0, pts);
-        pts.push(cp);
-        pp = cp; prev = cur;
-      }
-      d += "M" + pts.map((p) => `${r2(p[0])},${r2(p[1])}`).join("L") + "Z";
-    }
-  }
-  return d;
+  return (
+    proj.geoPath()({ type: "MultiPolygon", coordinates: polygons } as any) ?? ""
+  );
 }
 
-export function graticulePath(proj: Projection, step = 15): string {
-  let d = "";
-  for (let lon = -180; lon <= 180; lon += step) {
-    let pen = false;
-    for (let lat = -90; lat <= 90; lat += 2) {
-      const [x, y] = proj.project([lon, lat]);
-      d += (pen ? "L" : "M") + r2(x) + "," + r2(y);
-      pen = true;
-    }
-  }
-  for (let lat = -75; lat <= 75; lat += step) {
-    let pen = false;
-    for (let lon = -180; lon <= 180; lon += 2) {
-      const [x, y] = proj.project([lon, lat]);
-      d += (pen ? "L" : "M") + r2(x) + "," + r2(y);
-      pen = true;
-    }
-  }
-  return d;
+export function graticulePath(proj: Projection, _step = 15): string {
+  return proj.geoPath()(geoGraticule10()) ?? "";
 }
 
 /* ——— Arc grand-cercle (interpolation sphérique) ——— */
+const RAD = Math.PI / 180;
+
 export function greatCirclePoints(a: Pt, b: Pt, n = 64): Pt[] {
   const toCart = ([lon, lat]: Pt): [number, number, number] => {
     const l = lon * RAD, p = lat * RAD;
@@ -179,33 +103,4 @@ export function greatCirclePoints(a: Pt, b: Pt, n = 64): Pt[] {
     pts.push([Math.atan2(y, x) / RAD, Math.asin(Math.max(-1, Math.min(1, z))) / RAD]);
   }
   return pts;
-}
-
-/* ——— Chargement des données Natural Earth (world-atlas 110m) ——— */
-const CDN_SOURCES = [
-  "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
-  "https://fastly.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
-  "https://unpkg.com/world-atlas@2/countries-110m.json",
-];
-
-let worldPromise: Promise<any> | null = null;
-
-export function loadWorldTopo(): Promise<any> {
-  if (worldPromise) return worldPromise;
-  const attempt = async (i: number): Promise<any> => {
-    if (i >= CDN_SOURCES.length) throw new Error("world-atlas indisponible");
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 9000);
-    try {
-      const res = await fetch(CDN_SOURCES[i], { signal: ctrl.signal });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return await res.json();
-    } catch {
-      return attempt(i + 1);
-    } finally {
-      clearTimeout(timer);
-    }
-  };
-  worldPromise = attempt(0);
-  return worldPromise;
 }
