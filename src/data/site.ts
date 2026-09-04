@@ -32,7 +32,7 @@ export const SITE_URL = "https://www.lemondedugout.fr";
  * le site propose proprement la commande par téléphone.
  * Ne jamais inventer d'URL.
  */
-export const ORDER_URL = "";
+export const ORDER_URL = "https://www.ubereats.com/fr/store/le-monde-du-gout-saint-denis/iBBHrkvCVQGHlzrDwnqpiA?srsltid=AfmBOorvKxUJqeZEjY9NIXjdre5tpfYdgHgPbQiGtH71zUisStaFcvqD";
 
 export const RESTAURANT = {
   name: "Le Monde du Goût",
