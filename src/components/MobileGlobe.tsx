@@ -18,6 +18,7 @@ export default function MobileGlobe() {
   const [rotation, setRotation] = useState<[number, number, number]>([-12, -8, 0]);
   const [dragging, setDragging] = useState(false);
   const rotationRef = useRef(rotation);
+  const draggingRef = useRef(false);
   const dragRef = useRef<{ x: number; y: number; rotation: [number, number, number] } | null>(null);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function MobileGlobe() {
     const spin = (now: number) => {
       const elapsed = now - previous;
       previous = now;
+      if (draggingRef.current) return;
       const [longitude, latitude, roll] = rotationRef.current;
       setRotation([longitude + elapsed * 0.006, latitude, roll]);
       frame = requestAnimationFrame(spin);
@@ -53,6 +55,7 @@ export default function MobileGlobe() {
 
   const handlePointerDown = (event: React.PointerEvent<SVGSVGElement>) => {
     event.currentTarget.setPointerCapture(event.pointerId);
+    draggingRef.current = true;
     dragRef.current = { x: event.clientX, y: event.clientY, rotation: rotationRef.current };
     setDragging(true);
   };
@@ -65,6 +68,8 @@ export default function MobileGlobe() {
   };
 
   const stopDragging = () => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
     dragRef.current = null;
     setDragging(false);
   };
