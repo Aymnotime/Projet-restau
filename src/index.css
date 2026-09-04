@@ -48,6 +48,10 @@
   from { transform: translateX(-8%); }
   to { transform: translateX(8%); }
 }
+@keyframes globe-marker-pulse {
+  0%, 100% { r: 7; opacity: 0.2; }
+  50% { r: 14; opacity: 0.05; }
+}
 
 :root {
   --ease-expo: cubic-bezier(0.22, 1, 0.36, 1);
@@ -168,6 +172,10 @@ body {
 
 .mobile-globe-real.is-dragging svg {
   cursor: grabbing;
+}
+
+.mobile-globe-marker--selected {
+  animation: globe-marker-pulse 1.2s ease-in-out infinite;
 }
 
 .mobile-globe-real__hint {

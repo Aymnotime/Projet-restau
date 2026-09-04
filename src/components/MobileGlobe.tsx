@@ -17,9 +17,11 @@ export default function MobileGlobe() {
   const [topo, setTopo] = useState<any>(null);
   const [rotation, setRotation] = useState<[number, number, number]>([-12, -8, 0]);
   const [dragging, setDragging] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
   const rotationRef = useRef(rotation);
   const draggingRef = useRef(false);
   const dragRef = useRef<{ x: number; y: number; rotation: [number, number, number] } | null>(null);
+  const animationRef = useRef(0);
 
   useEffect(() => {
     loadWorldTopo().then(setTopo);
@@ -44,6 +46,36 @@ export default function MobileGlobe() {
     frame = requestAnimationFrame(spin);
     return () => cancelAnimationFrame(frame);
   }, [dragging, topo]);
+
+  const selectDestination = (destinationId: string) => {
+    const destination = DESTINATIONS.find((item) => item.id === destinationId);
+    if (!destination) return;
+    cancelAnimationFrame(animationRef.current);
+    draggingRef.current = true;
+    setDragging(true);
+    setSelected(destinationId);
+    const from = rotationRef.current;
+    const target: [number, number, number] = [-destination.lon, -destination.lat, 0];
+    const start = performance.now();
+    const animate = (now: number) => {
+      const progress = Math.min(1, (now - start) / 700);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const next: [number, number, number] = [
+        from[0] + (target[0] - from[0]) * eased,
+        from[1] + (target[1] - from[1]) * eased,
+        0,
+      ];
+      rotationRef.current = next;
+      setRotation(next);
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        draggingRef.current = false;
+        setDragging(false);
+      }
+    };
+    animationRef.current = requestAnimationFrame(animate);
+  };
 
   const projection = useMemo(
     () => geoOrthographic().translate([WIDTH / 2, HEIGHT / 2]).scale(151).rotate(rotation).clipAngle(90),
@@ -115,6 +147,7 @@ export default function MobileGlobe() {
                 role={destination ? "button" : undefined}
                 tabIndex={destination ? 0 : undefined}
                 aria-label={destination ? `${destination.country} — ${getProduct(destination.productId)?.name}` : undefined}
+                onClick={destination ? () => selectDestination(destination.id) : undefined}
               />
             );
           })}
@@ -127,8 +160,22 @@ export default function MobileGlobe() {
             if (!point) return null;
             const [x, y] = point;
             return (
-              <g key={destination.id} transform={`translate(${x},${y})`}>
-                <circle r="7" fill="#e30613" fillOpacity="0.18" />
+              <g
+                key={destination.id}
+                transform={`translate(${x},${y})`}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selected === destination.id}
+                aria-label={`${destination.country} — ${getProduct(destination.productId)?.name ?? "Inspiration"}`}
+                onClick={() => selectDestination(destination.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    selectDestination(destination.id);
+                  }
+                }}
+              >
+                <circle className={selected === destination.id ? "mobile-globe-marker--selected" : undefined} r="7" fill="#e30613" fillOpacity="0.18" />
                 <circle r="2.8" fill="#ffffff" stroke="#e30613" strokeWidth="1.3" />
                 <title>{`${destination.country} — ${getProduct(destination.productId)?.name ?? "Inspiration"}`}</title>
               </g>
