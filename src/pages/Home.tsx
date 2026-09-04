@@ -1,481 +1,529 @@
-import { useRef, type ReactNode } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { featured, formatPrice, inspirationOf } from "../data/products";
-import { IMAGES, MICROCOPY, RESTAURANT } from "../data/site";
-import WorldMap from "../components/WorldMap";
+import { lazy, Suspense, useRef } from "react";
+import { Link } from "react-router-dom";
+import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
+import { RESTAURANT, SITE_URL } from "../data/site";
 import {
-  Counter,
-  Kicker,
-  LinkArrow,
-  Marquee,
-  MaskLines,
-  OrderButton,
-  ProductImage,
-  Reveal,
-  usePageMeta,
-  WordsReveal,
+  Counter, Kicker, MaskLines, OrderButton, ProductImage, Reveal,
+  SectionMark, usePageMeta, WordsReveal,
 } from "../components/ui";
 import {
-  IconArrowDown,
-  IconBag,
-  IconCleaver,
-  IconFlame,
-  IconFries,
-  IconSauce,
-  IconScooter,
-  IconStack,
+  IconArrowRight, IconBag, IconFlame, IconGlobe, IconPlane, IconScooter,
 } from "../components/Icons";
 
-/* — Parallaxe légère, respectueuse de prefers-reduced-motion — */
-function Parallax({ children, className = "", range = 36 }: { children: ReactNode; className?: string; range?: number }) {
+const WorldMap = lazy(() => import("../components/WorldMap"));
+
+/* Chargement paresseux de la carte à l'approche de la section */
+function MapGate() {
   const ref = useRef<HTMLDivElement>(null);
+  const near = useInView(ref, { margin: "700px 0px", once: true });
   const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [range, -range]);
   return (
-    <div ref={ref} className={className}>
-      <motion.div style={reduce ? undefined : { y }}>{children}</motion.div>
+    <div ref={ref}>
+      {near ? (
+        <Suspense
+          fallback={
+            <div className="dot-grid flex aspect-[1000/620] w-full items-center justify-center border border-graphite bg-coal lg:aspect-[1000/520]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/60">
+                Préparation de la carte…
+              </p>
+            </div>
+          }
+        >
+          <WorldMap />
+        </Suspense>
+      ) : (
+        <div className="aspect-[1000/620] w-full lg:aspect-[1000/520]" aria-hidden />
+      )}
     </div>
   );
 }
 
-/* — Carte signature — */
-function SignatureCard({ id, delay }: { id: string; delay: number }) {
-  const product = featured.find((p) => p.id === id)!;
-  const dest = inspirationOf(product.id);
+const MARQUEE = [
+  "Fait maison", "Saint-Denis", "Livraison & retrait", "Saveurs du monde",
+  "Recettes généreuses", "Commande en ligne",
+];
+
+function Marquee() {
   return (
-    <Reveal
-      delay={delay}
-      className="min-w-[82%] snap-center sm:min-w-[58%] md:min-w-0"
-    >
-      <article className="group flex h-full flex-col border border-graphite bg-soot transition-all duration-500 hover:-translate-y-2 hover:border-ember/60 hover:shadow-[0_24px_60px_-24px_rgba(232,93,4,0.35)]">
-        <div className="relative overflow-hidden">
-          <ProductImage
-            product={product}
-            className="aspect-[4/3]"
-            imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-          />
-          {dest && (
-            <span className="absolute left-4 top-4 bg-coal/85 px-2.5 py-1 font-display text-xs tracking-[0.22em] text-ember backdrop-blur-sm">
-              {dest.country.toUpperCase()}
-            </span>
-          )}
-          <span className="absolute right-4 top-4 bg-ember px-2.5 py-1 font-display text-lg leading-none text-coal">
-            {formatPrice(product.price)}
-          </span>
-        </div>
-        <div className="flex flex-1 flex-col p-5 sm:p-6">
-          <h3 className="font-display text-3xl tracking-wide text-cream transition-colors group-hover:text-ember">
-            {product.name.toUpperCase()}
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-sand">{product.short}</p>
-          <div className="mt-auto flex items-end justify-between gap-3 pt-5">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-muted">Frites maison incluses</p>
-            <OrderButton size="sm" className="md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:focus-visible:translate-y-0 md:focus-visible:opacity-100">
-              COMMANDER
-            </OrderButton>
+    <div className="relative overflow-hidden border-y border-graphite bg-soot py-4" aria-hidden>
+      <div className="flex w-max animate-marquee motion-reduce:animate-none">
+        {[0, 1].map((n) => (
+          <div key={n} className="flex shrink-0 items-center">
+            {MARQUEE.map((t) => (
+              <span key={`${n}-${t}`} className="flex items-center gap-6 pr-6 font-display text-xl tracking-[0.2em] text-sand/80">
+                {t.toUpperCase()}
+                <IconGlobe className="h-4 w-4 text-ember" />
+              </span>
+            ))}
           </div>
-        </div>
-      </article>
-    </Reveal>
+        ))}
+      </div>
+    </div>
   );
 }
 
-const HOMEMADE = [
-  {
-    icon: IconCleaver,
-    title: "Viandes préparées maison",
-    text: "Steaks, poulet mariné, escalopes panées : travaillés chaque jour dans notre cuisine.",
-  },
-  {
-    icon: IconSauce,
-    title: "Sauces maison",
-    text: "Sauce Boursin, tartare, Nokoss ou cocktail — préparées par nos soins.",
-  },
-  {
-    icon: IconFries,
-    title: "Frites maison",
-    text: "Des frites fraîches, dorées à la commande, servies avec chaque sandwich.",
-  },
-  {
-    icon: IconStack,
-    title: "Recettes généreuses",
-    text: "Des sandwichs pensés pour caler les vraies faims, sans compromis sur le goût.",
-  },
-];
-
-export default function Home() {
-  usePageMeta(
-    "Le Monde du Goût — Sandwichs inspirés du monde à Saint-Denis (93)",
-    "Street-food premium à Saint-Denis : sandwichs inspirés des cuisines du monde, fait maison, livraison et retrait sur place. 7j/7 de 11h30 à 5h00."
-  );
+function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
   const reduce = useReducedMotion();
 
   return (
-    <>
-      {/* ═══════════ HERO ═══════════ */}
-      <section className="relative flex min-h-[100svh] flex-col overflow-hidden" aria-label="Le Monde du Goût">
-        <div className="absolute inset-0">
+    <section ref={ref} className="relative flex h-svh min-h-[620px] flex-col overflow-hidden">
+      <motion.div className="absolute inset-0" style={reduce ? undefined : { y }}>
+        <div className="animate-kenburns motion-reduce:animate-none absolute inset-0">
           <img
-            src={IMAGES.hero}
-            alt="Sandwich généreux du Monde du Goût, steaks maison et cheddar fondant"
-            className="h-full w-full object-cover object-[62%_center] animate-kenburns motion-reduce:animate-none"
+            src="https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png"
+            alt="Sandwich généreux du Monde du Goût, fromage fondant, lumières urbaines en arrière-plan"
+            className="h-full w-full object-cover"
+            fetchPriority="high"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-coal via-coal/72 to-coal/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-coal via-transparent to-coal/70" />
         </div>
+      </motion.div>
+      <div className="absolute inset-0 bg-gradient-to-r from-coal via-coal/72 to-coal/15" />
+      <div className="absolute inset-0 bg-gradient-to-t from-coal via-transparent to-coal/55" />
 
-        <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-16 pt-32 sm:px-6 sm:pb-20 lg:px-8">
-          <div className="flex flex-wrap items-center gap-2">
-            {["Saint-Denis (93)", "Fait maison", RESTAURANT.hoursShort].map((b) => (
-              <motion.span
-                key={b}
-                initial={reduce ? { opacity: 1 } : { opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: reduce ? 0 : 0.9, duration: 0.6 }}
-                className="border border-sand/25 bg-coal/40 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.24em] text-sand backdrop-blur-sm"
-              >
-                {b}
-              </motion.span>
-            ))}
-          </div>
+      {/* coordonnées — micro-détail */}
+      <p
+        aria-hidden
+        className="absolute bottom-32 right-6 hidden text-[10px] font-bold uppercase tracking-[0.34em] text-sand/50 [writing-mode:vertical-rl] lg:block"
+      >
+        48.9362° N — 2.3574° E · Saint-Denis, France
+      </p>
 
-          <h1 className="mt-6 font-display leading-[0.86] tracking-wide text-cream">
-            <MaskLines
-              className="block text-[clamp(2.75rem,13vw,10.5rem)]"
-              startDelay={0.15}
-              lines={[
-                <>LE GOÛT</>,
-                <>
-                  COMME GUIDE<span className="text-ember">.</span>
-                </>,
-              ]}
-            />
-            <MaskLines
-              className="mt-4 block text-[clamp(2.75rem,13vw,10.5rem)] sm:mt-6"
-              startDelay={0.5}
-              lines={[
-                <>LE MONDE</>,
-                <>
-                  COMME DESTINATION<span className="text-ember">.</span>
-                </>,
-              ]}
-            />
-          </h1>
-
-          <motion.p
-            initial={reduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: reduce ? 0 : 1.05, duration: 0.7 }}
-            className="mt-6 max-w-md text-base leading-relaxed text-sand sm:text-lg"
-          >
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-24 sm:px-6 lg:px-8 lg:pb-28">
+        <Reveal delay={0.15}>
+          <Kicker>Street-food internationale · Saint-Denis (93)</Kicker>
+        </Reveal>
+        <h1 className="mt-6 font-display leading-[0.88] tracking-wide text-cream">
+          <MaskLines
+            className="block text-[clamp(2.75rem,13vw,10.5rem)]"
+            startDelay={0.25}
+            lines={[
+              <>LE GOÛT</>,
+              <>COMME GUIDE.</>,
+            ]}
+          />
+          <MaskLines
+            className="mt-3 block text-[clamp(2.75rem,13vw,10.5rem)] sm:mt-4"
+            startDelay={0.55}
+            lines={[
+              <>LE MONDE</>,
+              <>COMME <span className="text-ember">DESTINATION.</span></>,
+            ]}
+          />
+        </h1>
+        <Reveal delay={0.85}>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-sand sm:text-lg">
             Des sandwichs inspirés des cuisines du monde, préparés avec passion à Saint-Denis.
-          </motion.p>
-
-          <motion.div
-            initial={reduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: reduce ? 0 : 1.2, duration: 0.7 }}
-            className="mt-8 flex flex-wrap items-center gap-4"
-          >
-            <OrderButton size="lg">COMMANDER</OrderButton>
-            <LinkArrow to="/menu">DÉCOUVRIR LE MENU</LinkArrow>
-          </motion.div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: reduce ? 0 : 1.6, duration: 0.8 }}
-          className="relative mx-auto flex w-full max-w-7xl items-center justify-between px-4 pb-6 sm:px-6 lg:px-8"
-          aria-hidden
-        >
-          <div className="hidden items-center gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-sand/80 sm:flex">
-            Scroll pour voyager
-            <span className="relative flex h-10 w-[2px] overflow-hidden bg-sand/25">
-              <span className="absolute h-4 w-full animate-drop bg-ember motion-reduce:animate-none" />
-            </span>
-            <IconArrowDown className="h-4 w-4 text-ember" />
-          </div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-sand/50">
-            {MICROCOPY[1]}
           </p>
-        </motion.div>
-      </section>
-
-      <Marquee
-        items={[
-          "Le monde dans un sandwich",
-          "Fait maison",
-          "Saint-Denis (93)",
-          "Livraison & retrait",
-          "9 destinations, 19 recettes",
-        ]}
-      />
-
-      {/* ═══════════ INTRO ÉDITORIALE ═══════════ */}
-      <section className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-7">
-            <Reveal>
-              <Kicker>Bienvenue à bord</Kicker>
-            </Reveal>
-            <h2 className="mt-6 font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.92] tracking-wide text-cream">
-              <WordsReveal text="UN RESTAURANT." />
-              <br />
-              <WordsReveal text="DES SAVEURS" baseDelay={0.15} />
-              <br />
-              <span className="text-ember">
-                <WordsReveal text="DU MONDE." baseDelay={0.3} />
-              </span>
-            </h2>
-            <div className="mt-8 max-w-xl space-y-4 text-base leading-relaxed text-sand">
-              <Reveal delay={0.1}>
-                <p>
-                  Situé à Saint-Denis, <strong className="text-cream">Le Monde du Goût</strong> vous invite à un voyage
-                  culinaire à travers les saveurs du monde.
-                </p>
-              </Reveal>
-              <Reveal delay={0.18}>
-                <p>
-                  Nos sandwichs s'inspirent de différentes traditions culinaires pour proposer une expérience
-                  généreuse, originale et conviviale.
-                </p>
-              </Reveal>
-            </div>
-            <Reveal delay={0.26}>
-              <p className="mt-8 border-l-2 border-ember pl-5 font-display text-2xl leading-snug tracking-wide text-cream sm:text-3xl">
-                « CHAQUE RECETTE EST PENSÉE COMME UNE NOUVELLE DESTINATION. »
-              </p>
-            </Reveal>
-
-            {/* compteurs */}
-            <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3">
-              {[
-                { n: <Counter to={19} />, label: "recettes signature" },
-                { n: <Counter to={9} />, label: "destinations inspirées" },
-                { n: <Counter to={100} suffix=" %" />, label: "fait maison" },
-              ].map((s, i) => (
-                <Reveal key={i} delay={0.1 * i} className="border-l-2 border-graphite pl-4">
-                  <p className="font-display text-5xl leading-none text-ember">{s.n}</p>
-                  <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.22em] text-muted">{s.label}</p>
-                </Reveal>
-              ))}
-            </div>
+        </Reveal>
+        <Reveal delay={1}>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <OrderButton size="lg">COMMANDER</OrderButton>
+            <Link
+              to="/menu"
+              className="group inline-flex items-center gap-3 border border-cream/35 px-8 py-4 font-display text-base tracking-[0.14em] text-cream transition-all duration-300 hover:border-ember hover:bg-ember hover:text-coal"
+            >
+              DÉCOUVRIR LE MENU
+              <IconArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+            </Link>
           </div>
+        </Reveal>
+        <Reveal delay={1.15}>
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-2 text-[11px] font-bold uppercase tracking-[0.24em] text-sand/70">
+            <span className="flex items-center gap-2"><IconScooter className="h-4 w-4 text-ember" /> Livraison</span>
+            <span className="flex items-center gap-2"><IconBag className="h-4 w-4 text-ember" /> Retrait sur place</span>
+            <span className="flex items-center gap-2"><IconFlame className="h-4 w-4 text-ember" /> Fait maison</span>
+          </div>
+        </Reveal>
+      </div>
 
-          <div className="lg:col-span-5">
-            <Parallax className="relative">
-              <div className="absolute -left-4 -top-4 h-full w-full border border-ember/50" aria-hidden />
-              <div className="relative overflow-hidden">
-                <img
-                  src={IMAGES.intro}
-                  alt="Sandwich au poulet mariné du Monde du Goût, cœur fondant"
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-[3/4] w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-coal/60 via-transparent to-transparent" />
-                <p className="absolute bottom-4 left-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.26em] text-cream">
-                  <IconFlame className="h-4 w-4 text-ember" /> Fait maison. Inspiré du monde.
-                </p>
+      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
+        <span>Scroll pour voyager</span>
+        <span className="relative block h-8 w-px overflow-hidden bg-sand/25">
+          <span className="absolute left-0 top-0 h-3 w-px animate-drop bg-ember motion-reduce:animate-none" />
+        </span>
+      </div>
+    </section>
+  );
+}
+
+function Intro() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+      <SectionMark n="01" label="Le concept" right="Saint-Denis — 93" />
+      <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-8">
+        <h2 className="font-display text-[clamp(3rem,8.5vw,7.5rem)] leading-[0.9] tracking-wide lg:col-span-7">
+          <WordsReveal text="UN RESTAURANT." />
+          <br />
+          <span className="text-ember">
+            <WordsReveal text="DES SAVEURS" baseDelay={0.15} />
+          </span>{" "}
+          <WordsReveal text="DU MONDE." baseDelay={0.3} />
+        </h2>
+        <div className="lg:col-span-5 lg:pt-4">
+          <Reveal delay={0.15}>
+            <p className="text-lg leading-relaxed text-sand">
+              Situé à Saint-Denis, Le Monde du Goût vous invite à un voyage culinaire à travers les saveurs du monde.
+            </p>
+          </Reveal>
+          <Reveal delay={0.25}>
+            <p className="mt-5 leading-relaxed text-muted">
+              Nos sandwichs s'inspirent de différentes traditions culinaires pour proposer une expérience généreuse,
+              originale et conviviale.
+            </p>
+          </Reveal>
+          <Reveal delay={0.35}>
+            <p className="mt-5 font-display text-2xl tracking-wide text-cream">
+              CHAQUE RECETTE EST PENSÉE COMME UNE NOUVELLE DESTINATION.
+            </p>
+          </Reveal>
+          <Reveal delay={0.45}>
+            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-graphite pt-8">
+              <div>
+                <p className="font-display text-5xl text-ember"><Counter to={19} /></p>
+                <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Recettes signatures</p>
               </div>
-            </Parallax>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════ CARTE DU MONDE ═══════════ */}
-      <section className="relative border-y border-graphite bg-soot/60 py-24 lg:py-32" id="destinations">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6 lg:mb-16">
-            <div>
-              <Reveal>
-                <Kicker>Embarquement immédiat</Kicker>
-              </Reveal>
-              <h2 className="mt-5 font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.92] tracking-wide text-cream">
-                <WordsReveal text="VOTRE PROCHAINE" />
-                <br />
-                <span className="text-ember">
-                  <WordsReveal text="DESTINATION ?" baseDelay={0.15} />
-                </span>
-              </h2>
+              <div>
+                <p className="font-display text-5xl text-ember"><Counter to={DESTINATIONS.length} /></p>
+                <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Inspirations</p>
+              </div>
+              <div>
+                <p className="font-display text-5xl text-ember"><Counter to={100} suffix=" %" /></p>
+                <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Fait maison</p>
+              </div>
             </div>
-            <Reveal delay={0.2} className="max-w-xs">
-              <p className="text-sm leading-relaxed text-muted">
-                Survolez une escale pour découvrir la recette qu'elle inspire. Une bouchée. Une destination.
-              </p>
-            </Reveal>
-          </div>
-          <WorldMap />
-        </div>
-      </section>
-
-      {/* ═══════════ LES INCONTOURNABLES ═══════════ */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <Reveal>
-              <Kicker>Les plus demandés</Kicker>
-            </Reveal>
-            <h2 className="mt-5 font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
-              <WordsReveal text="LES" /> <span className="text-ember"><WordsReveal text="INCONTOURNABLES." baseDelay={0.1} /></span>
-            </h2>
-            <Reveal delay={0.15}>
-              <p className="mt-3 text-sm text-muted">Les recettes à découvrir sans hésiter.</p>
-            </Reveal>
-          </div>
-          <Reveal delay={0.2}>
-            <LinkArrow to="/menu">TOUTE LA CARTE</LinkArrow>
           </Reveal>
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-3">
-          {featured.map((p, i) => (
-            <SignatureCard key={p.id} id={p.id} delay={(i % 3) * 0.1} />
-          ))}
+function MapSection() {
+  return (
+    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionMark n="02" label="La carte du monde" right="Projection Natural Earth" />
+        <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
+          <h2 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
+            <WordsReveal text="VOTRE PROCHAINE" />
+            <br />
+            <span className="text-ember"><WordsReveal text="DESTINATION ?" baseDelay={0.12} /></span>
+          </h2>
+          <Reveal delay={0.2}>
+            <p className="max-w-sm text-sm leading-relaxed text-muted">
+              Une bouchée, une destination. Survolez un pays — ou choisissez une escale — pour découvrir la recette
+              qu'il nous a inspirée.
+            </p>
+          </Reveal>
         </div>
-        <p className="mt-4 text-center text-[11px] uppercase tracking-[0.24em] text-muted md:hidden">
-          ← Faites glisser pour explorer →
-        </p>
-      </section>
+        <div className="mt-12">
+          <MapGate />
+        </div>
+      </div>
+    </section>
+  );
+}
 
-      {/* ═══════════ FAIT MAISON ═══════════ */}
-      <section className="relative overflow-hidden border-y border-graphite bg-soot py-24 lg:py-32">
-        <div className="dot-grid absolute inset-0 opacity-30" aria-hidden />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
-            <div>
-              <Reveal>
-                <Kicker>Notre exigence</Kicker>
-              </Reveal>
-              <h2 className="mt-6 font-display text-[clamp(2.8rem,7vw,5.2rem)] leading-[0.94] tracking-wide text-cream">
-                <WordsReveal text="ICI," />
-                <br />
-                <WordsReveal text="ON FAIT LES CHOSES" baseDelay={0.12} />
-                <br />
-                <span className="text-ember">
-                  <WordsReveal text="MAISON." baseDelay={0.3} />
-                </span>
-              </h2>
-              <div className="mt-10 space-y-2">
-                {HOMEMADE.map((item, i) => (
-                  <Reveal key={item.title} delay={i * 0.08}>
-                    <div className="group flex gap-5 border-b border-graphite py-5 transition-colors hover:border-ember/50">
-                      <span className="font-display text-lg text-ember/70">0{i + 1}</span>
-                      <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center border border-graphite text-ember transition-colors duration-300 group-hover:border-ember group-hover:bg-ember group-hover:text-coal">
-                        <item.icon className="h-6 w-6" />
-                      </span>
-                      <span>
-                        <span className="block font-display text-2xl tracking-wide text-cream">{item.title.toUpperCase()}</span>
-                        <span className="mt-1 block text-sm leading-relaxed text-muted">{item.text}</span>
-                      </span>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-            <Parallax range={28}>
-              <div className="relative">
-                <div className="absolute -right-4 -top-4 h-full w-full border border-ember/50" aria-hidden />
-                <div className="relative overflow-hidden">
+/* ——— Signatures : grille éditoriale asymétrique ——— */
+const SIG_SPANS = [
+  "md:col-span-7",
+  "md:col-span-5 md:mt-28",
+  "md:col-span-5 md:mt-10",
+  "md:col-span-7",
+  "md:col-span-6 md:mt-20",
+  "md:col-span-6 md:mt-6",
+];
+
+function Signatures() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+      <SectionMark n="03" label="Les signatures" right="06 recettes" />
+      <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
+        <h2 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
+          <WordsReveal text="LES" /> <span className="text-ember"><WordsReveal text="INCONTOURNABLES." baseDelay={0.1} /></span>
+        </h2>
+        <Reveal delay={0.2}>
+          <p className="max-w-xs text-sm leading-relaxed text-muted">Les recettes à découvrir sans hésiter.</p>
+        </Reveal>
+      </div>
+
+      {/* mobile / tablette : swipe */}
+      <div className="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 md:hidden">
+        {featured.map((p, i) => (
+          <article key={p.id} className="w-[78vw] max-w-[340px] shrink-0 snap-start border border-graphite bg-soot">
+            <SignatureInner p={p} i={i} alwaysCta />
+          </article>
+        ))}
+      </div>
+
+      {/* desktop : grille éditoriale */}
+      <div className="mt-12 hidden grid-cols-12 gap-x-8 gap-y-14 md:grid">
+        {featured.map((p, i) => (
+          <Reveal key={p.id} delay={(i % 2) * 0.1} className={SIG_SPANS[i]}>
+            <article className="group border border-graphite bg-soot transition-all duration-500 hover:-translate-y-2 hover:border-ember/70">
+              <SignatureInner p={p} i={i} />
+            </article>
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal delay={0.15}>
+        <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-graphite pt-8">
+          <p className="font-display text-2xl tracking-wide text-sand">
+            19 RECETTES AU TOTAL — <span className="text-ember">TOUTES FAITES MAISON.</span>
+          </p>
+          <Link
+            to="/menu"
+            className="group inline-flex items-center gap-3 border border-sand/40 px-7 py-3.5 font-display text-sm tracking-[0.14em] text-cream transition-all hover:border-ember hover:bg-ember hover:text-coal"
+          >
+            VOIR TOUTE LA CARTE
+            <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+function SignatureInner({ p, i, alwaysCta }: { p: (typeof featured)[number]; i: number; alwaysCta?: boolean }) {
+  const dest = inspirationOf(p.id);
+  return (
+    <>
+      <div className="relative overflow-hidden">
+        <ProductImage
+          product={p}
+          className="aspect-[16/11]"
+          imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+        />
+        <span className="absolute left-4 top-4 bg-coal/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-sand backdrop-blur-sm">
+          N°{String(i + 1).padStart(2, "0")}
+        </span>
+        {dest && (
+          <span className="absolute bottom-3 right-4 font-display text-sm tracking-[0.18em] text-cream/85">
+            ◆ {dest.country.toUpperCase()}
+          </span>
+        )}
+      </div>
+      <div className="p-6 sm:p-7">
+        <div className="flex items-baseline gap-3">
+          <h3 className="font-display text-3xl tracking-wide text-cream transition-colors duration-300 group-hover:text-ember sm:text-4xl">
+            {p.name.toUpperCase()}
+          </h3>
+          <span className="leader" />
+          <span className="font-display text-2xl text-ember sm:text-3xl">{formatPrice(p.price)}</span>
+        </div>
+        {p.short && <p className="mt-3 text-sm leading-relaxed text-muted">{p.short}</p>}
+        <div
+          className={`mt-5 transition-all duration-500 ${
+            alwaysCta ? "" : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100"
+          }`}
+        >
+          <OrderButton size="sm">COMMANDER</OrderButton>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ——— Fait maison : colonne sticky ——— */
+const ATELIER = [
+  {
+    t: "VIANDES PRÉPARÉES MAISON",
+    d: "Steaks, marinades et escalopes panées préparés chaque jour dans notre cuisine.",
+  },
+  {
+    t: "SAUCES MAISON",
+    d: "Boursin, cocktail, nokoss, tartare… des sauces signées, jamais industrielles.",
+  },
+  {
+    t: "FRITES MAISON",
+    d: "Coupées et frites sur place, servies avec chacun de nos sandwichs.",
+  },
+  {
+    t: "RECETTES GÉNÉREUSES",
+    d: "Des garnitures pleines, du goût, et l'envie d'y revenir.",
+  },
+];
+
+function FaitMaison() {
+  return (
+    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionMark n="04" label="L'atelier" right="Rue de la Boulangerie" />
+        <div className="mt-10 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* image sticky */}
+          <div className="lg:sticky lg:top-32 lg:self-start">
+            <Reveal>
+              <figure className="relative overflow-hidden border border-graphite">
+                <div className="animate-kenburns motion-reduce:animate-none">
                   <img
-                    src={IMAGES.atelier}
-                    alt="L'atelier du Monde du Goût : viandes grillées, sauces maison et frites fraîches"
+                    src="https://image.qwenlm.ai/generated-images/8c677b09-9811-446a-b55e-54c8c7f0f86c/_result.png"
+                    alt="L'atelier du Monde du Goût : viandes maison, sauces et frites en préparation"
+                    className="aspect-[4/5] w-full object-cover"
                     loading="lazy"
                     decoding="async"
-                    className="aspect-[14/10] w-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-coal/60 via-transparent to-transparent" />
-                  <p className="absolute bottom-4 left-4 text-[11px] font-bold uppercase tracking-[0.26em] text-cream">
-                    L'atelier — <span className="text-ember">chaque jour</span>
-                  </p>
                 </div>
-              </div>
-            </Parallax>
+                <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-coal via-coal/70 to-transparent px-5 pb-4 pt-14 text-[10px] font-bold uppercase tracking-[0.26em] text-sand/80">
+                  <span>L'atelier — fait maison</span>
+                  <span className="text-ember">Saint-Denis</span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          </div>
+
+          {/* liste éditoriale */}
+          <div>
+            <h2 className="font-display text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.94] tracking-wide">
+              <WordsReveal text="ICI, ON FAIT" />
+              <br />
+              <WordsReveal text="LES CHOSES" baseDelay={0.12} />
+              <br />
+              <span className="text-ember"><WordsReveal text="MAISON." baseDelay={0.24} /></span>
+            </h2>
+            <Reveal delay={0.3}>
+              <p className="mt-6 max-w-md text-sm leading-relaxed text-muted">
+                Fait maison. Inspiré du monde. Du steak à la sauce, tout part de la cuisine du restaurant.
+              </p>
+            </Reveal>
+            <div className="mt-10">
+              {ATELIER.map((a, i) => (
+                <Reveal key={a.t} delay={i * 0.08}>
+                  <div className="group grid grid-cols-[auto_1fr] items-start gap-6 border-t border-graphite py-7 transition-colors hover:bg-cream/[0.02] sm:gap-8">
+                    <span className="font-display text-4xl leading-none text-ember/70 transition-colors group-hover:text-ember sm:text-5xl">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h3 className="font-display text-2xl tracking-wide text-cream transition-transform duration-500 group-hover:translate-x-1.5 sm:text-3xl">
+                        {a.t}
+                      </h3>
+                      <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">{a.d}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+              <div className="border-t border-graphite" />
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* ═══════════ LIVRAISON / RETRAIT ═══════════ */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
-        <Reveal>
-          <Kicker>Commander</Kicker>
-        </Reveal>
-        <h2 className="mt-5 font-display text-[clamp(2.4rem,6vw,4.5rem)] leading-[0.94] tracking-wide">
-          <WordsReveal text="COMMENT ÇA" /> <span className="text-ember"><WordsReveal text="MARCHE ?" baseDelay={0.12} /></span>
+function Travel() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+      <SectionMark n="05" label="Livraison & retrait" right="Saint-Denis (93)" />
+      <div className="mt-10">
+        <h2 className="font-display text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.92] tracking-wide">
+          <WordsReveal text="LE VOYAGE VIENT" /> <span className="text-ember"><WordsReveal text="À VOUS." baseDelay={0.12} /></span>
         </h2>
-
-        <div className="mt-12 grid gap-6 lg:grid-cols-5">
-          <Reveal className="lg:col-span-3">
-            <div className="group relative h-full overflow-hidden bg-ember p-8 text-coal transition-transform duration-500 hover:-translate-y-1.5 sm:p-10">
-              <svg aria-hidden viewBox="0 0 400 120" className="absolute right-0 top-0 w-72 opacity-20" fill="none" stroke="#111111" strokeWidth="2" strokeDasharray="6 8">
-                <path d="M-10 110 Q 120 -20 210 60 T 410 30" />
-              </svg>
-              <IconScooter className="h-12 w-12" />
-              <h3 className="mt-6 font-display text-4xl tracking-wide sm:text-5xl">LIVRAISON À DOMICILE</h3>
-              <p className="mt-4 max-w-md text-sm font-semibold leading-relaxed text-coal/80">
+      </div>
+      <div className="mt-12 grid gap-6 lg:grid-cols-12">
+        <Reveal className="lg:col-span-7">
+          <article className="group flex h-full flex-col justify-between overflow-hidden border border-graphite bg-soot p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60 sm:p-10">
+            <div>
+              <div className="flex items-center justify-between">
+                <IconScooter className="h-12 w-12 text-ember transition-transform duration-500 group-hover:translate-x-2" />
+                <span className="font-display text-6xl text-cream/8 transition-colors duration-500 group-hover:text-ember/20">01</span>
+              </div>
+              <h3 className="mt-8 font-display text-4xl tracking-wide text-cream sm:text-5xl">LIVRAISON À DOMICILE</h3>
+              <p className="mt-4 max-w-md leading-relaxed text-sand">
                 Commandez en ligne et faites-vous livrer vos spécialités directement à votre porte.
               </p>
-              <p className="mt-3 inline-block border border-coal/30 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em]">
-                Livraison dans le secteur de Saint-Denis (93)
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                Livraison à domicile uniquement dans le secteur de Saint-Denis (93).
               </p>
-              <div className="mt-8">
-                <OrderButton variant="onOrange">COMMANDER EN LIVRAISON</OrderButton>
-              </div>
             </div>
-          </Reveal>
-          <Reveal delay={0.12} className="lg:col-span-2">
-            <div className="group flex h-full flex-col border border-graphite bg-soot p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60 sm:p-10">
-              <IconBag className="h-12 w-12 text-ember" />
-              <h3 className="mt-6 font-display text-4xl tracking-wide text-cream sm:text-5xl">RETRAIT SUR PLACE</h3>
-              <p className="mt-4 text-sm leading-relaxed text-sand">
+            <div className="mt-10">
+              <OrderButton variant="outline">COMMANDER EN LIVRAISON</OrderButton>
+            </div>
+          </article>
+        </Reveal>
+        <Reveal delay={0.12} className="lg:col-span-5">
+          <article className="group relative flex h-full flex-col justify-between overflow-hidden border border-graphite bg-soot p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60 sm:p-10">
+            <div>
+              <div className="flex items-center justify-between">
+                <IconBag className="h-12 w-12 text-ember transition-transform duration-500 group-hover:-rotate-6" />
+                <span className="font-display text-6xl text-cream/8 transition-colors duration-500 group-hover:text-ember/20">02</span>
+              </div>
+              <h3 className="mt-8 font-display text-4xl tracking-wide text-cream sm:text-5xl">RETRAIT SUR PLACE</h3>
+              <p className="mt-4 leading-relaxed text-sand">
                 Préparez votre commande en ligne et venez la récupérer directement au restaurant.
               </p>
-              <p className="mt-3 text-xs text-muted">
-                {RESTAURANT.address.street}, {RESTAURANT.address.zipCity}
-              </p>
-              <div className="mt-auto pt-8">
-                <OrderButton variant="outline">COMMANDER À EMPORTER</OrderButton>
-              </div>
             </div>
-          </Reveal>
-        </div>
-      </section>
+            <div className="mt-10">
+              <OrderButton variant="outline">COMMANDER À EMPORTER</OrderButton>
+            </div>
+          </article>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
 
-      {/* ═══════════ CTA FINAL ═══════════ */}
-      <section className="relative overflow-hidden border-t border-graphite bg-coal">
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(60% 80% at 78% 20%, rgba(232,93,4,0.16), transparent 65%)" }}
-        />
-        <div className="dot-grid absolute inset-0 opacity-25" aria-hidden />
-        <div className="relative mx-auto max-w-7xl px-4 py-28 sm:px-6 lg:px-8 lg:py-36">
-          <div className="max-w-4xl">
-            <Reveal>
-              <Kicker>Dernière escale</Kicker>
-            </Reveal>
-            <h2 className="mt-6 font-display text-[clamp(3.4rem,10vw,8.5rem)] leading-[0.88] tracking-wide text-cream">
-              <WordsReveal text="PRÊT À" /> <span className="text-ember"><WordsReveal text="VOYAGER ?" baseDelay={0.12} /></span>
-            </h2>
-            <div className="mt-8 space-y-1 font-display text-2xl tracking-wide text-sand sm:text-3xl">
-              <p><WordsReveal text="Choisissez votre destination." /></p>
-              <p><WordsReveal text="Choisissez votre sandwich." baseDelay={0.12} /></p>
-              <p className="text-ember"><WordsReveal text="Et laissez le goût faire le reste." baseDelay={0.24} /></p>
-            </div>
-            <Reveal delay={0.2}>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                <OrderButton size="lg">COMMANDER MAINTENANT</OrderButton>
-                <LinkArrow to="/restaurant">NOUS TROUVER</LinkArrow>
-              </div>
-            </Reveal>
-            <Reveal delay={0.3}>
-              <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.3em] text-muted">{MICROCOPY[0]}</p>
-            </Reveal>
+function FinalCta() {
+  return (
+    <section className="relative overflow-hidden border-t border-graphite bg-soot">
+      <p
+        aria-hidden
+        className="text-stroke pointer-events-none absolute left-1/2 top-6 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[16vw] leading-none opacity-50"
+      >
+        BON VOYAGE
+      </p>
+      <div className="relative mx-auto max-w-7xl px-4 py-28 text-center sm:px-6 lg:px-8 lg:py-40">
+        <Reveal>
+          <p className="flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-ember">
+            <IconPlane className="h-5 w-5" /> Embarquement immédiat
+          </p>
+        </Reveal>
+        <h2 className="mt-6 font-display leading-[0.88] tracking-wide text-cream">
+          <MaskLines
+            className="block text-[clamp(3.4rem,11vw,9rem)]"
+            lines={[<>PRÊT À</>, <><span className="text-ember">VOYAGER ?</span></>]}
+          />
+        </h2>
+        <Reveal delay={0.3}>
+          <p className="mx-auto mt-8 max-w-md text-lg leading-relaxed text-sand">
+            Choisissez votre destination. Choisissez votre sandwich. Et laissez le goût faire le reste.
+          </p>
+        </Reveal>
+        <Reveal delay={0.4}>
+          <div className="mt-10 flex justify-center">
+            <OrderButton size="lg">COMMANDER MAINTENANT</OrderButton>
           </div>
-        </div>
-      </section>
+        </Reveal>
+        <Reveal delay={0.5}>
+          <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.24em] text-muted">
+            {RESTAURANT.address.street} · {RESTAURANT.address.zipCity} — {RESTAURANT.hoursLabel}
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+export default function Home() {
+  usePageMeta(
+    "Le Monde du Goût — Sandwichs inspirés des cuisines du monde à Saint-Denis",
+    "Restaurant de street-food à Saint-Denis (93) : sandwichs inspirés des cuisines du monde, faits maison. Livraison et retrait sur place. Commandez en ligne."
+  );
+
+  return (
+    <>
+      <Hero />
+      <Marquee />
+      <Intro />
+      <MapSection />
+      <Signatures />
+      <FaitMaison />
+      <Travel />
+      <FinalCta />
     </>
   );
 }

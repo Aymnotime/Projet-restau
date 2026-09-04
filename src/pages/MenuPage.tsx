@@ -79,7 +79,7 @@ export default function MenuPage() {
           >
             {cat === "sandwichs" && (
               <div className="grid gap-x-14 md:grid-cols-2">
-                {items.map((p) => {
+                {items.map((p, idx) => {
                   const dest = inspirationOf(p.id);
                   return (
                     <article
@@ -93,6 +93,9 @@ export default function MenuPage() {
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-baseline gap-3">
+                          <span className="tnum hidden text-[10px] font-bold tracking-[0.22em] text-muted sm:inline">
+                            {String(idx + 1).padStart(2, "0")}
+                          </span>
                           <h2 className="font-display text-2xl tracking-wide text-cream transition-colors group-hover:text-ember sm:text-3xl">
                             {p.name.toUpperCase()}
                           </h2>

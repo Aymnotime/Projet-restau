@@ -7,15 +7,27 @@ import { IconClock, IconClose, IconMenu, IconPhone, LogoMark, Wordmark } from ".
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 32);
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 32);
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   useEffect(() => setOpen(false), [location.pathname]);
@@ -87,6 +99,12 @@ export default function Navbar() {
             </button>
           </div>
         </div>
+        {/* indicateur de lecture */}
+        <span
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 block h-[2px] origin-left bg-ember"
+          style={{ transform: `scaleX(${progress})` }}
+        />
       </header>
 
       {/* — Menu mobile plein écran — */}

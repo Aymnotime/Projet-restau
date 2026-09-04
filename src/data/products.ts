@@ -165,29 +165,30 @@ export const formatPrice = (n: number) =>
 /* ============================================================
    CARTE DU MONDE — Destinations & inspirations culinaires.
    Chaque destination est associée à une recette du menu.
-   (x, y) : position du repère sur la carte stylisée (viewBox 1000×520).
+   (lat, lon) : coordonnées géographiques réelles du repère.
    ============================================================ */
 export interface Destination {
   id: string;
   country: string;
   code: string;
-  x: number;
-  y: number;
+  lat: number;
+  lon: number;
   productId: string;
 }
 
-export const HOME_PIN = { x: 478, y: 96 };
+/** Le Monde du Goût — Saint-Denis (point de départ des trajets). */
+export const HOME_PIN: { lat: number; lon: number } = { lat: 48.9362, lon: 2.3574 };
 
 export const DESTINATIONS: Destination[] = [
-  { id: "algerie", country: "Algérie", code: "DZ", x: 486, y: 184, productId: "dz" },
-  { id: "maroc", country: "Maroc", code: "MA", x: 448, y: 196, productId: "oriental" },
-  { id: "usa", country: "USA", code: "US", x: 208, y: 148, productId: "ricain" },
-  { id: "inde", country: "Inde", code: "IN", x: 676, y: 236, productId: "indien" },
-  { id: "chine", country: "Chine", code: "CN", x: 768, y: 142, productId: "china-town" },
-  { id: "italie", country: "Italie", code: "IT", x: 516, y: 136, productId: "rital" },
-  { id: "france", country: "France", code: "FR", x: 470, y: 110, productId: "frenchy" },
-  { id: "suisse", country: "Suisse", code: "CH", x: 500, y: 118, productId: "suissard" },
-  { id: "afrique", country: "Afrique", code: "AF", x: 524, y: 322, productId: "africana" },
+  { id: "algerie", country: "Algérie", code: "DZ", lat: 36.7538, lon: 3.0588, productId: "dz" },
+  { id: "maroc", country: "Maroc", code: "MA", lat: 33.9716, lon: -6.8498, productId: "oriental" },
+  { id: "usa", country: "USA", code: "US", lat: 40.7128, lon: -74.006, productId: "ricain" },
+  { id: "inde", country: "Inde", code: "IN", lat: 28.6139, lon: 77.209, productId: "indien" },
+  { id: "chine", country: "Chine", code: "CN", lat: 39.9042, lon: 116.4074, productId: "china-town" },
+  { id: "italie", country: "Italie", code: "IT", lat: 41.9028, lon: 12.4964, productId: "rital" },
+  { id: "france", country: "France", code: "FR", lat: 48.8566, lon: 2.3522, productId: "frenchy" },
+  { id: "suisse", country: "Suisse", code: "CH", lat: 46.948, lon: 7.4474, productId: "suissard" },
+  { id: "afrique", country: "Afrique", code: "AF", lat: 14.7167, lon: -17.4677, productId: "africana" },
 ];
 
 /** inspiration culinaire d'une recette (si associée à une destination) */

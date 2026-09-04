@@ -272,6 +272,36 @@ export function Counter({ to, suffix = "", className = "" }: { to: number; suffi
   );
 }
 
+/* — Marqueur de section éditorial : ( n° ) — libellé — filet ——— */
+export function SectionMark({
+  n,
+  label,
+  className = "",
+  right,
+}: {
+  n: string;
+  label: string;
+  className?: string;
+  right?: ReactNode;
+}) {
+  return (
+    <Reveal className={className}>
+      <div className="flex items-center gap-4">
+        <span className="font-display text-lg tracking-[0.2em] text-ember">( {n} )</span>
+        <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.32em] text-sand">
+          {label}
+        </span>
+        <span className="hairline min-w-8 flex-1" aria-hidden />
+        {right && (
+          <span className="hidden text-[10px] font-bold uppercase tracking-[0.26em] text-muted md:block">
+            {right}
+          </span>
+        )}
+      </div>
+    </Reveal>
+  );
+}
+
 /* — Rangée de menu avec pointillés — */
 export function PriceLine({ name, price, className = "" }: { name: ReactNode; price: number; className?: string }) {
   return (
