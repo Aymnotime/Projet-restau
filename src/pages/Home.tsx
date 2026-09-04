@@ -1,4 +1,4 @@
-import { lazy, Suspense, useRef } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
@@ -10,26 +10,11 @@ import {
 import {
   IconArrowRight, IconBag, IconFlame, IconGlobe, IconPlane, IconScooter,
 } from "../components/Icons";
+import WorldMap from "../components/WorldMap";
 
-const WorldMap = lazy(() => import("../components/WorldMap"));
-
-/* Carte montée immédiatement (chunk dédié, code-splitting conservé).
-   Aucun gating IntersectionObserver : le rendu est déterministe. */
-function MapGate() {
-  return (
-    <Suspense
-      fallback={
-        <div className="dot-grid flex aspect-[1000/620] w-full items-center justify-center border border-graphite bg-coal lg:aspect-[1000/520]">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/60">
-            Préparation de la carte…
-          </p>
-        </div>
-      }
-    >
-      <WorldMap />
-    </Suspense>
-  );
-}
+/* Carte importée statiquement : le code + les données Natural Earth
+   voyagent dans le bundle principal, garantissant un rendu déterministe
+   (aucun chunk séparé, aucun Suspense, aucun observateur). */
 
 const MARQUEE = [
   "Fait maison", "Saint-Denis", "Livraison & retrait", "Saveurs du monde",
@@ -213,7 +198,7 @@ function MapSection() {
           </Reveal>
         </div>
         <div className="mt-12">
-          <MapGate />
+          <WorldMap />
         </div>
       </div>
     </section>

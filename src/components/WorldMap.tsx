@@ -310,10 +310,12 @@ export default function WorldMap() {
       <div>
         <div className="relative overflow-hidden border border-graphite bg-coal">
           {/* barre éditoriale */}
-          <div className="flex items-center justify-between border-b border-graphite px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.28em] text-sand/60">
-            <span>Planisphère · Natural Earth</span>
+          <div className="flex items-center justify-between gap-3 border-b border-graphite px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.28em] text-sand/60">
+            <span className="tnum">
+              {countries.length ? `${countries.length} pays` : "…"} · Natural Earth
+            </span>
             <span className="hidden sm:inline">Départ — Saint-Denis (93)</span>
-            <span className="text-ember">09 escales</span>
+            <span className="tnum text-ember">09 escales</span>
           </div>
 
           {failed ? (
