@@ -114,9 +114,21 @@ export default function MobileGlobe() {
             );
           })}
         </g>
+        <g aria-label="Destinations culinaires">
+          {DESTINATIONS.map((destination) => {
+            const point = projection([destination.lon, destination.lat]);
+            if (!point) return null;
+            const [x, y] = point;
+            return (
+              <g key={destination.id} transform={`translate(${x},${y})`}>
+                <circle r="7" fill="#e30613" fillOpacity="0.18" />
+                <circle r="2.8" fill="#ffffff" stroke="#e30613" strokeWidth="1.3" />
+                <title>{`${destination.country} — ${getProduct(destination.productId)?.name ?? "Inspiration"}`}</title>
+              </g>
+            );
+          })}
+        </g>
         <circle cx={WIDTH / 2} cy={HEIGHT / 2} r="151" fill="none" stroke="#e30613" strokeOpacity="0.8" strokeWidth="1.5" />
-        <circle cx="130" cy="106" r="3.5" fill="#ffffff" stroke="#e30613" strokeWidth="1.5" />
-        <circle cx="200" cy="184" r="3.5" fill="#ffffff" stroke="#e30613" strokeWidth="1.5" />
       </svg>
       <p className="mobile-globe-real__hint">Faites tourner le globe</p>
     </div>
