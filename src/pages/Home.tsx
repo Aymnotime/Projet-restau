@@ -362,6 +362,7 @@ function FaitMaison() {
                       muted
                       loop
                       playsInline
+                      preload="none"
                       controls
                     />
                 </div>
