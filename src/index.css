@@ -58,6 +58,23 @@
   animation: land-in 0.8s var(--ease-expo) both;
 }
 
+/* Apparition douce (graticule, étiquettes, repère départ) */
+@keyframes rise-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.rise-in {
+  animation: rise-in 0.7s var(--ease-expo) both;
+}
+
+/* Tracé progressif du loader de la carte */
+@keyframes dash-crawl {
+  to { stroke-dashoffset: -44; }
+}
+.dash-crawl {
+  animation: dash-crawl 1.1s linear infinite;
+}
+
 /* Soulignement éditorial animé */
 .link-line {
   background-image: linear-gradient(currentColor, currentColor);

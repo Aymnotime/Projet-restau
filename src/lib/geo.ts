@@ -76,9 +76,14 @@ export class Projection {
 /* ——— Génération de tracés (gérée par d3-geo : découpage de
    l'antiméridien, clip sphérique, précision des côtes) ——— */
 export function countryPath(polygons: Pt[][][], proj: Projection): string {
-  return (
-    proj.geoPath()({ type: "MultiPolygon", coordinates: polygons } as any) ?? ""
-  );
+  /* Une géométrie dégénérée ne doit jamais mettre la carte hors-ligne. */
+  try {
+    return (
+      proj.geoPath()({ type: "MultiPolygon", coordinates: polygons } as any) ?? ""
+    );
+  } catch {
+    return "";
+  }
 }
 
 export function graticulePath(proj: Projection, _step = 15): string {

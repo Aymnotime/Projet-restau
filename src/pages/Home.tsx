@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
 import { RESTAURANT, SITE_URL } from "../data/site";
 import {
@@ -13,29 +13,21 @@ import {
 
 const WorldMap = lazy(() => import("../components/WorldMap"));
 
-/* Chargement paresseux de la carte à l'approche de la section */
+/* Carte montée immédiatement (chunk dédié, code-splitting conservé).
+   Aucun gating IntersectionObserver : le rendu est déterministe. */
 function MapGate() {
-  const ref = useRef<HTMLDivElement>(null);
-  const near = useInView(ref, { margin: "700px 0px", once: true });
-  const reduce = useReducedMotion();
   return (
-    <div ref={ref}>
-      {near ? (
-        <Suspense
-          fallback={
-            <div className="dot-grid flex aspect-[1000/620] w-full items-center justify-center border border-graphite bg-coal lg:aspect-[1000/520]">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/60">
-                Préparation de la carte…
-              </p>
-            </div>
-          }
-        >
-          <WorldMap />
-        </Suspense>
-      ) : (
-        <div className="aspect-[1000/620] w-full lg:aspect-[1000/520]" aria-hidden />
-      )}
-    </div>
+    <Suspense
+      fallback={
+        <div className="dot-grid flex aspect-[1000/620] w-full items-center justify-center border border-graphite bg-coal lg:aspect-[1000/520]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/60">
+            Préparation de la carte…
+          </p>
+        </div>
+      }
+    >
+      <WorldMap />
+    </Suspense>
   );
 }
 
