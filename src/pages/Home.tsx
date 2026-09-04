@@ -18,17 +18,33 @@ const WorldMap = lazy(() => import("../components/WorldMap"));
    Aucun gating IntersectionObserver : le rendu est déterministe. */
 function MapGate() {
   return (
-    <Suspense
-      fallback={
-        <div className="dot-grid flex aspect-[1000/620] w-full items-center justify-center border border-graphite bg-coal lg:aspect-[1000/520]">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/60">
-            Préparation de la carte…
+    <>
+      <div className="md:hidden">
+        <div className="mobile-globe-wrap" role="img" aria-label="Globe animé des inspirations culinaires du Monde du Goût">
+          <div className="mobile-globe">
+            <div className="mobile-globe-surface" />
+            <span className="mobile-globe-pin mobile-globe-pin--fr">FR</span>
+            <span className="mobile-globe-pin mobile-globe-pin--dz">DZ</span>
+          </div>
+          <p className="mt-6 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
+            09 escales · un monde de saveurs
           </p>
         </div>
-      }
-    >
-      <WorldMap />
-    </Suspense>
+      </div>
+      <div className="hidden md:block">
+        <Suspense
+          fallback={
+            <div className="dot-grid flex aspect-[1000/620] w-full items-center justify-center border border-graphite bg-coal lg:aspect-[1000/520]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/60">
+                Préparation de la carte…
+              </p>
+            </div>
+          }
+        >
+          <WorldMap />
+        </Suspense>
+      </div>
+    </>
   );
 }
 
