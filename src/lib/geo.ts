@@ -34,11 +34,17 @@ export function countriesFromTopo(topo: any): Country[] {
   const fc: any = feature(topo, topo.objects.countries);
   const feats: any[] = fc?.features ?? [];
   return feats
-    .map((f) => ({
-      id: String(f.id ?? ""),
-      name: String(f.properties?.name ?? ""),
-      polygons: (f.geometry?.coordinates ?? []) as Pt[][][],
-    }))
+    .map((f) => {
+      const coords = f.geometry?.coordinates ?? [];
+      /* Polygon → [anneaux] ; MultiPolygon → [[anneaux], …] */
+      const polygons =
+        f.geometry?.type === "Polygon" ? [coords] : (coords as Pt[][][]);
+      return {
+        id: String(f.id ?? ""),
+        name: String(f.properties?.name ?? ""),
+        polygons,
+      };
+    })
     .filter((c) => c.polygons.length > 0);
 }
 

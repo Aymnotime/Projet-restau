@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Projection, countriesFromTopo, countryPath, graticulePath,
   greatCirclePoints, loadWorldTopo, type ScreenPt,
@@ -200,11 +200,9 @@ export default function WorldMap() {
   const [compact, setCompact] = useState(false);
   const viewRef = useRef<View>(IDENTITY);
   const rafRef = useRef(0);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(wrapRef, { amount: 0.3, once: true });
   const reduce = useReducedMotion();
 
-  /* Chargement paresseux des frontières (à l'approche de la section) */
+  /* Données Natural Earth embarquées → disponibles immédiatement. */
   useEffect(() => {
     let on = true;
     loadWorldTopo()
@@ -221,9 +219,11 @@ export default function WorldMap() {
     return () => mq.removeEventListener("change", fn);
   }, []);
 
+  /* La chorégraphie démarre dès que les données sont prêtes
+     (le montage est déjà différé à l'approche de la section). */
   useEffect(() => {
-    if (topo && inView) setEntered(true);
-  }, [topo, inView]);
+    if (topo) setEntered(true);
+  }, [topo]);
 
   /* Échap → retour vue monde */
   useEffect(() => {
@@ -308,10 +308,7 @@ export default function WorldMap() {
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
       {/* ————— LA CARTE ————— */}
       <div>
-        <div
-          ref={wrapRef}
-          className="relative overflow-hidden border border-graphite bg-coal"
-        >
+        <div className="relative overflow-hidden border border-graphite bg-coal">
           {/* barre éditoriale */}
           <div className="flex items-center justify-between border-b border-graphite px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.28em] text-sand/60">
             <span>Planisphère · Natural Earth</span>
@@ -336,16 +333,17 @@ export default function WorldMap() {
                 role="group"
                 aria-label="Carte du monde interactive : 9 inspirations culinaires reliées à Saint-Denis"
               >
-                {/* terres */}
+                {/* terres — toujours visibles dès que les données sont prêtes */}
                 <g transform={viewStr}>
                   <path
                     d={grat}
                     fill="none"
                     stroke="#F5F1E8"
-                    strokeOpacity={entered || reduce ? 0.06 : 0}
+                    strokeOpacity={0.06}
                     strokeWidth={0.7}
                     vectorEffect="non-scaling-stroke"
-                    style={{ transition: "stroke-opacity 1.2s ease 0.5s" }}
+                    className={entered && !reduce ? "rise-in" : undefined}
+                    style={entered && !reduce ? { animationDelay: "0.4s" } : undefined}
                   />
                   {land.map(({ c, d, cx }) => {
                     const destId = COUNTRY_TO_DEST[c.id];
@@ -357,7 +355,7 @@ export default function WorldMap() {
                         key={c.id}
                         d={d}
                         fill={lit ? "#FFFFFF" : "#F5F1E8"}
-                        fillOpacity={entered || reduce ? (lit ? 1 : 0.92) : 0}
+                        fillOpacity={lit ? 1 : 0.92}
                         stroke={lit ? "#E85D04" : "#111111"}
                         strokeWidth={lit ? 1.3 : 0.6}
                         vectorEffect="non-scaling-stroke"
@@ -424,9 +422,8 @@ export default function WorldMap() {
                     fontSize={15}
                     fontFamily="Bebas Neue"
                     letterSpacing={2.4}
-                    opacity={entered || reduce ? 1 : 0}
-                    style={{ transition: "opacity .6s ease 1.2s" }}
-                    className="hidden sm:block"
+                    className={`hidden sm:block${entered && !reduce ? " rise-in" : ""}`}
+                    style={entered && !reduce ? { animationDelay: "1.15s" } : undefined}
                   >
                     SAINT-DENIS — DÉPART
                   </text>
@@ -448,7 +445,10 @@ export default function WorldMap() {
                           style={{ transition: "r .25s ease, fill .25s ease" }}
                         />
                         {!compact && (
-                          <g opacity={entered || reduce ? 1 : 0} style={{ transition: `opacity .5s ease ${1.15 + i * 0.07}s` }}>
+                          <g
+                            className={entered && !reduce ? "rise-in" : undefined}
+                            style={entered && !reduce ? { animationDelay: `${1.1 + i * 0.07}s` } : undefined}
+                          >
                             <line
                               x1={x}
                               y1={y}
@@ -505,11 +505,11 @@ export default function WorldMap() {
                 )}
               </AnimatePresence>
 
-              {/* état de chargement */}
+              {/* état de chargement (bref : données embarquées) */}
               {!topo && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-coal/80 backdrop-blur-[2px]">
                   <svg width="120" height="24" viewBox="0 0 120 24" aria-hidden>
-                    <path d="M4 18 Q 60 -8 116 14" fill="none" stroke="#E85D04" strokeWidth="1.6" strokeDasharray="5 6" className="animate-marquee" style={{ animationDuration: "1.4s" }} />
+                    <path d="M4 18 Q 60 -8 116 14" fill="none" stroke="#E85D04" strokeWidth="1.6" strokeDasharray="5 6" className="dash-crawl" />
                   </svg>
                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
                     Traçage des routes aériennes…
