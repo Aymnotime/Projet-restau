@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { RESTAURANT } from "../data/site";
 import { Kicker, OrderButton, Reveal, usePageMeta, WordsReveal } from "../components/ui";
@@ -15,6 +15,12 @@ export default function Contact() {
   const [values, setValues] = useState({ name: "", email: "", phone: "", message: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const firstInvalidRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const setFirstInvalidRef = (element: HTMLInputElement | HTMLTextAreaElement | null) => {
+    firstInvalidRef.current = element;
+  };
 
   const validate = (): Errors => {
     const e: Errors = {};
@@ -26,11 +32,30 @@ export default function Contact() {
     return e;
   };
 
-  const onSubmit = (ev: FormEvent) => {
+  const onSubmit = async (ev: FormEvent) => {
     ev.preventDefault();
     const e = validate();
     setErrors(e);
-    if (Object.keys(e).length === 0) setSent(true);
+    setSubmitError("");
+    if (Object.keys(e).length > 0) {
+      firstInvalidRef.current?.focus();
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) throw new Error("Contact form submission failed");
+      setSent(true);
+    } catch {
+      setSubmitError("L'envoi a échoué. Vous pouvez nous joindre directement au 09 87 41 78 73.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const field =
@@ -191,6 +216,8 @@ export default function Contact() {
                             onChange={(e) => setValues({ ...values, name: e.target.value })}
                             aria-invalid={!!errors.name}
                             aria-describedby={errors.name ? "name-err" : undefined}
+                            required
+                            ref={errors.name ? setFirstInvalidRef : undefined}
                             placeholder="Votre nom"
                             className={field}
                           />
@@ -213,6 +240,8 @@ export default function Contact() {
                             onChange={(e) => setValues({ ...values, email: e.target.value })}
                             aria-invalid={!!errors.email}
                             aria-describedby={errors.email ? "email-err" : undefined}
+                            required
+                            ref={!errors.name && errors.email ? setFirstInvalidRef : undefined}
                             placeholder="vous@exemple.fr"
                             className={field}
                           />
@@ -256,6 +285,9 @@ export default function Contact() {
                             onChange={(e) => setValues({ ...values, message: e.target.value })}
                             aria-invalid={!!errors.message}
                             aria-describedby={errors.message ? "message-err" : undefined}
+                            required
+                            minLength={10}
+                            ref={!errors.name && !errors.email && errors.message ? setFirstInvalidRef : undefined}
                             placeholder="Votre message…"
                             className={`${field} resize-y`}
                           />
@@ -266,12 +298,14 @@ export default function Contact() {
                           )}
                         </div>
                       </div>
+                      {submitError && <p className="mt-6 text-sm font-semibold text-ember" role="alert">{submitError}</p>}
                       <div className="mt-8 flex flex-wrap items-center gap-5">
                         <button
                           type="submit"
-                          className="group inline-flex items-center gap-3 bg-ember px-8 py-4 font-display text-base tracking-[0.14em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97]"
+                          disabled={submitting}
+                          className="group inline-flex min-h-11 items-center gap-3 bg-ember px-8 py-4 font-display text-base tracking-[0.14em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97] disabled:cursor-wait disabled:opacity-60"
                         >
-                          ENVOYER
+                          {submitting ? "ENVOI…" : "ENVOYER"}
                           <IconCheck className="h-5 w-5 transition-transform group-hover:scale-110" />
                         </button>
                         <p className="text-xs text-muted">

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ORDER_URL, RESTAURANT } from "../data/site";
 import { IconBag, IconCheck, IconClose, IconPhone, IconPin, IconScooter } from "./Icons";
@@ -13,6 +13,7 @@ export const useOrder = () => useContext(OrderContext);
  */
 export function OrderProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const reduce = useReducedMotion();
 
   const openOrder = useCallback(() => setOpen(true), []);
@@ -23,6 +24,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -59,6 +61,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
               className="relative w-full max-w-lg border border-graphite bg-soot p-6 sm:p-8"
             >
               <button
+                ref={closeButtonRef}
                 onClick={close}
                 aria-label="Fermer la fenêtre de commande"
                 className="absolute right-4 top-4 p-2 text-sand transition-colors hover:text-ember"
@@ -83,23 +86,21 @@ export function OrderProvider({ children }: { children: ReactNode }) {
                     >
                       <IconScooter className="h-7 w-7 shrink-0" />
                       <span className="flex-1">
-                        <span className="block font-display text-xl leading-none">COMMANDER EN LIVRAISON</span>
+                        <span className="block font-display text-xl leading-none">COMMANDER SUR UBER EATS</span>
                         <span className="text-xs font-semibold text-coal/70">Livraison à domicile — Saint-Denis (93)</span>
                       </span>
                       <IconCheck className="h-5 w-5" />
                     </a>
                     <a
-                      href={ORDER_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={RESTAURANT.phoneHref}
                       className="group flex items-center gap-4 border border-graphite bg-graphite/40 p-4 transition-colors hover:border-ember"
                     >
                       <IconBag className="h-7 w-7 shrink-0 text-ember" />
                       <span className="flex-1">
-                        <span className="block font-display text-xl leading-none">COMMANDER À EMPORTER</span>
+                        <span className="block font-display text-xl leading-none">APPELER POUR RETRAIT</span>
                         <span className="text-xs font-semibold text-muted">Retrait sur place au restaurant</span>
                       </span>
-                      <IconCheck className="h-5 w-5 text-ember" />
+                      <IconPhone className="h-5 w-5 text-ember" />
                     </a>
                   </>
                 ) : (

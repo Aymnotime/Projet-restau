@@ -1,4 +1,4 @@
-import { RESTAURANT } from "../data/site";
+import { BOBIGNY_RESTAURANT, GOOGLE_BOBIGNY_REVIEWS_URL, RESTAURANT } from "../data/site";
 import { Kicker, OrderButton, Reveal, usePageMeta, WordsReveal } from "../components/ui";
 import { IconArrowRight, IconClock, IconPhone, IconPin, IconScooter, IconBag } from "../components/Icons";
 
@@ -140,6 +140,43 @@ export default function Restaurant() {
             </Reveal>
           </div>
         </div>
+
+        <section className="mt-20" aria-labelledby="locations-title">
+          <Reveal>
+            <Kicker>Deux adresses</Kicker>
+          </Reveal>
+          <h2 id="locations-title" className="mt-5 font-display text-[clamp(2.6rem,6vw,5rem)] leading-[0.92] tracking-wide">
+            <WordsReveal text="RETROUVEZ-NOUS" />
+            <br />
+            <span className="text-ember"><WordsReveal text="PRÈS DE CHEZ VOUS." baseDelay={0.12} /></span>
+          </h2>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <Reveal>
+              <article className="h-full border border-ember/60 bg-soot p-7 sm:p-8">
+                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Adresse principale</p>
+                <h3 className="mt-4 font-display text-3xl tracking-wide">SAINT-DENIS</h3>
+                <address className="mt-3 text-sm not-italic leading-relaxed text-sand">{RESTAURANT.address.street}<br />{RESTAURANT.address.zipCity}</address>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href={RESTAURANT.mapsDirections} target="_blank" rel="noopener noreferrer" className="bg-ember px-4 py-3 font-display text-sm tracking-[0.14em] text-coal hover:bg-ember-dark">ITINÉRAIRE</a>
+                  <a href={RESTAURANT.phoneHref} className="border border-sand/40 px-4 py-3 font-display text-sm tracking-[0.14em] text-cream hover:border-ember hover:text-ember">{RESTAURANT.phoneDisplay}</a>
+                </div>
+              </article>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <article className="h-full border border-graphite bg-soot p-7 sm:p-8">
+                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Nouvelle adresse</p>
+                <h3 className="mt-4 font-display text-3xl tracking-wide">BOBIGNY</h3>
+                <address className="mt-3 text-sm not-italic leading-relaxed text-sand">{BOBIGNY_RESTAURANT.address.street}<br />{BOBIGNY_RESTAURANT.address.zipCity}</address>
+                <p className="mt-3 text-xs text-muted">{BOBIGNY_RESTAURANT.hoursLabel}</p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href={BOBIGNY_RESTAURANT.mapsDirections} target="_blank" rel="noopener noreferrer" className="bg-ember px-4 py-3 font-display text-sm tracking-[0.14em] text-coal hover:bg-ember-dark">ITINÉRAIRE</a>
+                  <a href={BOBIGNY_RESTAURANT.phoneHref} className="border border-sand/40 px-4 py-3 font-display text-sm tracking-[0.14em] text-cream hover:border-ember hover:text-ember">{BOBIGNY_RESTAURANT.phoneDisplay}</a>
+                </div>
+                <a href={GOOGLE_BOBIGNY_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-xs font-bold uppercase tracking-[0.18em] text-ember hover:text-cream">★ 4,1/5 · 49 avis Google</a>
+              </article>
+            </Reveal>
+          </div>
+        </section>
 
         {/* ——— Comment commander ——— */}
         <div className="mt-20">

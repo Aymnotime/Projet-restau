@@ -24,6 +24,9 @@ import logoImage from "../../logo/logo.png";
    ============================================================ */
 
 export const SITE_URL = "https://www.lemondedugout.fr";
+export const GOOGLE_REVIEWS_URL = "https://www.google.com/maps?cid=4550625844542494646";
+export const GOOGLE_BOBIGNY_REVIEWS_URL = "https://www.google.com/maps?cid=12459659037580595776";
+export const GOOGLE_REVIEWS_FALLBACK = { rating: 4.6, count: 660 };
 
 /**
  * ⚙️ COMMANDE EN LIGNE
@@ -51,6 +54,21 @@ export const RESTAURANT = {
     "https://www.google.com/maps?q=45%20Rue%20de%20la%20Boulangerie%2C%2093200%20Saint-Denis&output=embed",
   mapsDirections:
     "https://www.google.com/maps/dir/?api=1&destination=45%20Rue%20de%20la%20Boulangerie%2C%2093200%20Saint-Denis",
+};
+
+export const BOBIGNY_RESTAURANT = {
+  name: "Le Monde du Goût — Bobigny",
+  address: {
+    street: "4 Avenue Louis Aragon",
+    zipCity: "93000 Bobigny",
+  },
+  phoneDisplay: "09 54 29 24 07",
+  phoneHref: "tel:+33954292407",
+  hoursLabel: "Horaires à confirmer · fermeture indiquée à 2h00",
+  mapsDirections:
+    "https://www.google.com/maps/dir/?api=1&destination=4%20Avenue%20Louis%20Aragon%2C%2093000%20Bobigny",
+  googleRating: 4.1,
+  googleReviewCount: 49,
 };
 
 export const NAV = [

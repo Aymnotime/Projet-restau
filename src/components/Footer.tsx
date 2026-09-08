@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { NAV, RESTAURANT } from "../data/site";
+import { BOBIGNY_RESTAURANT, GOOGLE_REVIEWS_FALLBACK, GOOGLE_REVIEWS_URL, NAV, RESTAURANT } from "../data/site";
 import { OrderButton } from "./ui";
 import { IconClock, IconMail, IconPhone, IconPin, Wordmark } from "./Icons";
 
@@ -65,10 +65,35 @@ export default function Footer() {
                   {RESTAURANT.phoneDisplay}
                 </a>
               </li>
+              <li className="flex items-start gap-3 border-t border-graphite pt-4">
+                <IconPin className="mt-0.5 h-5 w-5 shrink-0 text-ember" />
+                <span>
+                  {BOBIGNY_RESTAURANT.address.street}
+                  <br />
+                  {BOBIGNY_RESTAURANT.address.zipCity}
+                </span>
+              </li>
+              <li>
+                <a href={BOBIGNY_RESTAURANT.phoneHref} className="flex items-center gap-3 transition-colors hover:text-ember">
+                  <IconPhone className="h-5 w-5 shrink-0 text-ember" />
+                  {BOBIGNY_RESTAURANT.phoneDisplay}
+                </a>
+              </li>
               <li>
                 <a href={`mailto:${RESTAURANT.email}`} className="flex items-center gap-3 transition-colors hover:text-ember">
                   <IconMail className="h-5 w-5 shrink-0 text-ember" />
                   {RESTAURANT.email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={GOOGLE_REVIEWS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 transition-colors hover:text-ember"
+                >
+                  <span className="w-5 shrink-0 text-center text-ember" aria-hidden="true">★</span>
+                  {GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5 sur Google · {GOOGLE_REVIEWS_FALLBACK.count} avis
                 </a>
               </li>
               <li className="flex items-center gap-3">
