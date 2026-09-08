@@ -9,7 +9,7 @@ export default function Footer() {
       {/* filigrane */}
       <p
         aria-hidden
-        className="text-stroke pointer-events-none absolute -bottom-6 left-1/2 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[18vw] leading-none opacity-60"
+        className="text-stroke pointer-events-none absolute -bottom-6 left-1/2 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[18vw] leading-none opacity-90"
       >
         LE MONDE DU GOÛT
       </p>
@@ -53,11 +53,14 @@ export default function Footer() {
             <ul className="mt-5 space-y-4 text-sm text-sand">
               <li className="flex items-start gap-3">
                 <IconPin className="mt-0.5 h-5 w-5 shrink-0 text-ember" />
-                <span>
-                  {RESTAURANT.address.street}
-                  <br />
-                  {RESTAURANT.address.zipCity}
-                </span>
+                <div>
+                  <span className="font-display text-lg tracking-wide text-cream">SAINT-DENIS</span>
+                  <address className="mt-1 not-italic leading-relaxed">
+                    {RESTAURANT.address.street}
+                    <br />
+                    {RESTAURANT.address.zipCity}
+                  </address>
+                </div>
               </li>
               <li>
                 <a href={RESTAURANT.phoneHref} className="flex items-center gap-3 transition-colors hover:text-ember">
@@ -67,11 +70,14 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3 border-t border-graphite pt-4">
                 <IconPin className="mt-0.5 h-5 w-5 shrink-0 text-ember" />
-                <span>
-                  {BOBIGNY_RESTAURANT.address.street}
-                  <br />
-                  {BOBIGNY_RESTAURANT.address.zipCity}
-                </span>
+                <div>
+                  <span className="font-display text-lg tracking-wide text-cream">BOBIGNY</span>
+                  <address className="mt-1 not-italic leading-relaxed">
+                    {BOBIGNY_RESTAURANT.address.street}
+                    <br />
+                    {BOBIGNY_RESTAURANT.address.zipCity}
+                  </address>
+                </div>
               </li>
               <li>
                 <a href={BOBIGNY_RESTAURANT.phoneHref} className="flex items-center gap-3 transition-colors hover:text-ember">
@@ -79,13 +85,21 @@ export default function Footer() {
                   {BOBIGNY_RESTAURANT.phoneDisplay}
                 </a>
               </li>
-              <li>
-                <a href={`mailto:${RESTAURANT.email}`} className="flex items-center gap-3 transition-colors hover:text-ember">
-                  <IconMail className="h-5 w-5 shrink-0 text-ember" />
-                  {RESTAURANT.email}
-                </a>
+              <li className="flex items-center gap-3 border-t border-graphite pt-4">
+                <IconClock className="h-5 w-5 shrink-0 text-ember" />
+                <div>
+                  <p className="font-medium text-cream">SAINT-DENIS</p>
+                  <p>{RESTAURANT.hoursLabel}</p>
+                </div>
               </li>
-              <li>
+              <li className="flex items-center gap-3">
+                <IconClock className="h-5 w-5 shrink-0 text-ember" />
+                <div>
+                  <p className="font-medium text-cream">BOBIGNY</p>
+                  <p>{BOBIGNY_RESTAURANT.hoursShort}</p>
+                </div>
+              </li>
+              <li className="border-t border-graphite pt-4">
                 <a
                   href={GOOGLE_REVIEWS_URL}
                   target="_blank"
@@ -96,9 +110,11 @@ export default function Footer() {
                   {GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5 sur Google · {GOOGLE_REVIEWS_FALLBACK.count} avis
                 </a>
               </li>
-              <li className="flex items-center gap-3">
-                <IconClock className="h-5 w-5 shrink-0 text-ember" />
-                {RESTAURANT.hoursLabel}
+              <li>
+                <a href={`mailto:${RESTAURANT.email}`} className="flex items-center gap-3 transition-colors hover:text-ember">
+                  <IconMail className="h-5 w-5 shrink-0 text-ember" />
+                  {RESTAURANT.email}
+                </a>
               </li>
             </ul>
           </div>
