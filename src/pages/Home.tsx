@@ -324,7 +324,7 @@ function Chinatown() {
         <Reveal>
           <Kicker>Une escale à deux pas</Kicker>
           <h2 className="mt-5 max-w-[9ch] font-display text-[clamp(3rem,7vw,6rem)] leading-[0.9] tracking-wide">
-            <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" />
+            <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" className="whitespace-nowrap" />
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
