@@ -1,24 +1,24 @@
-```gitignore
+```
 # Dependencies
 node_modules/
 
-# Build outputs
+# Build artifacts
 dist/
 build/
-.next/
-.nuxt/
-public/build/
+*.js.map
+*.ts.map
 
-# Environment variables
+# Environment
 .env
 .env.local
 .env.*
 
-# IDE files
+# Editors
 .vscode/
 .idea/
 *.swp
 *.swo
+*.tmp
 
 # Logs
 *.log
@@ -54,58 +54,27 @@ yarn-error.log*
 node_modules/
 dist/
 build/
+.nyc_output
+coverage/
+*.lcov
+.nyc_output/
+coverage/
+build/
+dist/
 .next/
 out/
-coverage/
-.nyc_output/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.vscode/.ropeproject/
-
-# Temporary files
-*.tmp
-*.temp
-*~
-.DS_Store
-Thumbs.db
-
-# Compiled files
-*.exe
-*.dll
-*.so
-*.a
-*.o
-*.obj
-*.out
-*.class
-
-# Compression
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-
-# Coverage directory used by tools like istanbul
-coverage/
-# nyc test coverage
-.nyc_output/
+.nuxt/
+public/
+!.gitkeep
+.next/cache/
+.next/static/chunks/
 
 # TypeScript
 *.tsbuildinfo
+.next/
+nuxt/dist/
+
+# General
+.DS_Store
+Thumbs.db
 ```

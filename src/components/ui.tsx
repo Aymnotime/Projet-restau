@@ -181,6 +181,7 @@ export function ProductImage({
         decoding="async"
         onError={() => setFailed(true)}
         className={`h-full w-full object-cover ${imgClassName}`}
+        style={{ objectPosition: 'center 25%' }}
       />
     </div>
   );
