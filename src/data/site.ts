@@ -64,7 +64,8 @@ export const BOBIGNY_RESTAURANT = {
   },
   phoneDisplay: "09 54 29 24 07",
   phoneHref: "tel:+33954292407",
-  hoursLabel: "Horaires à confirmer · fermeture indiquée à 2h00",
+  hoursLabel: "11h00 — 2h00 · 7j/7",
+  hoursShort: "11h00 — 2h00 · 7j/7",
   mapsDirections:
     "https://www.google.com/maps/dir/?api=1&destination=4%20Avenue%20Louis%20Aragon%2C%2093000%20Bobigny",
   googleRating: 4.1,

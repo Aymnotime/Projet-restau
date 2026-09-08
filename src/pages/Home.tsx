@@ -204,7 +204,7 @@ function Hero() {
         </h1>
         <Reveal delay={0.85}>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-sand sm:text-lg">
-            Des sandwichs inspirés des cuisines du monde, préparés avec passion à Saint-Denis.
+            Sandwichs signatures & cuisine du monde à Saint-Denis et Bobigny.
           </p>
         </Reveal>
         <Reveal delay={1}>
@@ -214,7 +214,7 @@ function Hero() {
               to="/menu"
               className="group inline-flex items-center gap-3 border border-cream/35 px-8 py-4 font-display text-base tracking-[0.14em] text-cream transition-all duration-300 hover:border-ember hover:bg-ember hover:text-coal"
             >
-              DÉCOUVRIR LE MENU
+              VOIR LA CARTE
               <IconArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
             </Link>
           </div>
@@ -324,7 +324,7 @@ function Chinatown() {
         <Reveal>
           <Kicker>Une escale à deux pas</Kicker>
           <h2 className="mt-5 max-w-[9ch] font-display text-[clamp(3rem,7vw,6rem)] leading-[0.9] tracking-wide">
-            <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" />
+            <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" className="whitespace-nowrap" />
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
@@ -378,20 +378,20 @@ function Signatures() {
         </Reveal>
       </div>
 
-      <div className="mt-12 md:hidden">
+      <div className="mt-10 md:hidden">
         <article className="group overflow-hidden border border-graphite bg-soot">
           <SignatureInner p={featured[0]} i={0} featured />
         </article>
         <div className="mt-4 divide-y divide-graphite border-y border-graphite">
           {featured.slice(1).map((p, i) => (
             <article key={p.id} className="group bg-soot/50">
-              <CompactSignature p={p} i={i + 1} />
+              <CompactSignatureNoButton p={p} i={i + 1} />
             </article>
           ))}
         </div>
       </div>
 
-      <div className="mt-12 hidden gap-5 md:grid md:grid-cols-12">
+      <div className="mt-10 hidden gap-5 md:grid md:grid-cols-12">
         <Reveal className="md:col-span-7">
           <article className="group h-full overflow-hidden border border-graphite bg-soot transition-colors duration-500 hover:border-ember/70">
             <SignatureInner p={featured[0]} i={0} featured />
@@ -401,15 +401,14 @@ function Signatures() {
           {featured.slice(1).map((p, i) => (
             <Reveal key={p.id} delay={(i % 2) * 0.08}>
               <article className="group bg-soot/50 transition-colors duration-300 hover:bg-soot">
-                <CompactSignature p={p} i={i + 1} />
+                <CompactSignatureNoButton p={p} i={i + 1} />
               </article>
             </Reveal>
           ))}
         </div>
       </div>
 
-      <Reveal delay={0.15}>
-        <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-graphite pt-8">
+      <div className="mt-10 flex flex-wrap items-center justify-between gap-6 border-t border-graphite pt-8">
           <p className="font-display text-2xl tracking-wide text-sand">
             19 RECETTES AU TOTAL — <span className="text-ember">TOUTES FAITES MAISON.</span>
           </p>
@@ -421,7 +420,6 @@ function Signatures() {
             <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
-      </Reveal>
     </section>
   );
 }
@@ -507,6 +505,37 @@ function SignatureInner({ p, i, featured: isFeatured = false }: { p: (typeof fea
 }
 
 function CompactSignature({ p, i }: { p: (typeof featured)[number]; i: number }) {
+  const dest = inspirationOf(p.id);
+  return (
+    <div className="flex items-center gap-4 p-4 sm:gap-5 sm:p-5">
+      <div className="relative h-24 w-24 shrink-0 overflow-hidden sm:h-28 sm:w-28">
+        <ProductImage
+          product={p}
+          className="h-full w-full"
+          imgClassName="transition-transform duration-500 ease-out group-hover:scale-110"
+        />
+        <span className="absolute left-2 top-2 text-[9px] font-bold tracking-[0.16em] text-cream">
+          {String(i + 1).padStart(2, "0")}
+        </span>
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-3">
+          <h3 className="truncate font-display text-2xl tracking-wide text-cream transition-colors group-hover:text-ember sm:text-3xl">
+            {p.name.toUpperCase()}
+          </h3>
+          <span className="shrink-0 font-display text-xl text-ember">{formatPrice(p.price)}</span>
+        </div>
+        {dest && <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dest.country}</p>}
+        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted">{p.short}</p>
+        <div className="mt-3">
+          <OrderButton size="xs">COMMANDER</OrderButton>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CompactSignatureNoButton({ p, i }: { p: (typeof featured)[number]; i: number }) {
   const dest = inspirationOf(p.id);
   return (
     <div className="flex items-center gap-4 p-4 sm:gap-5 sm:p-5">
@@ -680,13 +709,13 @@ function FinalCta() {
     <section className="relative overflow-hidden border-t border-graphite bg-soot">
       <p
         aria-hidden
-        className="text-stroke pointer-events-none absolute left-1/2 top-6 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[16vw] leading-none opacity-50"
+        className="text-stroke pointer-events-none absolute left-1/2 top-6 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[16vw] leading-none opacity-80"
       >
         BON VOYAGE
       </p>
       <div className="relative mx-auto max-w-7xl px-4 py-28 text-center sm:px-6 lg:px-8 lg:py-40">
         <Reveal>
-          <p className="flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-ember">
+          <p className="flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-sand/90">
             <IconPlane className="h-5 w-5" /> Embarquement immédiat
           </p>
         </Reveal>
@@ -718,8 +747,8 @@ function FinalCta() {
 
 export default function Home() {
   usePageMeta(
-    "Le Monde du Goût — Sandwichs inspirés des cuisines du monde à Saint-Denis",
-    "Restaurant de street-food à Saint-Denis (93) : sandwichs inspirés des cuisines du monde, faits maison. Livraison et retrait sur place. Commandez en ligne."
+    "Le Monde du Goût — Sandwichs signatures & cuisine du monde à Saint-Denis et Bobigny",
+    "Restaurant de street-food à Saint-Denis et Bobigny (93) : sandwichs signatures inspirés des cuisines du monde, faits maison. Livraison et retrait sur place. Commandez en ligne."
   );
 
   return (
@@ -727,11 +756,11 @@ export default function Home() {
       <Hero />
       <Marquee />
       <BusinessStrip />
+      <Signatures />
       <Intro />
       <PosterSection />
-      <Chinatown />
       <MapSection />
-      <Signatures />
+      <Chinatown />
       <FaitMaison />
       <Travel />
       <FinalCta />
