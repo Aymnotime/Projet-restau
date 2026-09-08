@@ -17,19 +17,26 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <span className="text-cream">
+            <span className="text-cream inline-block mb-4">
               <Wordmark />
             </span>
-            <p className="mt-6 font-display text-2xl leading-tight tracking-wide text-sand">
+            <h2 className="text-3xl md:text-4xl font-display font-bold bg-gradient-to-r from-gray-400 via-gray-200 to-white bg-clip-text text-transparent mb-6">
+              LE MONDE DU GOÛT
+            </h2>
+            <p className="font-display text-2xl leading-tight tracking-wide text-sand mb-4">
               LE GOÛT COMME GUIDE.
               <br />
               <span className="text-ember">LE MONDE COMME DESTINATION.</span>
             </p>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
+            <p className="max-w-sm text-sm leading-relaxed text-muted mb-8">
               Sandwichs inspirés des cuisines du monde, préparés avec passion à Saint-Denis. Fait maison, généreux,
               sans compromis.
             </p>
-            <OrderButton className="mt-8">COMMANDER</OrderButton>
+            <div className="flex items-center gap-3 text-gray-300 mb-8">
+              <span className="text-amber-400 text-lg">★★★★★</span>
+              <span className="text-sm">{GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5 sur Google · {GOOGLE_REVIEWS_FALLBACK.count} avis</span>
+            </div>
+            <OrderButton>COMMANDER</OrderButton>
           </div>
 
           <nav className="lg:col-span-3" aria-label="Navigation pied de page">
@@ -132,6 +139,12 @@ export default function Footer() {
               Politique de confidentialité
             </Link>
           </div>
+          <p className="font-display text-sm tracking-widest uppercase text-gray-400 flex items-center gap-2">
+            <span>Bon Voyage</span>
+            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </p>
         </div>
       </div>
     </footer>
