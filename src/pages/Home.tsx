@@ -324,9 +324,7 @@ function Chinatown() {
         <Reveal>
           <Kicker>Une escale à deux pas</Kicker>
           <h2 className="mt-5 max-w-[9ch] font-display text-[clamp(3rem,7vw,6rem)] leading-[0.9] tracking-wide">
-            <WordsReveal text="TU CONNAIS" />
-            <br />
-            <span className="text-ember"><WordsReveal text="NOTRE CHINATOWN ?" baseDelay={0.12} /></span>
+            <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" />
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
@@ -576,7 +574,6 @@ function FaitMaison() {
                     muted
                     loop
                     playsInline
-                    controls
                   />
                 </div>
                 <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-coal via-coal/70 to-transparent px-5 pb-4 pt-14 text-[10px] font-bold uppercase tracking-[0.26em] text-sand/80">
