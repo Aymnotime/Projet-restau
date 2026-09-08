@@ -200,9 +200,9 @@ export function OrderButton({
 }) {
   const openOrder = useOrder();
   const sizes = {
-    sm: "px-4 py-2 text-xs",
-    md: "px-6 py-3 text-sm",
-    lg: "px-8 py-4 text-base",
+    sm: "min-h-11 px-4 py-2 text-xs",
+    md: "min-h-11 px-6 py-3 text-sm",
+    lg: "min-h-11 px-8 py-4 text-base",
   }[size];
   const variants = {
     solid: "bg-ember text-coal hover:bg-ember-dark border border-ember hover:border-ember-dark",

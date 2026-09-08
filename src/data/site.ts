@@ -1,9 +1,32 @@
+import dzImage from "../../image-sandwich/le-dz.jpeg";
+import camaroImage from "../../image-sandwich/le-camaro.jpeg";
+import zyentImage from "../../image-sandwich/le-bollywood.jpeg";
+import latinosImage from "../../image-sandwich/le-latinos.jpeg";
+import ricainImage from "../../image-sandwich/le-ricain.jpeg";
+import suissardImage from "../../image-sandwich/LE-SUISSARD.jpeg";
+import panameImage from "../../image-sandwich/LE-PANAME.jpeg";
+import indienImage from "../../image-sandwich/L'INDIEN.jpeg";
+import chinaTownImage from "../../image-sandwich/chinatown.jpeg";
+import vikingImage from "../../image-sandwich/le-viking.jpeg";
+import orientalImage from "../../image-sandwich/L'ORIENTAL.jpeg";
+import mgImage from "../../image-sandwich/le-mg.jpeg";
+import africanaImage from "../../image-sandwich/MG ROUGE.jpeg";
+import gauloisImage from "../../image-sandwich/le-normand.jpeg";
+import frenchyImage from "../../image-sandwich/LE FRENCHY.jpeg";
+import introImage from "../../image-sandwich/FRENCHYKEN.jpeg";
+import ritalImage from "../../image-sandwich/le-rital.jpeg";
+import heroImage from "../../image-sandwich/multi-image.jpeg";
+import logoImage from "../../logo/logo.png";
+
 /* ============================================================
-   LE MONDE DU GOÛT — Configuration centrale du site
+  LE MONDE DU GOÛT — Configuration centrale du site
    Modifiez ce fichier pour mettre à jour les informations.
    ============================================================ */
 
 export const SITE_URL = "https://www.lemondedugout.fr";
+export const GOOGLE_REVIEWS_URL = "https://www.google.com/maps?cid=4550625844542494646";
+export const GOOGLE_BOBIGNY_REVIEWS_URL = "https://www.google.com/maps?cid=12459659037580595776";
+export const GOOGLE_REVIEWS_FALLBACK = { rating: 4.6, count: 660 };
 
 /**
  * ⚙️ COMMANDE EN LIGNE
@@ -12,7 +35,7 @@ export const SITE_URL = "https://www.lemondedugout.fr";
  * le site propose proprement la commande par téléphone.
  * Ne jamais inventer d'URL.
  */
-export const ORDER_URL = "";
+export const ORDER_URL = "https://www.ubereats.com/fr/store/le-monde-du-gout-saint-denis/iBBHrkvCVQGHlzrDwnqpiA?srsltid=AfmBOorvKxUJqeZEjY9NIXjdre5tpfYdgHgPbQiGtH71zUisStaFcvqD";
 
 export const RESTAURANT = {
   name: "Le Monde du Goût",
@@ -33,6 +56,21 @@ export const RESTAURANT = {
     "https://www.google.com/maps/dir/?api=1&destination=45%20Rue%20de%20la%20Boulangerie%2C%2093200%20Saint-Denis",
 };
 
+export const BOBIGNY_RESTAURANT = {
+  name: "Le Monde du Goût — Bobigny",
+  address: {
+    street: "4 Avenue Louis Aragon",
+    zipCity: "93000 Bobigny",
+  },
+  phoneDisplay: "09 54 29 24 07",
+  phoneHref: "tel:+33954292407",
+  hoursLabel: "Horaires à confirmer · fermeture indiquée à 2h00",
+  mapsDirections:
+    "https://www.google.com/maps/dir/?api=1&destination=4%20Avenue%20Louis%20Aragon%2C%2093000%20Bobigny",
+  googleRating: 4.1,
+  googleReviewCount: 49,
+};
+
 export const NAV = [
   { label: "Menu", to: "/menu" },
   { label: "Notre histoire", to: "/notre-histoire" },
@@ -41,19 +79,29 @@ export const NAV = [
 ] as const;
 
 /* ============================================================
-   📷 ZONE IMAGES — Remplacez ces visuels par les photos
-   officielles du restaurant (mêmes clés, mêmes emplacements).
+   📷 ZONE IMAGES — Photos officielles du restaurant.
    ============================================================ */
 export const IMAGES = {
-  hero: "https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png",
-  intro: "https://image.qwenlm.ai/generated-images/0c613848-0805-4f58-bc5a-ecc09a56c865/_result.png",
-  atelier: "https://image.qwenlm.ai/generated-images/8c677b09-9811-446a-b55e-54c8c7f0f86c/_result.png",
-  mg: "https://image.qwenlm.ai/generated-images/896372ce-46c9-4e4c-afe1-b0ff8656863c/_result.png",
-  indien: "https://image.qwenlm.ai/generated-images/d6002850-169a-4fa7-85f9-244b2556faa5/_result.png",
-  ricain: "https://image.qwenlm.ai/generated-images/9cf8ed81-50b4-437c-83aa-0c21e6f0712f/_result.png",
-  chinaTown: "https://image.qwenlm.ai/generated-images/1f690726-ff4e-43ae-a2ed-4c5f3a26a7c8/_result.png",
-  suissard: "https://image.qwenlm.ai/generated-images/39039bce-6c94-4138-8b7b-2193e7e7dd30/_result.png",
-  frenchy: "https://image.qwenlm.ai/generated-images/6c26dc4c-2bc5-4a7a-aeab-734195bff207/_result.png",
+  hero: heroImage,
+  intro: introImage,
+  atelier: mgImage,
+  logo: logoImage,
+  dz: dzImage,
+  camaro: camaroImage,
+  zyent: zyentImage,
+  latinos: latinosImage,
+  mg: mgImage,
+  indien: indienImage,
+  ricain: ricainImage,
+  chinaTown: chinaTownImage,
+  suissard: suissardImage,
+  frenchy: frenchyImage,
+  paname: panameImage,
+  viking: vikingImage,
+  oriental: orientalImage,
+  africana: africanaImage,
+  gaulois: gauloisImage,
+  rital: ritalImage,
 };
 
 export const MICROCOPY = [

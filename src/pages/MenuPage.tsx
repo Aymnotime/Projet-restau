@@ -161,9 +161,8 @@ export default function MenuPage() {
           </motion.div>
         </AnimatePresence>
 
-        <p className="mt-10 border-t border-graphite pt-5 text-xs italic leading-relaxed text-muted">
-          Photos d'illustration en attendant les visuels officiels du restaurant. Chaque sandwich est servi avec des
-          frites maison.
+        <p className="mt-10 border-t border-graphite pt-5 text-xs leading-relaxed text-muted">
+          Photos des recettes préparées au restaurant. Chaque sandwich est servi avec des frites maison.
         </p>
 
         {/* ——— Bandeau commande ——— */}

@@ -1,16 +1,20 @@
-import { useRef } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type VideoHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
-import { RESTAURANT, SITE_URL } from "../data/site";
+import { GOOGLE_REVIEWS_FALLBACK, GOOGLE_REVIEWS_URL, IMAGES, RESTAURANT, SITE_URL } from "../data/site";
 import {
   Counter, Kicker, MaskLines, OrderButton, ProductImage, Reveal,
   SectionMark, usePageMeta, WordsReveal,
 } from "../components/ui";
 import {
-  IconArrowRight, IconBag, IconFlame, IconGlobe, IconPlane, IconScooter,
+  IconArrowRight, IconBag, IconFlame, IconGlobe, IconPhone, IconPlane, IconScooter,
 } from "../components/Icons";
 import WorldMap from "../components/WorldMap";
+import atelierVideo from "../../video-promo/Alors  Team bœuf ou team poulet  🍗🥩📍 Saint-Denis45 Rue de la Boulangerie, 93200 Saint-Denis📞.mp4";
+import chinatownVideo from "../../video-promo/TU CONNAIS NOTRE CHINATOWN  🇨🇳🥙 📍 Saint-Denis45 Rue de la Boulangerie, 93200 Saint-Denis📞 0.mp4";
+import bigRicainPoster from "../../video-promo/Le Big Ricain.png";
+const MobileGlobe = lazy(() => import("../components/MobileGlobe"));
 
 /* Carte importée statiquement : le code + les données Natural Earth
    voyagent dans le bundle principal, garantissant un rendu déterministe
@@ -20,6 +24,44 @@ const MARQUEE = [
   "Fait maison", "Saint-Denis", "Livraison & retrait", "Saveurs du monde",
   "Recettes généreuses", "Commande en ligne",
 ];
+
+function MapGate() {
+  return (
+    <>
+      <div className="md:hidden">
+        <Suspense fallback={<div className="mobile-globe-real" aria-hidden="true" />}>
+          <MobileGlobe />
+        </Suspense>
+      </div>
+      <div className="hidden md:block">
+        <WorldMap />
+      </div>
+    </>
+  );
+}
+
+function LazyVideo({ src, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
+  const containerRef = useRef<HTMLVideoElement>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const video = containerRef.current;
+    if (!video || ready) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setReady(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "320px 0px" },
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [ready]);
+
+  return <video ref={containerRef} {...props} src={ready ? src : undefined} preload={ready ? "metadata" : "none"} />;
+}
 
 function Marquee() {
   return (
@@ -40,6 +82,66 @@ function Marquee() {
   );
 }
 
+function BusinessStrip() {
+  const [reviews, setReviews] = useState(GOOGLE_REVIEWS_FALLBACK);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/google-rating")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: { rating?: number; count?: number } | null) => {
+        if (active && data?.rating && data.count) setReviews({ rating: data.rating, count: data.count });
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const rating = reviews.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  return (
+    <section className="border-b border-graphite bg-soot" aria-label="Informations pratiques">
+      <div className="mx-auto grid max-w-7xl divide-y divide-graphite px-4 sm:px-6 md:grid-cols-4 md:divide-x md:divide-y-0 lg:px-8">
+        <a
+          href={GOOGLE_REVIEWS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 py-4 transition-colors hover:text-ember md:px-6 md:py-5 md:first:pl-0"
+          aria-label={`Voir les avis Google du Monde du Goût, note ${rating} sur 5 et ${reviews.count} avis`}
+        >
+          <span className="font-display text-xl tracking-wide text-ember" aria-hidden="true">★</span>
+          <div>
+            <p className="font-display text-lg leading-none text-cream">AVIS GOOGLE</p>
+            <p className="mt-1 text-xs text-muted">{rating}/5 · {reviews.count} avis</p>
+          </div>
+        </a>
+        <div className="flex items-center gap-3 py-4 md:px-6 md:py-5 md:first:pl-0">
+          <IconScooter className="h-5 w-5 shrink-0 text-ember" />
+          <div>
+            <p className="font-display text-lg leading-none text-cream">LIVRAISON</p>
+            <p className="mt-1 text-xs text-muted">Saint-Denis (93)</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 py-4 md:px-6 md:py-5">
+          <IconFlame className="h-5 w-5 shrink-0 text-ember" />
+          <div>
+            <p className="font-display text-lg leading-none text-cream">FAIT MAISON</p>
+            <p className="mt-1 text-xs text-muted">Sandwichs et frites préparés sur place</p>
+          </div>
+        </div>
+        <a href={RESTAURANT.phoneHref} className="flex items-center gap-3 py-4 transition-colors hover:text-ember md:px-6 md:py-5 md:last:pr-0">
+          <IconPhone className="h-5 w-5 shrink-0 text-ember" />
+          <div>
+            <p className="font-display text-lg leading-none text-cream">OUVERT 7J/7</p>
+            <p className="mt-1 text-xs text-muted">{RESTAURANT.hoursShort} · {RESTAURANT.phoneDisplay}</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -51,7 +153,7 @@ function Hero() {
       <motion.div className="absolute inset-0" style={reduce ? undefined : { y }}>
         <div className="animate-kenburns motion-reduce:animate-none absolute inset-0">
           <img
-            src="https://image.qwenlm.ai/generated-images/184797ae-e572-4f92-9730-683d9be965b5/_result.png"
+            src={IMAGES.hero}
             alt="Sandwich généreux du Monde du Goût, fromage fondant, lumières urbaines en arrière-plan"
             className="h-full w-full object-cover"
             fetchPriority="high"
@@ -71,7 +173,16 @@ function Hero() {
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-24 sm:px-6 lg:px-8 lg:pb-28">
         <Reveal delay={0.15}>
-          <Kicker>Street-food internationale · Saint-Denis (93)</Kicker>
+          <a
+            href={GOOGLE_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-fit items-center gap-3 text-sm font-bold uppercase tracking-[0.18em] text-cream transition-colors hover:text-ember"
+            aria-label={`Voir les avis Google : ${GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })} sur 5, ${GOOGLE_REVIEWS_FALLBACK.count} avis`}
+          >
+            <span className="text-lg text-ember" aria-hidden="true">★</span>
+            <span>{GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5 sur Google · {GOOGLE_REVIEWS_FALLBACK.count} avis</span>
+          </a>
         </Reveal>
         <h1 className="mt-6 font-display leading-[0.88] tracking-wide text-cream">
           <MaskLines
@@ -183,7 +294,7 @@ function MapSection() {
   return (
     <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionMark n="02" label="La carte du monde" right="Projection Natural Earth" />
+        <SectionMark n="04" label="La carte du monde" right="Projection Natural Earth" />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
           <h2 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
             <WordsReveal text="VOTRE PROCHAINE" />
@@ -198,27 +309,68 @@ function MapSection() {
           </Reveal>
         </div>
         <div className="mt-12">
-          <WorldMap />
+          <MapGate />
         </div>
       </div>
     </section>
   );
 }
 
-/* ——— Signatures : grille éditoriale asymétrique ——— */
-const SIG_SPANS = [
-  "md:col-span-7",
-  "md:col-span-5 md:mt-28",
-  "md:col-span-5 md:mt-10",
-  "md:col-span-7",
-  "md:col-span-6 md:mt-20",
-  "md:col-span-6 md:mt-6",
-];
+function Chinatown() {
+  return (
+    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionMark n="03" label="Chinatown" right="Saint-Denis — 93" />
+        <Reveal>
+          <Kicker>Une escale à deux pas</Kicker>
+          <h2 className="mt-5 max-w-[9ch] font-display text-[clamp(3rem,7vw,6rem)] leading-[0.9] tracking-wide">
+            <WordsReveal text="TU CONNAIS" />
+            <br />
+            <span className="text-ember"><WordsReveal text="NOTRE CHINATOWN ?" baseDelay={0.12} /></span>
+          </h2>
+        </Reveal>
+        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+          <Reveal className="lg:col-span-5 lg:col-start-2">
+            <figure className="relative overflow-hidden border border-graphite bg-coal">
+              <LazyVideo
+                src={chinatownVideo}
+                poster={IMAGES.atelier}
+                aria-label="Découvrir le Chinatown de Saint-Denis avec Le Monde du Goût"
+                className="aspect-[9/16] max-h-[680px] w-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+              <figcaption className="flex items-center justify-between border-t border-graphite px-4 py-3 text-[10px] font-bold uppercase tracking-[0.24em] text-muted">
+                <span>Saint-Denis</span>
+                <span className="text-ember">45 rue de la Boulangerie</span>
+              </figcaption>
+            </figure>
+          </Reveal>
+          <div className="lg:col-span-5">
+            <Reveal delay={0.18}>
+              <p className="mt-7 max-w-md text-lg leading-relaxed text-sand">
+                Au cœur de Saint-Denis, notre quartier est une destination à lui tout seul. Passe nous voir et découvre
+                l&apos;adresse où les saveurs du monde se retrouvent.
+              </p>
+            </Reveal>
+            <Reveal delay={0.28}>
+              <p className="mt-6 font-display text-2xl tracking-wide text-cream">
+                LE MONDE DU GOÛT, C&apos;EST ICI.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function Signatures() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
-      <SectionMark n="03" label="Les signatures" right="06 recettes" />
+      <SectionMark n="05" label="Les signatures" right="06 recettes" />
       <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
         <h2 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
           <WordsReveal text="LES" /> <span className="text-ember"><WordsReveal text="INCONTOURNABLES." baseDelay={0.1} /></span>
@@ -228,24 +380,34 @@ function Signatures() {
         </Reveal>
       </div>
 
-      {/* mobile / tablette : swipe */}
-      <div className="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 md:hidden">
-        {featured.map((p, i) => (
-          <article key={p.id} className="w-[78vw] max-w-[340px] shrink-0 snap-start border border-graphite bg-soot">
-            <SignatureInner p={p} i={i} alwaysCta />
-          </article>
-        ))}
+      <div className="mt-12 md:hidden">
+        <article className="group overflow-hidden border border-graphite bg-soot">
+          <SignatureInner p={featured[0]} i={0} featured />
+        </article>
+        <div className="mt-4 divide-y divide-graphite border-y border-graphite">
+          {featured.slice(1).map((p, i) => (
+            <article key={p.id} className="group bg-soot/50">
+              <CompactSignature p={p} i={i + 1} />
+            </article>
+          ))}
+        </div>
       </div>
 
-      {/* desktop : grille éditoriale */}
-      <div className="mt-12 hidden grid-cols-12 gap-x-8 gap-y-14 md:grid">
-        {featured.map((p, i) => (
-          <Reveal key={p.id} delay={(i % 2) * 0.1} className={SIG_SPANS[i]}>
-            <article className="group border border-graphite bg-soot transition-all duration-500 hover:-translate-y-2 hover:border-ember/70">
-              <SignatureInner p={p} i={i} />
-            </article>
-          </Reveal>
-        ))}
+      <div className="mt-12 hidden gap-5 md:grid md:grid-cols-12">
+        <Reveal className="md:col-span-7">
+          <article className="group h-full overflow-hidden border border-graphite bg-soot transition-colors duration-500 hover:border-ember/70">
+            <SignatureInner p={featured[0]} i={0} featured />
+          </article>
+        </Reveal>
+        <div className="flex flex-col divide-y divide-graphite border-y border-graphite md:col-span-5">
+          {featured.slice(1).map((p, i) => (
+            <Reveal key={p.id} delay={(i % 2) * 0.08}>
+              <article className="group bg-soot/50 transition-colors duration-300 hover:bg-soot">
+                <CompactSignature p={p} i={i + 1} />
+              </article>
+            </Reveal>
+          ))}
+        </div>
       </div>
 
       <Reveal delay={0.15}>
@@ -266,43 +428,111 @@ function Signatures() {
   );
 }
 
-function SignatureInner({ p, i, alwaysCta }: { p: (typeof featured)[number]; i: number; alwaysCta?: boolean }) {
+function PosterSection() {
+  return (
+    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionMark n="02" label="L'affiche du moment" right="Le Big Ricain" />
+        <Reveal delay={0.1}>
+          <figure className="mt-10 overflow-hidden border border-graphite bg-coal">
+            <img
+              src={bigRicainPoster}
+              alt="Affiche du Big Ricain, sandwich généreux aux steaks et au fromage"
+              className="h-auto w-full"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+        </Reveal>
+        <div className="mt-8 grid items-end gap-8 border-t border-graphite pt-8 lg:grid-cols-12 lg:gap-12">
+          <Reveal className="lg:col-span-7">
+            <Kicker>La recette qui fait parler</Kicker>
+            <h2 className="mt-5 font-display text-[clamp(3rem,6vw,5.5rem)] leading-[0.9] tracking-wide">
+              <WordsReveal text="LE BIG" />
+              <br />
+              <span className="text-ember"><WordsReveal text="RICAIN." baseDelay={0.1} /></span>
+            </h2>
+          </Reveal>
+          <div className="lg:col-span-5 lg:flex lg:items-end lg:justify-between lg:gap-8">
+            <Reveal delay={0.16}>
+              <p className="max-w-sm text-base leading-relaxed text-sand">
+                Un sandwich généreux, des steaks grillés, du fromage fondant et tout ce qu&apos;il faut pour une vraie
+                escale américaine.
+              </p>
+            </Reveal>
+            <Reveal delay={0.26}>
+              <div className="mt-6 shrink-0 lg:mt-0">
+                <OrderButton size="md">COMMANDER</OrderButton>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SignatureInner({ p, i, featured: isFeatured = false }: { p: (typeof featured)[number]; i: number; featured?: boolean }) {
   const dest = inspirationOf(p.id);
   return (
     <>
       <div className="relative overflow-hidden">
         <ProductImage
           product={p}
-          className="aspect-[16/11]"
+          className={isFeatured ? "aspect-[4/3]" : "aspect-[16/11]"}
           imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.06]"
         />
-        <span className="absolute left-4 top-4 bg-coal/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-sand backdrop-blur-sm">
-          N°{String(i + 1).padStart(2, "0")}
+        <span className="absolute left-5 top-5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-cream">
+          <span className="h-1.5 w-1.5 bg-ember" /> N°{String(i + 1).padStart(2, "0")}
         </span>
         {dest && (
-          <span className="absolute bottom-3 right-4 font-display text-sm tracking-[0.18em] text-cream/85">
+          <span className="absolute bottom-4 right-5 font-display text-sm tracking-[0.18em] text-cream/85">
             ◆ {dest.country.toUpperCase()}
           </span>
         )}
       </div>
-      <div className="p-6 sm:p-7">
+      <div className={isFeatured ? "p-6 sm:p-8" : "p-6 sm:p-7"}>
         <div className="flex items-baseline gap-3">
           <h3 className="font-display text-3xl tracking-wide text-cream transition-colors duration-300 group-hover:text-ember sm:text-4xl">
             {p.name.toUpperCase()}
           </h3>
-          <span className="leader" />
+          <span className="leader hidden sm:block" />
           <span className="font-display text-2xl text-ember sm:text-3xl">{formatPrice(p.price)}</span>
         </div>
         {p.short && <p className="mt-3 text-sm leading-relaxed text-muted">{p.short}</p>}
-        <div
-          className={`mt-5 transition-all duration-500 ${
-            alwaysCta ? "" : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100"
-          }`}
-        >
+        <div className="mt-5">
           <OrderButton size="sm">COMMANDER</OrderButton>
         </div>
       </div>
     </>
+  );
+}
+
+function CompactSignature({ p, i }: { p: (typeof featured)[number]; i: number }) {
+  const dest = inspirationOf(p.id);
+  return (
+    <div className="flex items-center gap-4 p-4 sm:gap-5 sm:p-5">
+      <div className="relative h-24 w-24 shrink-0 overflow-hidden sm:h-28 sm:w-28">
+        <ProductImage
+          product={p}
+          className="h-full w-full"
+          imgClassName="transition-transform duration-500 ease-out group-hover:scale-110"
+        />
+        <span className="absolute left-2 top-2 text-[9px] font-bold tracking-[0.16em] text-cream">
+          {String(i + 1).padStart(2, "0")}
+        </span>
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-3">
+          <h3 className="truncate font-display text-2xl tracking-wide text-cream transition-colors group-hover:text-ember sm:text-3xl">
+            {p.name.toUpperCase()}
+          </h3>
+          <span className="shrink-0 font-display text-xl text-ember">{formatPrice(p.price)}</span>
+        </div>
+        {dest && <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dest.country}</p>}
+        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted">{p.short}</p>
+      </div>
+    </div>
   );
 }
 
@@ -330,19 +560,23 @@ function FaitMaison() {
   return (
     <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionMark n="04" label="L'atelier" right="Rue de la Boulangerie" />
+        <SectionMark n="06" label="L'atelier" right="Rue de la Boulangerie" />
         <div className="mt-10 grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* image sticky */}
           <div className="lg:sticky lg:top-32 lg:self-start">
             <Reveal>
               <figure className="relative overflow-hidden border border-graphite">
-                <div className="animate-kenburns motion-reduce:animate-none">
-                  <img
-                    src="https://image.qwenlm.ai/generated-images/8c677b09-9811-446a-b55e-54c8c7f0f86c/_result.png"
-                    alt="L'atelier du Monde du Goût : viandes maison, sauces et frites en préparation"
+                <div>
+                  <LazyVideo
+                    src={atelierVideo}
+                    poster={IMAGES.atelier}
+                    aria-label="L'atelier du Monde du Goût : équipe bœuf ou poulet à Saint-Denis"
                     className="aspect-[4/5] w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
                   />
                 </div>
                 <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-coal via-coal/70 to-transparent px-5 pb-4 pt-14 text-[10px] font-bold uppercase tracking-[0.26em] text-sand/80">
@@ -395,7 +629,7 @@ function FaitMaison() {
 function Travel() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
-      <SectionMark n="05" label="Livraison & retrait" right="Saint-Denis (93)" />
+      <SectionMark n="07" label="Livraison & retrait" right="Saint-Denis (93)" />
       <div className="mt-10">
         <h2 className="font-display text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.92] tracking-wide">
           <WordsReveal text="LE VOYAGE VIENT" /> <span className="text-ember"><WordsReveal text="À VOUS." baseDelay={0.12} /></span>
@@ -418,7 +652,7 @@ function Travel() {
               </p>
             </div>
             <div className="mt-10">
-              <OrderButton variant="outline">COMMANDER EN LIVRAISON</OrderButton>
+              <OrderButton variant="outline">COMMANDER SUR UBER EATS</OrderButton>
             </div>
           </article>
         </Reveal>
@@ -495,7 +729,10 @@ export default function Home() {
     <>
       <Hero />
       <Marquee />
+      <BusinessStrip />
       <Intro />
+      <PosterSection />
+      <Chinatown />
       <MapSection />
       <Signatures />
       <FaitMaison />
