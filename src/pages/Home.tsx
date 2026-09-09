@@ -158,7 +158,7 @@ function Hero() {
   const reduce = useReducedMotion();
 
   return (
-    <section ref={ref} className="relative flex h-svh min-h-[620px] flex-col overflow-hidden">
+    <section ref={ref} className="relative flex h-svh min-h-[480px] sm:min-h-[560px] md:min-h-[620px] flex-col overflow-hidden">
       <motion.div className="absolute inset-0" style={reduce ? undefined : { y }}>
         <div className="animate-kenburns motion-reduce:animate-none absolute inset-0">
           <img
@@ -176,13 +176,13 @@ function Hero() {
       {/* coordonnées — micro-détail */}
       <p
         aria-hidden
-        className="absolute bottom-32 right-6 hidden text-[10px] font-bold uppercase tracking-[0.34em] text-sand/50 [writing-mode:vertical-rl] lg:block"
+        className="absolute bottom-24 sm:bottom-32 right-4 sm:right-6 hidden text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.34em] text-sand/50 [writing-mode:vertical-rl] lg:block"
       >
         48.9362° N — 2.3574° E · Saint-Denis, France
       </p>
 
       {/* Note Google en bas à droite - bien visible */}
-      <div className="absolute bottom-20 right-6 z-30 hidden lg:block">
+      <div className="absolute bottom-16 sm:bottom-20 right-4 sm:right-6 z-30 hidden lg:block">
         <Reveal delay={0.15}>
           <a
             href={GOOGLE_REVIEWS_URL}
@@ -200,10 +200,10 @@ function Hero() {
         </Reveal>
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-24 sm:px-6 lg:px-8 lg:pb-16">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-20 sm:pb-24 lg:pb-16">
         <h1 className="font-display leading-[0.88] tracking-wide text-cream">
           <MaskLines
-            className="block text-[clamp(2.75rem,13vw,10.5rem)]"
+            className="block text-[clamp(2.2rem,10vw,10.5rem)] sm:text-[clamp(2.5rem,12vw,10.5rem)]"
             startDelay={0.25}
             lines={[
               <>LE GOÛT</>,
@@ -211,7 +211,7 @@ function Hero() {
             ]}
           />
           <MaskLines
-            className="mt-3 block text-[clamp(2.75rem,13vw,10.5rem)] sm:mt-4"
+            className="mt-2 block text-[clamp(2.2rem,10vw,10.5rem)] sm:mt-3 sm:text-[clamp(2.5rem,12vw,10.5rem)]"
             startDelay={0.55}
             lines={[
               <>LE MONDE</>,
@@ -220,27 +220,27 @@ function Hero() {
           />
         </h1>
         <Reveal delay={0.85}>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-sand sm:text-lg">
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-sand sm:text-base sm:mt-4 lg:text-lg">
             Sandwichs signatures & cuisine du monde à Saint-Denis et Bobigny.
           </p>
         </Reveal>
         <Reveal delay={1}>
-          <div className="mt-6 flex flex-wrap items-center gap-4">
+          <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-4 sm:mt-6">
             <OrderButton size="lg">COMMANDER</OrderButton>
             <Link
               to="/menu"
-              className="group inline-flex items-center gap-3 border border-cream/35 px-8 py-4 font-display text-base tracking-[0.14em] text-cream transition-all duration-300 hover:border-ember hover:bg-ember hover:text-coal"
+              className="group inline-flex items-center gap-2 sm:gap-3 border border-cream/35 px-6 py-3 sm:px-8 sm:py-4 font-display text-sm sm:text-base tracking-[0.14em] text-cream transition-all duration-300 hover:border-ember hover:bg-ember hover:text-coal"
             >
               VOIR LA CARTE
-              <IconArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+              <IconArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
             </Link>
           </div>
         </Reveal>
         <Reveal delay={1.15}>
-          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-2 text-[11px] font-bold uppercase tracking-[0.24em] text-sand/70">
-            <span className="flex items-center gap-2"><IconScooter className="h-4 w-4 text-ember" /> Livraison</span>
-            <span className="flex items-center gap-2"><IconBag className="h-4 w-4 text-ember" /> Retrait sur place</span>
-            <span className="flex items-center gap-2"><IconFlame className="h-4 w-4 text-ember" /> Fait maison</span>
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-sand/70">
+            <span className="flex items-center gap-1.5 sm:gap-2"><IconScooter className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-ember" /> Livraison</span>
+            <span className="flex items-center gap-1.5 sm:gap-2"><IconBag className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-ember" /> Retrait sur place</span>
+            <span className="flex items-center gap-1.5 sm:gap-2"><IconFlame className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-ember" /> Fait maison</span>
           </div>
         </Reveal>
       </div>
@@ -248,10 +248,10 @@ function Hero() {
       {/* Logos partenaires en bas à droite */}
       <LogoMarquee />
 
-      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
         <span>Scroll pour voyager</span>
-        <span className="relative block h-8 w-px overflow-hidden bg-sand/25">
-          <span className="absolute left-0 top-0 h-3 w-px animate-drop bg-ember motion-reduce:animate-none" />
+        <span className="relative block h-6 sm:h-8 w-px overflow-hidden bg-sand/25">
+          <span className="absolute left-0 top-0 h-2.5 sm:h-3 w-px animate-drop bg-ember motion-reduce:animate-none" />
         </span>
       </div>
     </section>
@@ -311,24 +311,24 @@ function MapSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+    <section className="border-y border-graphite bg-soot/60 py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionMark n="04" label="La carte du monde" right="Saint-Denis & Bobigny" />
-        <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
+        <div className="mt-8 sm:mt-10 flex flex-wrap items-end justify-between gap-6">
+          <h2 className="font-display text-[clamp(2rem,6vw,5.5rem)] leading-[0.92] tracking-wide">
             <WordsReveal text="VOTRE PROCHAINE" />
             <br />
             <span className="text-ember"><WordsReveal text="DESTINATION ?" baseDelay={0.12} /></span>
           </h2>
           <Reveal delay={0.2}>
-            <p className="max-w-sm text-sm leading-relaxed text-muted">
+            <p className="max-w-sm text-xs sm:text-sm leading-relaxed text-muted">
               Une bouchée, une destination. Survolez un pays — ou choisissez une escale — pour découvrir la recette
               qu'il nous a inspirée.
             </p>
           </Reveal>
         </div>
-        <div className="mt-12 min-h-[400px]">
-          {isInView ? <MapGate /> : <div className="flex h-[400px] items-center justify-center text-sm text-muted">Chargement de la carte...</div>}
+        <div className="mt-8 sm:mt-12 min-h-[320px] sm:min-h-[400px]">
+          {isInView ? <MapGate /> : <div className="flex h-[320px] sm:h-[400px] items-center justify-center text-sm text-muted">Chargement de la carte...</div>}
         </div>
       </div>
     </section>
@@ -337,30 +337,30 @@ function MapSection() {
 
 function Chinatown() {
   return (
-    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+    <section className="border-y border-graphite bg-soot/60 py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionMark n="03" label="Chinatown" right="Saint-Denis — 93" />
         <Reveal>
           <Kicker>Une escale à deux pas</Kicker>
-          <h2 className="mt-5 max-w-[9ch] font-display text-[clamp(3rem,7vw,6rem)] leading-[0.9] tracking-wide">
+          <h2 className="mt-3 sm:mt-5 max-w-[9ch] font-display text-[clamp(2rem,6vw,6rem)] leading-[0.9] tracking-wide">
             <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" className="whitespace-nowrap" />
           </h2>
         </Reveal>
-        <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+        <div className="mt-8 sm:mt-10 grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
           <Reveal className="lg:col-span-5 lg:col-start-2">
             <figure className="relative overflow-hidden border border-graphite bg-coal">
               <LazyVideo
                 src={chinatownVideo}
                 poster={IMAGES.atelier}
                 aria-label="Découvrir le Chinatown de Saint-Denis avec Le Monde du Goût"
-                className="aspect-[9/16] max-h-[680px] w-full object-cover"
+                className="aspect-[9/16] max-h-[520px] sm:max-h-[600px] md:max-h-[680px] w-full object-cover"
                 style={{ objectPosition: 'center 30%' }}
                 autoPlay
                 muted
                 loop
                 playsInline
               />
-              <figcaption className="flex items-center justify-between border-t border-graphite px-4 py-3 text-[10px] font-bold uppercase tracking-[0.24em] text-muted">
+              <figcaption className="flex items-center justify-between border-t border-graphite px-4 py-3 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.24em] text-muted">
                 <span>Saint-Denis</span>
                 <span className="text-ember">45 rue de la Boulangerie</span>
               </figcaption>
@@ -368,13 +368,13 @@ function Chinatown() {
           </Reveal>
           <div className="lg:col-span-5">
             <Reveal delay={0.18}>
-              <p className="mt-7 max-w-md text-lg leading-relaxed text-sand">
+              <p className="mt-5 sm:mt-7 max-w-md text-base sm:text-lg leading-relaxed text-sand">
                 Au cœur de Saint-Denis, notre quartier est une destination à lui tout seul. Passe nous voir et découvre
                 l&apos;adresse où les saveurs du monde se retrouvent.
               </p>
             </Reveal>
             <Reveal delay={0.28}>
-              <p className="mt-6 font-display text-2xl tracking-wide text-cream">
+              <p className="mt-4 sm:mt-6 font-display text-xl sm:text-2xl tracking-wide text-cream">
                 LE MONDE DU GOÛT, C&apos;EST ICI.
               </p>
             </Reveal>
@@ -730,34 +730,34 @@ function FinalCta() {
     <section className="relative overflow-hidden border-t border-graphite bg-soot">
       <p
         aria-hidden
-        className="text-stroke pointer-events-none absolute left-1/2 top-6 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[16vw] leading-none opacity-80"
+        className="text-stroke pointer-events-none absolute left-1/2 top-4 sm:top-6 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[14vw] sm:text-[16vw] leading-none opacity-80"
       >
         BON VOYAGE
       </p>
-      <div className="relative mx-auto max-w-7xl px-4 py-28 text-center sm:px-6 lg:px-8 lg:py-40">
+      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:py-28 lg:py-40 text-center sm:px-6 lg:px-8">
         <Reveal>
-          <p className="flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.3em] text-sand/90">
-            <IconPlane className="h-5 w-5" /> Embarquement immédiat
+          <p className="flex items-center justify-center gap-3 text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-sand/90">
+            <IconPlane className="h-4 w-4 sm:h-5 sm:w-5" /> Embarquement immédiat
           </p>
         </Reveal>
-        <h2 className="mt-6 font-display leading-[0.88] tracking-wide text-cream">
+        <h2 className="mt-4 sm:mt-6 font-display leading-[0.88] tracking-wide text-cream">
           <MaskLines
-            className="block text-[clamp(3.4rem,11vw,9rem)]"
+            className="block text-[clamp(2.5rem,9vw,9rem)] sm:text-[clamp(3.4rem,11vw,9rem)]"
             lines={[<>PRÊT À</>, <><span className="text-ember">VOYAGER ?</span></>]}
           />
         </h2>
         <Reveal delay={0.3}>
-          <p className="mx-auto mt-8 max-w-md text-lg leading-relaxed text-sand">
+          <p className="mx-auto mt-6 sm:mt-8 max-w-md text-sm sm:text-lg leading-relaxed text-sand">
             Choisissez votre destination. Choisissez votre sandwich. Et laissez le goût faire le reste.
           </p>
         </Reveal>
         <Reveal delay={0.4}>
-          <div className="mt-10 flex justify-center">
+          <div className="mt-8 sm:mt-10 flex justify-center">
             <OrderButton size="lg">COMMANDER MAINTENANT</OrderButton>
           </div>
         </Reveal>
         <Reveal delay={0.5}>
-          <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.24em] text-muted">
+          <p className="mt-6 sm:mt-8 text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-muted">
             {RESTAURANT.address.street} · {RESTAURANT.address.zipCity} — {RESTAURANT.hoursLabel}
           </p>
         </Reveal>

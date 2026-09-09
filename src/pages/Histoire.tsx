@@ -20,17 +20,17 @@ export default function Histoire() {
   const reduce = useReducedMotion();
 
   return (
-    <div className="pt-28 lg:pt-36">
+    <div className="pt-24 sm:pt-28 lg:pt-36">
       {/* ——— Héros éditorial ——— */}
       <header className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="grid gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
             <Reveal>
               <Kicker>Notre histoire</Kicker>
             </Reveal>
-            <h1 className="mt-6 font-display leading-[0.86] tracking-wide">
+            <h1 className="mt-4 sm:mt-6 font-display leading-[0.86] tracking-wide">
               <MaskLines
-                className="block text-[clamp(4rem,12vw,10rem)]"
+                className="block text-[clamp(2.5rem,10vw,10rem)] sm:text-[clamp(3rem,11vw,10rem)]"
                 lines={[
                   <>LE MONDE</>,
                   <>
@@ -43,7 +43,7 @@ export default function Histoire() {
               initial={reduce ? { opacity: 1 } : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduce ? 0 : 0.5, duration: 0.7 }}
-              className="mt-6 font-display text-2xl leading-snug tracking-wide text-sand sm:text-3xl"
+              className="mt-4 sm:mt-6 font-display text-xl sm:text-2xl md:text-3xl leading-snug tracking-wide text-sand"
             >
               LE GOÛT COMME GUIDE.
               <br />
@@ -51,7 +51,7 @@ export default function Histoire() {
             </motion.p>
           </div>
           <div className="flex items-end lg:col-span-5">
-            <div className="space-y-5 border-l-2 border-ember pl-6 text-base leading-relaxed text-sand">
+            <div className="space-y-4 sm:space-y-5 border-l-2 border-ember pl-5 sm:pl-6 text-sm sm:text-base leading-relaxed text-sand">
               <Reveal delay={0.15}>
                 <p>
                   Situé à Saint-Denis, <strong className="text-cream">Le Monde du Goût</strong> vous invite à un voyage
@@ -75,9 +75,9 @@ export default function Histoire() {
       </header>
 
       {/* ——— Manifeste ——— */}
-      <section className="mx-auto max-w-5xl px-4 py-24 text-center sm:px-6 lg:py-32">
-        <IconCompass className="mx-auto h-10 w-10 text-ember" />
-        <p className="mt-8 font-display text-[clamp(2.2rem,6vw,4.6rem)] leading-[1.02] tracking-wide text-cream">
+      <section className="mx-auto max-w-5xl px-4 py-16 sm:py-24 text-center sm:px-6 lg:py-32">
+        <IconCompass className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-ember" />
+        <p className="mt-6 sm:mt-8 font-display text-[clamp(1.6rem,5vw,4.6rem)] sm:text-[clamp(2.2rem,6vw,4.6rem)] leading-[1.02] tracking-wide text-cream">
           <WordsReveal text="DES CUISINES DU MONDE," />
           <br />
           <WordsReveal text="UN SANDWICH À LA FOIS." baseDelay={0.2} />
@@ -87,7 +87,7 @@ export default function Histoire() {
           </span>
         </p>
         <Reveal delay={0.3}>
-          <p className="mx-auto mt-8 max-w-xl text-sm leading-relaxed text-muted">
+          <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-xs sm:text-sm leading-relaxed text-muted">
             Du DZ à l'Africana, du China Town au Suissard : nos recettes rendent hommage aux saveurs qui nous font
             voyager, préparées chaque jour avec des produits faits maison.
           </p>
@@ -95,28 +95,28 @@ export default function Histoire() {
       </section>
 
       {/* ——— Galerie ——— */}
-      <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+      <section className="border-y border-graphite bg-soot/60 py-16 sm:py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+          <div className="mb-8 sm:mb-12 flex flex-wrap items-end justify-between gap-6">
             <div>
               <Reveal>
                 <Kicker>En images</Kicker>
               </Reveal>
-              <h2 className="mt-5 font-display text-[clamp(2.6rem,6vw,4.8rem)] leading-[0.92] tracking-wide">
+              <h2 className="mt-3 sm:mt-5 font-display text-[clamp(2rem,5vw,4.8rem)] sm:text-[clamp(2.6rem,6vw,4.8rem)] leading-[0.92] tracking-wide">
                 <WordsReveal text="LA GALERIE DU" /> <span className="text-ember"><WordsReveal text="GOÛT." baseDelay={0.12} /></span>
               </h2>
             </div>
             <Reveal delay={0.2}>
-              <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-muted">
+              <p className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.28em] text-muted">
                 Photos d'illustration — à remplacer par les visuels officiels
               </p>
             </Reveal>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:auto-rows-[220px]">
+          <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 md:auto-rows-[180px] sm:auto-rows-[220px]">
             {GALLERY.map((g, i) => (
               <Reveal key={g.src} delay={(i % 3) * 0.08} className={g.span}>
-                <figure className="group relative h-full min-h-[240px] overflow-hidden border border-graphite">
+                <figure className="group relative h-full min-h-[180px] sm:min-h-[240px] overflow-hidden border border-graphite">
                   <img
                     src={g.src}
                     alt={g.alt}
@@ -125,9 +125,9 @@ export default function Histoire() {
                     className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-coal/70 via-transparent to-transparent opacity-80 transition-opacity group-hover:opacity-100" />
-                  <figcaption className="absolute bottom-3 left-3 flex items-center gap-2">
-                    <span className="h-2 w-2 rotate-45 bg-ember" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-cream">{g.tag}</span>
+                  <figcaption className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 flex items-center gap-1.5 sm:gap-2">
+                    <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rotate-45 bg-ember" />
+                    <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-cream">{g.tag}</span>
                   </figcaption>
                 </figure>
               </Reveal>
@@ -137,23 +137,23 @@ export default function Histoire() {
       </section>
 
       {/* ——— Valeurs + CTA ——— */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-28">
-        <div className="flex flex-wrap gap-3">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:py-24 sm:px-6 lg:px-8 lg:py-28">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           {["Généreux", "International", "Convivial", "Fait maison", "Urbain", "Accessible"].map((v, i) => (
             <Reveal key={v} delay={i * 0.05}>
-              <span className="inline-block border border-graphite bg-soot px-5 py-2.5 font-display text-xl tracking-[0.1em] text-sand transition-colors hover:border-ember hover:text-ember">
+              <span className="inline-block border border-graphite bg-soot px-4 py-2 sm:px-5 sm:py-2.5 font-display text-lg sm:text-xl tracking-[0.1em] text-sand transition-colors hover:border-ember hover:text-ember">
                 {v.toUpperCase()}
               </span>
             </Reveal>
           ))}
         </div>
-        <div className="mt-16 flex flex-col items-start justify-between gap-8 border-t border-graphite pt-10 lg:flex-row lg:items-end">
-          <h2 className="font-display text-[clamp(2.6rem,6vw,5rem)] leading-[0.9] tracking-wide">
+        <div className="mt-12 sm:mt-16 flex flex-col items-start justify-between gap-6 sm:gap-8 border-t border-graphite pt-8 sm:pt-10 lg:flex-row lg:items-end">
+          <h2 className="font-display text-[clamp(2rem,5vw,5rem)] sm:text-[clamp(2.6rem,6vw,5rem)] leading-[0.9] tracking-wide">
             <WordsReveal text="LA SUITE DU VOYAGE" />
             <br />
             <span className="text-ember"><WordsReveal text="EST DANS LA CARTE." baseDelay={0.15} /></span>
           </h2>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3 sm:gap-4">
             <LinkArrow to="/menu">DÉCOUVRIR LE MENU</LinkArrow>
             <OrderButton>COMMANDER</OrderButton>
           </div>
