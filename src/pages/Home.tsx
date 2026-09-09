@@ -289,14 +289,10 @@ function Intro() {
             </p>
           </Reveal>
           <Reveal delay={0.45}>
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-graphite pt-8">
+            <div className="mt-10 grid grid-cols-2 gap-6 border-t border-graphite pt-8">
               <div>
                 <p className="font-display text-5xl text-ember"><Counter to={19} /></p>
                 <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Recettes signatures</p>
-              </div>
-              <div>
-                <p className="font-display text-5xl text-ember"><Counter to={DESTINATIONS.length} /></p>
-                <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Inspirations</p>
               </div>
               <div>
                 <p className="font-display text-5xl text-ember"><Counter to={100} suffix=" %" /></p>
@@ -317,7 +313,7 @@ function MapSection() {
   return (
     <section ref={ref} className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionMark n="04" label="La carte du monde" right="Projection Natural Earth" />
+        <SectionMark n="04" label="La carte du monde" right="Saint-Denis & Bobigny" />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
           <h2 className="font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
             <WordsReveal text="VOTRE PROCHAINE" />
