@@ -1,8 +1,8 @@
 import dzImage from "../../image-sandwich/le-dz.jpeg";
 import camaroImage from "../../image-sandwich/le-camaro.jpeg";
-import zyentImage from "../../image-sandwich/le-bollywood.jpeg";
 import latinosImage from "../../image-sandwich/le-latinos.jpeg";
 import ricainImage from "../../image-sandwich/le-ricain.jpeg";
+import bigRicainImage from "../../image-sandwich/le big ricain.jpeg";
 import suissardImage from "../../image-sandwich/LE-SUISSARD.jpeg";
 import panameImage from "../../image-sandwich/LE-PANAME.jpeg";
 import indienImage from "../../image-sandwich/L'INDIEN.jpeg";
@@ -10,11 +10,10 @@ import chinaTownImage from "../../image-sandwich/chinatown.jpeg";
 import vikingImage from "../../image-sandwich/le-viking.jpeg";
 import orientalImage from "../../image-sandwich/L'ORIENTAL.jpeg";
 import mgImage from "../../image-sandwich/le-mg.jpeg";
-import africanaImage from "../../image-sandwich/MG ROUGE.jpeg";
-import gauloisImage from "../../image-sandwich/le-normand.jpeg";
+import mgRougeImage from "../../image-sandwich/MG ROUGE.jpeg";
 import frenchyImage from "../../image-sandwich/LE FRENCHY.jpeg";
+import frenchyKenImage from "../../image-sandwich/FRENCHYKEN.jpeg";
 import introImage from "../../image-sandwich/FRENCHYKEN.jpeg";
-import ritalImage from "../../image-sandwich/le-rital.jpeg";
 import heroImage from "../../image-sandwich/multi-image.jpeg";
 import logoImage from "../../logo/logo.png";
 
@@ -81,28 +80,29 @@ export const NAV = [
 
 /* ============================================================
    📷 ZONE IMAGES — Photos officielles du restaurant.
+   Uniquement les images réelles présentes dans /image-sandwich/
    ============================================================ */
 export const IMAGES = {
   hero: heroImage,
   intro: introImage,
   atelier: mgImage,
   logo: logoImage,
+  // Sandwichs avec images réelles
   dz: dzImage,
   camaro: camaroImage,
-  zyent: zyentImage,
   latinos: latinosImage,
-  mg: mgImage,
-  indien: indienImage,
   ricain: ricainImage,
-  chinaTown: chinaTownImage,
+  bigRicain: bigRicainImage,
   suissard: suissardImage,
-  frenchy: frenchyImage,
   paname: panameImage,
+  indien: indienImage,
+  chinaTown: chinaTownImage,
   viking: vikingImage,
   oriental: orientalImage,
-  africana: africanaImage,
-  gaulois: gauloisImage,
-  rital: ritalImage,
+  mg: mgImage,
+  mgRouge: mgRougeImage,
+  frenchy: frenchyImage,
+  frenchyKen: frenchyKenImage,
 };
 
 export const MICROCOPY = [

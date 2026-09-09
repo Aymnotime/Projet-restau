@@ -1,7 +1,9 @@
 # Dependencies
+
 node_modules/
 
 # Build artifacts
+
 dist/
 build/
 .next/
@@ -10,12 +12,14 @@ public/dist/
 out/
 
 # Environment
+
 .env
 .env.local
 .env.*
 !.env.example
 
 # Editors
+
 .vscode/
 .idea/
 *.swp
@@ -23,10 +27,12 @@ out/
 *.tmp
 
 # Logs
+
 *.log
 
 # Python
-__pycache__/
+
+**pycache**/
 *.pyc
 *.pyo
 *.pyd
@@ -38,25 +44,28 @@ pip-log.txt
 pip-selfcheck.json
 
 # Node.js
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # Coverage
+
 coverage/
 *.lcov
 .nyc_output/
 istanbul/
 .jest/
 
+# TypeScript
+
+*.tsbuildinfo
+
 # OS generated files
+
 .DS_Store
-.DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# TypeScript
-*.tsbuildinfo

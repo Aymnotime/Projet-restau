@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState, type VideoHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform, useInView } from "framer-motion";
 import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
 import { GOOGLE_REVIEWS_FALLBACK, GOOGLE_REVIEWS_URL, IMAGES, RESTAURANT, SITE_URL } from "../data/site";
 import {
@@ -63,17 +63,26 @@ function LazyVideo({ src, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
   return <video ref={containerRef} {...props} src={ready ? src : undefined} preload={ready ? "metadata" : "none"} />;
 }
 
-function Marquee() {
+const LOGOS = [
+  { name: "Uber Eats", src: "/logos/ubereats.svg" },
+  { name: "Deliveroo", src: "/logos/deliveroo.svg" },
+  { name: "DoorDash", src: "/logos/doordash.svg" },
+];
+
+function LogoMarquee() {
   return (
-    <div className="relative overflow-hidden border-y border-graphite bg-soot py-4" aria-hidden>
-      <div className="flex w-max animate-marquee motion-reduce:animate-none">
+    <div className="absolute bottom-6 right-6 z-20 hidden lg:flex items-center gap-4 overflow-hidden">
+      <div className="flex items-center gap-4 animate-marquee-slow motion-reduce:animate-none">
         {[0, 1].map((n) => (
-          <div key={n} className="flex shrink-0 items-center">
-            {MARQUEE.map((t) => (
-              <span key={`${n}-${t}`} className="flex items-center gap-6 pr-6 font-display text-xl tracking-[0.2em] text-sand/80">
-                {t.toUpperCase()}
-                <IconGlobe className="h-4 w-4 text-ember" />
-              </span>
+          <div key={n} className="flex shrink-0 items-center gap-4">
+            {LOGOS.map((logo) => (
+              <img
+                key={`${n}-${logo.name}`}
+                src={logo.src}
+                alt={`Logo ${logo.name}`}
+                className="h-8 w-auto opacity-60 grayscale transition-opacity hover:opacity-100 hover:grayscale-0"
+                loading="lazy"
+              />
             ))}
           </div>
         ))}
@@ -172,20 +181,27 @@ function Hero() {
         48.9362° N — 2.3574° E · Saint-Denis, France
       </p>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-24 sm:px-6 lg:px-8 lg:pb-28">
+      {/* Note Google en bas à droite - bien visible */}
+      <div className="absolute bottom-20 right-6 z-30 hidden lg:block">
         <Reveal delay={0.15}>
           <a
             href={GOOGLE_REVIEWS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex w-fit items-center gap-3 text-sm font-bold uppercase tracking-[0.18em] text-cream transition-colors hover:text-ember"
+            className="inline-flex items-center gap-3 rounded-lg bg-white/95 px-5 py-3 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:shadow-xl"
             aria-label={`Voir les avis Google : ${GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })} sur 5, ${GOOGLE_REVIEWS_FALLBACK.count} avis`}
           >
-            <span className="text-lg text-ember" aria-hidden="true">★</span>
-            <span>{GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5 sur Google · {GOOGLE_REVIEWS_FALLBACK.count} avis</span>
+            <span className="text-xl text-amber-500" aria-hidden="true">★</span>
+            <div className="text-left">
+              <p className="font-bold text-coal">{GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5</p>
+              <p className="text-xs text-gray-600">{GOOGLE_REVIEWS_FALLBACK.count} avis Google</p>
+            </div>
           </a>
         </Reveal>
-        <h1 className="mt-6 font-display leading-[0.88] tracking-wide text-cream">
+      </div>
+
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-24 sm:px-6 lg:px-8 lg:pb-16">
+        <h1 className="font-display leading-[0.88] tracking-wide text-cream">
           <MaskLines
             className="block text-[clamp(2.75rem,13vw,10.5rem)]"
             startDelay={0.25}
@@ -204,12 +220,12 @@ function Hero() {
           />
         </h1>
         <Reveal delay={0.85}>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-sand sm:text-lg">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-sand sm:text-lg">
             Sandwichs signatures & cuisine du monde à Saint-Denis et Bobigny.
           </p>
         </Reveal>
         <Reveal delay={1}>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="mt-6 flex flex-wrap items-center gap-4">
             <OrderButton size="lg">COMMANDER</OrderButton>
             <Link
               to="/menu"
@@ -221,13 +237,16 @@ function Hero() {
           </div>
         </Reveal>
         <Reveal delay={1.15}>
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-2 text-[11px] font-bold uppercase tracking-[0.24em] text-sand/70">
+          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-2 text-[11px] font-bold uppercase tracking-[0.24em] text-sand/70">
             <span className="flex items-center gap-2"><IconScooter className="h-4 w-4 text-ember" /> Livraison</span>
             <span className="flex items-center gap-2"><IconBag className="h-4 w-4 text-ember" /> Retrait sur place</span>
             <span className="flex items-center gap-2"><IconFlame className="h-4 w-4 text-ember" /> Fait maison</span>
           </div>
         </Reveal>
       </div>
+
+      {/* Logos partenaires en bas à droite */}
+      <LogoMarquee />
 
       <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
         <span>Scroll pour voyager</span>
@@ -292,8 +311,11 @@ function Intro() {
 }
 
 function MapSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   return (
-    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+    <section ref={ref} className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionMark n="04" label="La carte du monde" right="Projection Natural Earth" />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
@@ -309,8 +331,8 @@ function MapSection() {
             </p>
           </Reveal>
         </div>
-        <div className="mt-12">
-          <MapGate />
+        <div className="mt-12 min-h-[400px]">
+          {isInView ? <MapGate /> : <div className="flex h-[400px] items-center justify-center text-sm text-muted">Chargement de la carte...</div>}
         </div>
       </div>
     </section>
@@ -757,7 +779,6 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Marquee />
       <BusinessStrip />
       <Signatures />
       <Intro />

@@ -75,6 +75,15 @@ export default function Footer() {
                   {RESTAURANT.phoneDisplay}
                 </a>
               </li>
+              <li className="border-t border-graphite pt-4 mt-2">
+                <div className="flex items-center gap-3">
+                  <IconClock className="h-5 w-5 shrink-0 text-ember" />
+                  <div>
+                    <p className="font-medium text-cream">SAINT-DENIS</p>
+                    <p>{RESTAURANT.hoursLabel}</p>
+                  </div>
+                </div>
+              </li>
               <li className="flex items-start gap-3 border-t border-graphite pt-4">
                 <IconPin className="mt-0.5 h-5 w-5 shrink-0 text-ember" />
                 <div>
@@ -92,18 +101,13 @@ export default function Footer() {
                   {BOBIGNY_RESTAURANT.phoneDisplay}
                 </a>
               </li>
-              <li className="flex items-center gap-3 border-t border-graphite pt-4">
-                <IconClock className="h-5 w-5 shrink-0 text-ember" />
-                <div>
-                  <p className="font-medium text-cream">SAINT-DENIS</p>
-                  <p>{RESTAURANT.hoursLabel}</p>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <IconClock className="h-5 w-5 shrink-0 text-ember" />
-                <div>
-                  <p className="font-medium text-cream">BOBIGNY</p>
-                  <p>{BOBIGNY_RESTAURANT.hoursShort}</p>
+              <li className="border-t border-graphite pt-4">
+                <div className="flex items-center gap-3">
+                  <IconClock className="h-5 w-5 shrink-0 text-ember" />
+                  <div>
+                    <p className="font-medium text-cream">BOBIGNY</p>
+                    <p>{BOBIGNY_RESTAURANT.hoursShort}</p>
+                  </div>
                 </div>
               </li>
               <li className="border-t border-graphite pt-4">
@@ -139,9 +143,9 @@ export default function Footer() {
               Politique de confidentialité
             </Link>
           </div>
-          <p className="font-display text-sm tracking-widest uppercase text-gray-400 flex items-center gap-2">
+          <p className="font-display text-sm tracking-widest uppercase text-gray-200 flex items-center gap-2">
             <span>Bon Voyage</span>
-            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           </p>

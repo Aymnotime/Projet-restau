@@ -309,15 +309,6 @@ export default function WorldMap() {
       {/* ————— LA CARTE ————— */}
       <div>
         <div className="relative overflow-hidden border border-graphite bg-coal">
-          {/* barre éditoriale */}
-          <div className="flex items-center justify-between gap-3 border-b border-graphite px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.28em] text-sand/60">
-            <span className="tnum">
-              {countries.length ? `${countries.length} pays` : "…"} · Natural Earth
-            </span>
-            <span className="hidden sm:inline">Départ — Saint-Denis (93)</span>
-            <span className="tnum text-ember">09 escales</span>
-          </div>
-
           {failed ? (
             /* Repli hors-ligne : aucune fausse géographie */
             <div className="px-6 py-16 text-center">
@@ -535,9 +526,6 @@ export default function WorldMap() {
                     <div className="flex gap-3 p-3">
                       <ProductImage product={hoveredProduct} className="h-16 w-16 shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-[9px] font-bold uppercase tracking-[0.24em] text-ember">
-                          Escale {hoveredDest.code} · {hoveredDest.country}
-                        </p>
                         <p className="mt-1 truncate font-display text-xl leading-none tracking-wide text-cream">
                           {hoveredProduct.name.toUpperCase()}
                         </p>
@@ -576,9 +564,6 @@ export default function WorldMap() {
                 <span className={`font-display text-base leading-none tracking-[0.14em] ${active ? "text-coal" : "text-ember"}`}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="font-display text-base leading-none tracking-[0.14em]">
-                  {d.country.toUpperCase()}
-                </span>
               </button>
             );
           })}
@@ -610,9 +595,6 @@ export default function WorldMap() {
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-ember">
-                  Inspiration {selectedDest.country} · {selectedDest.lat.toFixed(2)}°, {selectedDest.lon.toFixed(2)}°
-                </p>
                 <div className="mt-3 flex items-baseline justify-between gap-3">
                   <h3 className="font-display text-4xl leading-none tracking-wide">{selectedProduct.name.toUpperCase()}</h3>
                   <p className="font-display text-3xl text-ember">{formatPrice(selectedProduct.price)}</p>

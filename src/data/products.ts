@@ -33,7 +33,7 @@ export const CATEGORIES: { id: Category; label: string }[] = [
 const F = "Servi avec des frites maison.";
 
 export const PRODUCTS: Product[] = [
-  // ——— SANDWICHS ———
+  // ——— SANDWICHS (Uniquement avec images réelles) ———
   {
     id: "dz", slug: "dz", name: "Le DZ", category: "sandwichs", price: 8.9,
     description: "Viande hachée maison / Omelette / Fromage / Sauce maison.",
@@ -45,11 +45,6 @@ export const PRODUCTS: Product[] = [
     note: F, image: IMAGES.camaro, short: "Poulet mariné aux oignons, poivrons et olives, sauce maison.",
   },
   {
-    id: "zyent", slug: "zyent", name: "Le Zyent", category: "sandwichs", price: 8.9,
-    description: "Thon / Pommes de terre / Sauce épicée / Olives / Œuf.",
-    note: F, image: IMAGES.zyent, short: "Thon, pommes de terre, sauce épicée, olives, œuf.",
-  },
-  {
     id: "latinos", slug: "latinos", name: "Le Latinos", category: "sandwichs", price: 8.9,
     description: "Poulet mariné / Sauce épicée / Piment / Cheddar.",
     note: F, image: IMAGES.latinos, short: "Poulet mariné, sauce épicée, piment, cheddar.",
@@ -59,6 +54,12 @@ export const PRODUCTS: Product[] = [
     description: "4 steaks maison / Bacon / Cheddar / Œuf / Sauce cocktail.",
     note: F, image: IMAGES.ricain, featured: true,
     short: "4 steaks maison, bacon, cheddar, œuf, sauce cocktail.",
+  },
+  {
+    id: "big-ricain", slug: "big-ricain", name: "Le Big Ricain", category: "sandwichs", price: 14.9,
+    description: "6 steaks maison / Double bacon / Double cheddar / Œuf / Sauce cocktail.",
+    note: F, image: IMAGES.bigRicain, featured: true,
+    short: "6 steaks maison, double bacon, double cheddar, œuf, sauce cocktail.",
   },
   {
     id: "suissard", slug: "suissard", name: "Le Suissard", category: "sandwichs", price: 10.9,
@@ -100,19 +101,10 @@ export const PRODUCTS: Product[] = [
     short: "2 steaks maison, poulet mariné, sauce Boursin, poulet fumé.",
   },
   {
-    id: "africana", slug: "africana", name: "L'Africana", category: "sandwichs", price: 8.9,
-    description: "Poulet mariné / Sauce Nokoss / Cheddar.",
-    note: F, image: IMAGES.africana, short: "Poulet mariné, sauce Nokoss, cheddar.",
-  },
-  {
-    id: "gaulois", slug: "gaulois", name: "Le Gaulois", category: "sandwichs", price: 10.9,
-    description: "3 steaks maison / Sauce au poivre / Œuf.",
-    note: F, image: IMAGES.gaulois, short: "3 steaks maison, sauce au poivre, œuf.",
-  },
-  {
-    id: "vege", slug: "vege", name: "Le Végé", category: "sandwichs", price: 8.9,
-    description: "Galette de pommes de terre / Crudités / Cheddar / Œuf.",
-    note: F, image: null, short: "Galette de pommes de terre, crudités, cheddar, œuf.",
+    id: "mg-rouge", slug: "mg-rouge", name: "Le MG Rouge", category: "sandwichs", price: 11.9,
+    description: "2 steaks maison / Poulet mariné / Sauce Boursin / Fromage / Poulet fumé / Sauce spicy.",
+    note: F, image: IMAGES.mgRouge, featured: true,
+    short: "2 steaks maison, poulet mariné, sauce Boursin, poulet fumé, sauce spicy.",
   },
   {
     id: "frenchy", slug: "frenchy", name: "Le Frenchy", category: "sandwichs", price: 11.9,
@@ -121,20 +113,10 @@ export const PRODUCTS: Product[] = [
     short: "2 steaks maison, chèvre, miel, cheddar.",
   },
   {
-    id: "flamand", slug: "flamand", name: "Le Flamand", category: "sandwichs", price: 10.9,
-    description: "Escalope panée maison / Sauce tartare maison / Citron / Cheddar.",
-    note: F, image: null, short: "Escalope panée maison, sauce tartare maison, citron.",
-  },
-  {
-    id: "rital", slug: "rital", name: "Le Rital", category: "sandwichs", price: 10.9,
-    description: "3 steaks maison / Sauce tomate basilic / Mozzarella / Huile d'olive.",
-    note: F, image: null, short: "3 steaks maison, sauce tomate basilic, mozzarella.",
-  },
-  {
-    id: "mg-tacos", slug: "mg-tacos", name: "Le MG — Tacos", category: "sandwichs", price: 11.9,
-    description: "2 steaks maison / Poulet mariné / Sauce Boursin / Fromage / Poulet fumé.",
-    note: "Avec frites maison à l'intérieur.", image: null,
-    short: "La recette MG en version tacos, frites maison à l'intérieur.",
+    id: "frenchy-ken", slug: "frenchy-ken", name: "Le Frenchy Ken", category: "sandwichs", price: 11.9,
+    description: "2 steaks maison / Chèvre / Miel / Cheddar / Sauce spéciale.",
+    note: F, image: IMAGES.frenchyKen, featured: true,
+    short: "2 steaks maison, chèvre, miel, cheddar, sauce spéciale.",
   },
 
   // ——— BOISSONS ———
