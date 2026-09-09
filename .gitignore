@@ -1,15 +1,18 @@
 ```
-# Dependencies
-node_modules/
-
 # Build artifacts
 dist/
 build/
+*.js
+*.css
+*.map
+
+# Dependencies
+node_modules/
 
 # Environment
 .env
 .env.local
-.env.*
+*.env.*
 
 # Editors
 .vscode/
@@ -18,15 +21,31 @@ build/
 # Logs
 *.log
 
-# Python cache
-__pycache__/
-*.pyc
+# Temporary files
+*.tmp
+*.swp
+*.swo
 
-# System files
+# OS specific
 .DS_Store
 Thumbs.db
 
-# Compression
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+
+# Compressed files
 *.zip
 *.gz
 *.tar
@@ -49,5 +68,4 @@ Thumbs.db
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
 ```
