@@ -1,8 +1,7 @@
-```gitignore
 # Dependencies
 node_modules/
 
-# Build outputs
+# Build artifacts
 dist/
 build/
 .next/
@@ -10,13 +9,13 @@ build/
 public/dist/
 out/
 
-# Environment variables
+# Environment
 .env
 .env.local
 .env.*
 !.env.example
 
-# IDE files
+# Editors
 .vscode/
 .idea/
 *.swp
@@ -45,6 +44,7 @@ yarn-error.log*
 
 # Coverage
 coverage/
+*.lcov
 .nyc_output/
 istanbul/
 .jest/
@@ -60,5 +60,3 @@ Thumbs.db
 
 # TypeScript
 *.tsbuildinfo
-```
-```

@@ -156,6 +156,7 @@ function Hero() {
             src={IMAGES.hero}
             alt="Sandwich généreux du Monde du Goût, fromage fondant, lumières urbaines en arrière-plan"
             className="h-full w-full object-cover"
+            style={{ objectPosition: 'center 20%' }}
             fetchPriority="high"
           />
         </div>
@@ -335,6 +336,7 @@ function Chinatown() {
                 poster={IMAGES.atelier}
                 aria-label="Découvrir le Chinatown de Saint-Denis avec Le Monde du Goût"
                 className="aspect-[9/16] max-h-[680px] w-full object-cover"
+                style={{ objectPosition: 'center 30%' }}
                 autoPlay
                 muted
                 loop
@@ -599,6 +601,7 @@ function FaitMaison() {
                     poster={IMAGES.atelier}
                     aria-label="L'atelier du Monde du Goût : équipe bœuf ou poulet à Saint-Denis"
                     className="aspect-[4/5] w-full object-cover"
+                    style={{ objectPosition: 'center 25%' }}
                     autoPlay
                     muted
                     loop
