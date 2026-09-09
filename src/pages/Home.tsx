@@ -40,6 +40,14 @@ function MapGate() {
   );
 }
 
+function MapSectionFallback() {
+  return (
+    <div className="flex min-h-[280px] sm:min-h-[340px] md:min-h-[400px] items-center justify-center text-sm text-muted">
+      Chargement de la carte...
+    </div>
+  );
+}
+
 function LazyVideo({ src, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
   const containerRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
@@ -327,8 +335,8 @@ function MapSection() {
             </p>
           </Reveal>
         </div>
-        <div className="mt-6 sm:mt-8 min-h-[280px] sm:min-h-[340px] md:min-h-[400px]">
-          {isInView ? <MapGate /> : <div className="flex h-[280px] sm:h-[340px] md:h-[400px] items-center justify-center text-sm text-muted">Chargement de la carte...</div>}
+        <div className="mt-6 sm:mt-8">
+          {isInView ? <MapGate /> : <MapSectionFallback />}
         </div>
       </div>
     </section>
