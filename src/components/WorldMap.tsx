@@ -568,9 +568,6 @@ export default function WorldMap() {
             );
           })}
         </div>
-        <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-muted">
-          Frontières · Natural Earth / world-atlas — Projection Natural Earth I
-        </p>
       </div>
 
       {/* ————— PANNEAU DESTINATION ————— */}
