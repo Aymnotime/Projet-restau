@@ -59,33 +59,33 @@ export default function Contact() {
   };
 
   const field =
-    "w-full border border-graphite bg-coal px-4 py-3 text-sm text-cream placeholder:text-muted/70 transition-colors focus:border-ember focus:outline-none";
-  const label = "mb-2 block text-[11px] font-bold uppercase tracking-[0.24em] text-sand";
+    "w-full border border-graphite bg-coal px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-cream placeholder:text-muted/70 transition-colors focus:border-ember focus:outline-none";
+  const label = "mb-2 block text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-sand";
   const err = "mt-1.5 text-xs font-semibold text-ember";
 
   return (
-    <div className="pt-28 lg:pt-36">
+    <div className="pt-24 sm:pt-28 lg:pt-36">
       <header className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <Kicker>Écrivez-nous</Kicker>
         </Reveal>
-        <h1 className="mt-5 font-display text-[clamp(3.4rem,9vw,7.5rem)] leading-[0.88] tracking-wide">
+        <h1 className="mt-3 sm:mt-5 font-display text-[clamp(2.6rem,8vw,7.5rem)] leading-[0.88] tracking-wide">
           <WordsReveal text="CONTACT" />
           <span className="text-ember"><WordsReveal text="." baseDelay={0.1} /></span>
         </h1>
         <Reveal delay={0.15}>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-sand">
+          <p className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-sand">
             Une question, une commande spéciale, un événement ? Laissez-nous un message — ou passez nous voir, c'est
             encore mieux.
           </p>
         </Reveal>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8 lg:pb-32">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+      <section className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-10 lg:px-8 lg:pb-32">
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
           {/* ——— Coordonnées ——— */}
           <div className="lg:col-span-5">
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {[
                 {
                   icon: IconPin,
@@ -121,19 +121,19 @@ export default function Contact() {
                 },
               ].map((item, i) => (
                 <Reveal key={item.title} delay={i * 0.07}>
-                  <div className="group flex items-start gap-4 border border-graphite bg-soot p-5 transition-colors hover:border-ember/60">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center border border-graphite text-ember transition-colors group-hover:border-ember group-hover:bg-ember group-hover:text-coal">
+                  <div className="group flex items-start gap-3 sm:gap-4 border border-graphite bg-soot p-4 sm:p-5 transition-colors hover:border-ember/60">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-graphite text-ember transition-colors group-hover:border-ember group-hover:bg-ember group-hover:text-coal sm:h-11 sm:w-11">
                       <item.icon className="h-5 w-5" />
                     </span>
                     <div className="min-w-0">
-                      <h2 className="text-[11px] font-bold uppercase tracking-[0.26em] text-muted">{item.title}</h2>
-                      <p className="mt-1 text-sm font-semibold leading-relaxed text-cream">{item.body}</p>
+                      <h2 className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.26em] text-muted">{item.title}</h2>
+                      <p className="mt-1 text-xs sm:text-sm font-semibold leading-relaxed text-cream">{item.body}</p>
                       {item.href && (
                         <a
                           href={item.href}
                           target={item.href.startsWith("http") ? "_blank" : undefined}
                           rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="mt-1 inline-block text-xs font-bold uppercase tracking-[0.18em] text-ember transition-colors hover:text-cream"
+                          className="mt-1 inline-block text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-ember transition-colors hover:text-cream"
                         >
                           {item.cta} →
                         </a>
@@ -144,8 +144,8 @@ export default function Contact() {
               ))}
             </div>
             <Reveal delay={0.3}>
-              <div className="mt-6 border border-dashed border-line bg-graphite/30 p-5">
-                <p className="text-sm font-semibold text-cream">Envie de commander maintenant ?</p>
+              <div className="mt-5 sm:mt-6 border border-dashed border-line bg-graphite/30 p-4 sm:p-5">
+                <p className="text-xs sm:text-sm font-semibold text-cream">Envie de commander maintenant ?</p>
                 <div className="mt-3">
                   <OrderButton size="sm">COMMANDER</OrderButton>
                 </div>
@@ -156,7 +156,7 @@ export default function Contact() {
           {/* ——— Formulaire ——— */}
           <div className="lg:col-span-7">
             <Reveal delay={0.1}>
-              <div className="border border-graphite bg-soot p-6 sm:p-10">
+              <div className="border border-graphite bg-soot p-5 sm:p-6 md:p-8 lg:p-10">
                 <AnimatePresence mode="wait">
                   {sent ? (
                     <motion.div
@@ -164,16 +164,16 @@ export default function Contact() {
                       initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: reduce ? 0 : 0.4 }}
-                      className="py-10 text-center"
+                      className="py-8 sm:py-10 text-center"
                       role="status"
                     >
-                      <span className="mx-auto flex h-16 w-16 items-center justify-center border border-ember bg-ember/10 text-ember">
-                        <IconCheck className="h-8 w-8" />
+                      <span className="mx-auto flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center border border-ember bg-ember/10 text-ember">
+                        <IconCheck className="h-7 w-7 sm:h-8 sm:w-8" />
                       </span>
-                      <h2 className="mt-6 font-display text-4xl tracking-wide">
+                      <h2 className="mt-5 sm:mt-6 font-display text-3xl sm:text-4xl tracking-wide">
                         MESSAGE ENVOYÉ<span className="text-ember">.</span>
                       </h2>
-                      <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-sand">
+                      <p className="mx-auto mt-3 max-w-sm text-xs sm:text-sm leading-relaxed text-sand">
                         Merci {values.name.trim().split(" ")[0]} ! Nous revenons vers vous très vite. Pour une commande
                         immédiate, appelez le{" "}
                         <a href={RESTAURANT.phoneHref} className="font-semibold text-ember hover:underline">
@@ -186,7 +186,7 @@ export default function Contact() {
                           setSent(false);
                           setValues({ name: "", email: "", phone: "", message: "" });
                         }}
-                        className="mt-8 border border-sand/40 px-6 py-3 font-display text-sm tracking-[0.14em] text-cream transition-colors hover:border-ember hover:text-ember"
+                        className="mt-6 sm:mt-8 border border-sand/40 px-5 py-2.5 sm:px-6 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-cream transition-colors hover:border-ember hover:text-ember"
                       >
                         ENVOYER UN AUTRE MESSAGE
                       </button>
@@ -200,10 +200,10 @@ export default function Contact() {
                       exit={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
                       transition={{ duration: reduce ? 0 : 0.3 }}
                     >
-                      <h2 className="font-display text-3xl tracking-wide">
+                      <h2 className="font-display text-2xl sm:text-3xl tracking-wide">
                         LAISSEZ-NOUS UN MESSAGE<span className="text-ember">.</span>
                       </h2>
-                      <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                      <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 sm:grid-cols-2">
                         <div>
                           <label htmlFor="name" className={label}>
                             Nom <span className="text-ember">*</span>
@@ -280,7 +280,7 @@ export default function Contact() {
                           <textarea
                             id="message"
                             name="message"
-                            rows={6}
+                            rows={5}
                             value={values.message}
                             onChange={(e) => setValues({ ...values, message: e.target.value })}
                             aria-invalid={!!errors.message}
@@ -298,17 +298,17 @@ export default function Contact() {
                           )}
                         </div>
                       </div>
-                      {submitError && <p className="mt-6 text-sm font-semibold text-ember" role="alert">{submitError}</p>}
-                      <div className="mt-8 flex flex-wrap items-center gap-5">
+                      {submitError && <p className="mt-5 sm:mt-6 text-xs sm:text-sm font-semibold text-ember" role="alert">{submitError}</p>}
+                      <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-4 sm:gap-5">
                         <button
                           type="submit"
                           disabled={submitting}
-                          className="group inline-flex min-h-11 items-center gap-3 bg-ember px-8 py-4 font-display text-base tracking-[0.14em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97] disabled:cursor-wait disabled:opacity-60"
+                          className="group inline-flex min-h-10 sm:min-h-11 items-center gap-2.5 sm:gap-3 bg-ember px-6 py-2.5 sm:px-8 sm:py-4 font-display text-sm sm:text-base tracking-[0.14em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97] disabled:cursor-wait disabled:opacity-60"
                         >
                           {submitting ? "ENVOI…" : "ENVOYER"}
-                          <IconCheck className="h-5 w-5 transition-transform group-hover:scale-110" />
+                          <IconCheck className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:scale-110" />
                         </button>
-                        <p className="text-xs text-muted">
+                        <p className="text-[10px] sm:text-xs text-muted">
                           <span className="text-ember">*</span> Champs obligatoires
                         </p>
                       </div>

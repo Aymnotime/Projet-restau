@@ -30,45 +30,45 @@ export default function Restaurant() {
   );
 
   return (
-    <div className="pt-28 lg:pt-36">
+    <div className="pt-24 sm:pt-28 lg:pt-36">
       <header className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <Kicker>Nous trouver</Kicker>
         </Reveal>
-        <h1 className="mt-5 font-display text-[clamp(3.4rem,9vw,7.5rem)] leading-[0.88] tracking-wide">
+        <h1 className="mt-3 sm:mt-5 font-display text-[clamp(2.6rem,8vw,7.5rem)] leading-[0.88] tracking-wide">
           <WordsReveal text="LE" /> <span className="text-ember"><WordsReveal text="RESTAURANT." baseDelay={0.1} /></span>
         </h1>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8 lg:pb-32">
-        <div className="grid gap-8 lg:grid-cols-12">
+      <section className="mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6 sm:pb-24 sm:pt-12 lg:px-8 lg:pb-32">
+        <div className="grid gap-6 lg:grid-cols-12 lg:gap-10">
           {/* ——— Informations ——— */}
           <div className="lg:col-span-5">
             <Reveal>
-              <div className="border border-graphite bg-soot p-8 sm:p-10">
-                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Adresse</p>
-                <address className="mt-4 font-display text-4xl not-italic leading-[1.02] tracking-wide text-cream sm:text-5xl">
+              <div className="border border-graphite bg-soot p-5 sm:p-6 md:p-8 lg:p-10">
+                <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Adresse</p>
+                <address className="mt-3 sm:mt-4 font-display text-3xl not-italic leading-[1.02] tracking-wide text-cream sm:text-4xl md:text-5xl">
                   45 RUE DE LA
                   <br />
                   BOULANGERIE
                   <br />
                   <span className="text-ember">93200 SAINT-DENIS</span>
                 </address>
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3">
                   <a
                     href={RESTAURANT.mapsDirections}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-3 bg-ember px-6 py-3 font-display text-sm tracking-[0.14em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97]"
+                    className="group inline-flex items-center gap-2.5 sm:gap-3 bg-ember px-5 py-2.5 sm:px-6 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97]"
                   >
                     ITINÉRAIRE
-                    <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-1" />
                   </a>
                   <a
                     href={RESTAURANT.phoneHref}
-                    className="group inline-flex items-center gap-3 border border-sand/40 px-6 py-3 font-display text-sm tracking-[0.14em] text-cream transition-all hover:border-ember hover:text-ember active:scale-[0.97]"
+                    className="group inline-flex items-center gap-2.5 sm:gap-3 border border-sand/40 px-5 py-2.5 sm:px-6 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-cream transition-all hover:border-ember hover:text-ember active:scale-[0.97]"
                   >
-                    <IconPhone className="h-4 w-4" />
+                    <IconPhone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     APPELER
                   </a>
                 </div>
@@ -76,19 +76,19 @@ export default function Restaurant() {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div className="mt-6 grid gap-6 sm:grid-cols-2">
-                <div className="border border-graphite bg-soot p-6">
-                  <IconClock className="h-8 w-8 text-ember" />
-                  <h2 className="mt-4 font-display text-2xl tracking-wide">HORAIRES</h2>
-                  <p className="mt-2 text-sm font-semibold text-sand">Tous les jours</p>
-                  <p className="font-display text-3xl text-cream">11h30 – 5h00</p>
+              <div className="mt-4 sm:mt-6 grid gap-4 sm:gap-6 sm:grid-cols-2">
+                <div className="border border-graphite bg-soot p-5 sm:p-6">
+                  <IconClock className="h-7 w-7 sm:h-8 sm:w-8 text-ember" />
+                  <h2 className="mt-3 sm:mt-4 font-display text-xl sm:text-2xl tracking-wide">HORAIRES</h2>
+                  <p className="mt-2 text-xs sm:text-sm font-semibold text-sand">Tous les jours</p>
+                  <p className="font-display text-2xl sm:text-3xl text-cream">11h30 – 5h00</p>
                 </div>
-                <div className="border border-graphite bg-soot p-6">
-                  <IconPhone className="h-8 w-8 text-ember" />
-                  <h2 className="mt-4 font-display text-2xl tracking-wide">TÉLÉPHONE</h2>
+                <div className="border border-graphite bg-soot p-5 sm:p-6">
+                  <IconPhone className="h-7 w-7 sm:h-8 sm:w-8 text-ember" />
+                  <h2 className="mt-3 sm:mt-4 font-display text-xl sm:text-2xl tracking-wide">TÉLÉPHONE</h2>
                   <a
                     href={RESTAURANT.phoneHref}
-                    className="mt-2 block font-display text-3xl text-cream transition-colors hover:text-ember"
+                    className="mt-2 block font-display text-2xl sm:text-3xl text-cream transition-colors hover:text-ember"
                   >
                     {RESTAURANT.phoneDisplay}
                   </a>
@@ -98,9 +98,9 @@ export default function Restaurant() {
             </Reveal>
 
             <Reveal delay={0.18}>
-              <div className="mt-6 flex items-center gap-4 border border-dashed border-line bg-graphite/30 p-5">
-                <IconBag className="h-8 w-8 shrink-0 text-ember" />
-                <p className="text-sm leading-relaxed text-sand">
+              <div className="mt-4 sm:mt-6 flex items-start gap-3 sm:gap-4 border border-dashed border-line bg-graphite/30 p-4 sm:p-5">
+                <IconBag className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-ember" />
+                <p className="text-xs sm:text-sm leading-relaxed text-sand">
                   Livraison à domicile <strong className="text-cream">uniquement dans le secteur de Saint-Denis (93)</strong>.
                   Retrait sur place tous les jours.
                 </p>
@@ -111,7 +111,7 @@ export default function Restaurant() {
           {/* ——— Carte interactive ——— */}
           <div className="lg:col-span-7">
             <Reveal delay={0.1} className="h-full">
-              <div className="relative h-full min-h-[420px] overflow-hidden border border-graphite bg-soot">
+              <div className="relative h-full min-h-[360px] sm:min-h-[420px] overflow-hidden border border-graphite bg-soot">
                 <iframe
                   title="Plan d'accès — Le Monde du Goût, 45 Rue de la Boulangerie, 93200 Saint-Denis"
                   src={RESTAURANT.mapsEmbed}
@@ -120,9 +120,9 @@ export default function Restaurant() {
                   referrerPolicy="no-referrer-when-downgrade"
                   allowFullScreen
                 />
-                <div className="pointer-events-none absolute left-4 top-4 border border-graphite bg-coal/90 p-4 backdrop-blur-sm">
-                  <p className="flex items-center gap-2 font-display text-xl tracking-wide text-cream">
-                    <IconPin className="h-5 w-5 text-ember" /> LE MONDE DU GOÛT
+                <div className="pointer-events-none absolute left-3 right-3 top-3 sm:left-4 sm:right-auto sm:top-4 border border-graphite bg-coal/90 p-3 sm:p-4 backdrop-blur-sm">
+                  <p className="flex items-center gap-2 font-display text-lg sm:text-xl tracking-wide text-cream">
+                    <IconPin className="h-4 w-4 sm:h-5 sm:w-5 text-ember" /> LE MONDE DU GOÛT
                   </p>
                   <p className="mt-1 text-xs text-muted">
                     {RESTAURANT.address.street}, {RESTAURANT.address.zipCity}
@@ -132,82 +132,82 @@ export default function Restaurant() {
                   href={RESTAURANT.mapsDirections}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute bottom-4 right-4 inline-flex items-center gap-2 bg-ember px-4 py-2.5 font-display text-sm tracking-[0.14em] text-coal transition-colors hover:bg-ember-dark"
+                  className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 inline-flex items-center gap-1.5 sm:gap-2 bg-ember px-3 py-2 sm:px-4 sm:py-2.5 font-display text-xs sm:text-sm tracking-[0.14em] text-coal transition-colors hover:bg-ember-dark"
                 >
-                  OUVRIR L'ITINÉRAIRE <IconArrowRight className="h-4 w-4" />
+                  OUVRIR L'ITINÉRAIRE <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </a>
               </div>
             </Reveal>
           </div>
         </div>
 
-        <section className="mt-20" aria-labelledby="locations-title">
+        <section className="mt-16 sm:mt-20" aria-labelledby="locations-title">
           <Reveal>
             <Kicker>Deux adresses</Kicker>
           </Reveal>
-          <h2 id="locations-title" className="mt-5 font-display text-[clamp(2.6rem,6vw,5rem)] leading-[0.92] tracking-wide">
+          <h2 id="locations-title" className="mt-4 sm:mt-5 font-display text-[clamp(2rem,5.5vw,5rem)] leading-[0.92] tracking-wide">
             <WordsReveal text="RETROUVEZ-NOUS" />
             <br />
             <span className="text-ember"><WordsReveal text="PRÈS DE CHEZ VOUS." baseDelay={0.12} /></span>
           </h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 md:grid-cols-2">
             <Reveal>
-              <article className="h-full border border-ember/60 bg-soot p-7 sm:p-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Adresse principale</p>
-                <h3 className="mt-4 font-display text-3xl tracking-wide">SAINT-DENIS</h3>
-                <address className="mt-3 text-sm not-italic leading-relaxed text-sand">{RESTAURANT.address.street}<br />{RESTAURANT.address.zipCity}</address>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <a href={RESTAURANT.mapsDirections} target="_blank" rel="noopener noreferrer" className="bg-ember px-4 py-3 font-display text-sm tracking-[0.14em] text-coal hover:bg-ember-dark">ITINÉRAIRE</a>
-                  <a href={RESTAURANT.phoneHref} className="border border-sand/40 px-4 py-3 font-display text-sm tracking-[0.14em] text-cream hover:border-ember hover:text-ember">{RESTAURANT.phoneDisplay}</a>
+              <article className="h-full border border-ember/60 bg-soot p-5 sm:p-6 md:p-7 lg:p-8">
+                <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Adresse principale</p>
+                <h3 className="mt-3 sm:mt-4 font-display text-2xl sm:text-3xl tracking-wide">SAINT-DENIS</h3>
+                <address className="mt-2 sm:mt-3 text-xs sm:text-sm not-italic leading-relaxed text-sand">{RESTAURANT.address.street}<br />{RESTAURANT.address.zipCity}</address>
+                <div className="mt-5 sm:mt-6 flex flex-wrap gap-2.5 sm:gap-3">
+                  <a href={RESTAURANT.mapsDirections} target="_blank" rel="noopener noreferrer" className="bg-ember px-4 py-2.5 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-coal hover:bg-ember-dark">ITINÉRAIRE</a>
+                  <a href={RESTAURANT.phoneHref} className="border border-sand/40 px-4 py-2.5 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-cream hover:border-ember hover:text-ember">{RESTAURANT.phoneDisplay}</a>
                 </div>
               </article>
             </Reveal>
             <Reveal delay={0.1}>
-              <article className="h-full border border-graphite bg-soot p-7 sm:p-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Nouvelle adresse</p>
-                <h3 className="mt-4 font-display text-3xl tracking-wide">BOBIGNY</h3>
-                <address className="mt-3 text-sm not-italic leading-relaxed text-sand">{BOBIGNY_RESTAURANT.address.street}<br />{BOBIGNY_RESTAURANT.address.zipCity}</address>
-                <p className="mt-3 text-xs text-muted">{BOBIGNY_RESTAURANT.hoursLabel}</p>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <a href={BOBIGNY_RESTAURANT.mapsDirections} target="_blank" rel="noopener noreferrer" className="bg-ember px-4 py-3 font-display text-sm tracking-[0.14em] text-coal hover:bg-ember-dark">ITINÉRAIRE</a>
-                  <a href={BOBIGNY_RESTAURANT.phoneHref} className="border border-sand/40 px-4 py-3 font-display text-sm tracking-[0.14em] text-cream hover:border-ember hover:text-ember">{BOBIGNY_RESTAURANT.phoneDisplay}</a>
+              <article className="h-full border border-graphite bg-soot p-5 sm:p-6 md:p-7 lg:p-8">
+                <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Nouvelle adresse</p>
+                <h3 className="mt-3 sm:mt-4 font-display text-2xl sm:text-3xl tracking-wide">BOBIGNY</h3>
+                <address className="mt-2 sm:mt-3 text-xs sm:text-sm not-italic leading-relaxed text-sand">{BOBIGNY_RESTAURANT.address.street}<br />{BOBIGNY_RESTAURANT.address.zipCity}</address>
+                <p className="mt-2 sm:mt-3 text-xs text-muted">{BOBIGNY_RESTAURANT.hoursLabel}</p>
+                <div className="mt-5 sm:mt-6 flex flex-wrap gap-2.5 sm:gap-3">
+                  <a href={BOBIGNY_RESTAURANT.mapsDirections} target="_blank" rel="noopener noreferrer" className="bg-ember px-4 py-2.5 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-coal hover:bg-ember-dark">ITINÉRAIRE</a>
+                  <a href={BOBIGNY_RESTAURANT.phoneHref} className="border border-sand/40 px-4 py-2.5 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-cream hover:border-ember hover:text-ember">{BOBIGNY_RESTAURANT.phoneDisplay}</a>
                 </div>
-                <a href={GOOGLE_BOBIGNY_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-xs font-bold uppercase tracking-[0.18em] text-ember hover:text-cream">★ 4,1/5 · 49 avis Google</a>
+                <a href={GOOGLE_BOBIGNY_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="mt-4 sm:mt-5 inline-block text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-ember hover:text-cream">★ 4,1/5 · 49 avis Google</a>
               </article>
             </Reveal>
           </div>
         </section>
 
         {/* ——— Comment commander ——— */}
-        <div className="mt-20">
+        <div className="mt-16 sm:mt-20">
           <Reveal>
             <Kicker>En trois temps</Kicker>
           </Reveal>
-          <h2 className="mt-5 font-display text-[clamp(2.2rem,5vw,4rem)] leading-[0.94] tracking-wide">
+          <h2 className="mt-4 sm:mt-5 font-display text-[clamp(1.8rem,4.5vw,4rem)] leading-[0.94] tracking-wide">
             <WordsReveal text="COMMENT" /> <span className="text-ember"><WordsReveal text="COMMANDER ?" baseDelay={0.12} /></span>
           </h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 md:grid-cols-3">
             {STEPS.map((s, i) => (
               <Reveal key={s.n} delay={i * 0.1}>
-                <div className="group h-full border border-graphite bg-soot p-7 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60">
+                <div className="group h-full border border-graphite bg-soot p-5 sm:p-6 md:p-7 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60">
                   <div className="flex items-center justify-between">
-                    <s.icon className="h-8 w-8 text-ember" />
-                    <span className="font-display text-4xl text-cream/15 transition-colors group-hover:text-ember/40">{s.n}</span>
+                    <s.icon className="h-7 w-7 sm:h-8 sm:w-8 text-ember" />
+                    <span className="font-display text-3xl sm:text-4xl text-cream/15 transition-colors group-hover:text-ember/40">{s.n}</span>
                   </div>
-                  <h3 className="mt-5 font-display text-2xl tracking-wide text-cream">{s.title.toUpperCase()}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{s.text}</p>
+                  <h3 className="mt-4 sm:mt-5 font-display text-xl sm:text-2xl tracking-wide text-cream">{s.title.toUpperCase()}</h3>
+                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted">{s.text}</p>
                 </div>
               </Reveal>
             ))}
           </div>
           <Reveal delay={0.2}>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <OrderButton size="lg">COMMANDER MAINTENANT</OrderButton>
+            <div className="mt-8 sm:mt-10 flex flex-wrap gap-3 sm:gap-4">
+              <OrderButton size="md" className="sm:lg">COMMANDER MAINTENANT</OrderButton>
               <a
                 href={RESTAURANT.phoneHref}
-                className="group inline-flex items-center gap-3 border border-sand/40 px-8 py-4 font-display text-base tracking-[0.14em] text-cream transition-all hover:border-ember hover:text-ember"
+                className="group inline-flex items-center gap-2.5 sm:gap-3 border border-sand/40 px-6 py-3 sm:px-8 sm:py-4 font-display text-sm sm:text-base tracking-[0.14em] text-cream transition-all hover:border-ember hover:text-ember"
               >
-                <IconPhone className="h-5 w-5" /> APPELER
+                <IconPhone className="h-4 w-4 sm:h-5 sm:w-5" /> APPELER
               </a>
             </div>
           </Reveal>
