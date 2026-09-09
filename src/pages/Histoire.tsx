@@ -20,17 +20,17 @@ export default function Histoire() {
   const reduce = useReducedMotion();
 
   return (
-    <div className="pt-24 sm:pt-28 lg:pt-36">
+    <div className="pt-20 sm:pt-24 lg:pt-28">
       {/* ——— Héros éditorial ——— */}
       <header className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
             <Reveal>
               <Kicker>Notre histoire</Kicker>
             </Reveal>
-            <h1 className="mt-4 sm:mt-6 font-display leading-[0.86] tracking-wide">
+            <h1 className="mt-3 sm:mt-4 font-display leading-[0.86] tracking-wide">
               <MaskLines
-                className="block text-[clamp(2.5rem,10vw,10rem)] sm:text-[clamp(3rem,11vw,10rem)]"
+                className="block text-[clamp(2rem,9vw,8rem)] sm:text-[clamp(2.5rem,10vw,9rem)]"
                 lines={[
                   <>LE MONDE</>,
                   <>
@@ -43,7 +43,7 @@ export default function Histoire() {
               initial={reduce ? { opacity: 1 } : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduce ? 0 : 0.5, duration: 0.7 }}
-              className="mt-4 sm:mt-6 font-display text-xl sm:text-2xl md:text-3xl leading-snug tracking-wide text-sand"
+              className="mt-3 sm:mt-4 font-display text-lg sm:text-xl md:text-2xl leading-snug tracking-wide text-sand"
             >
               LE GOÛT COMME GUIDE.
               <br />
@@ -51,7 +51,7 @@ export default function Histoire() {
             </motion.p>
           </div>
           <div className="flex items-end lg:col-span-5">
-            <div className="space-y-4 sm:space-y-5 border-l-2 border-ember pl-5 sm:pl-6 text-sm sm:text-base leading-relaxed text-sand">
+            <div className="space-y-3 sm:space-y-4 border-l-2 border-ember pl-4 sm:pl-5 text-xs sm:text-sm leading-relaxed text-sand">
               <Reveal delay={0.15}>
                 <p>
                   Situé à Saint-Denis, <strong className="text-cream">Le Monde du Goût</strong> vous invite à un voyage
@@ -75,9 +75,9 @@ export default function Histoire() {
       </header>
 
       {/* ——— Manifeste ——— */}
-      <section className="mx-auto max-w-5xl px-4 py-16 sm:py-24 text-center sm:px-6 lg:py-32">
-        <IconCompass className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-ember" />
-        <p className="mt-6 sm:mt-8 font-display text-[clamp(1.6rem,5vw,4.6rem)] sm:text-[clamp(2.2rem,6vw,4.6rem)] leading-[1.02] tracking-wide text-cream">
+      <section className="mx-auto max-w-5xl px-4 py-12 sm:py-16 text-center sm:px-6 lg:py-20">
+        <IconCompass className="mx-auto h-7 w-7 sm:h-8 sm:w-8 text-ember" />
+        <p className="mt-4 sm:mt-6 font-display text-[clamp(1.4rem,4.5vw,4rem)] sm:text-[clamp(1.8rem,5.5vw,4.2rem)] leading-[1.02] tracking-wide text-cream">
           <WordsReveal text="DES CUISINES DU MONDE," />
           <br />
           <WordsReveal text="UN SANDWICH À LA FOIS." baseDelay={0.2} />
@@ -87,7 +87,7 @@ export default function Histoire() {
           </span>
         </p>
         <Reveal delay={0.3}>
-          <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-xs sm:text-sm leading-relaxed text-muted">
+          <p className="mx-auto mt-4 sm:mt-6 max-w-xl text-xs leading-relaxed text-muted">
             Du DZ à l'Africana, du China Town au Suissard : nos recettes rendent hommage aux saveurs qui nous font
             voyager, préparées chaque jour avec des produits faits maison.
           </p>

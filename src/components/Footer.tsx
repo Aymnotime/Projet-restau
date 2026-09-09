@@ -9,21 +9,21 @@ export default function Footer() {
       {/* filigrane */}
       <p
         aria-hidden
-        className="text-stroke pointer-events-none absolute -bottom-4 sm:-bottom-6 left-1/2 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[14vw] sm:text-[16vw] md:text-[18vw] leading-none opacity-90"
+        className="text-stroke pointer-events-none absolute -bottom-4 sm:-bottom-6 left-1/2 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[10vw] sm:text-[12vw] md:text-[14vw] lg:text-[16vw] leading-none opacity-90"
       >
         LE MONDE DU GOÛT
       </p>
 
-      <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:gap-12 lg:grid-cols-12">
+      <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-12 sm:pt-16 sm:px-6 lg:px-8">
+        <div className="grid gap-8 sm:gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <span className="text-cream inline-block mb-4">
               <Wordmark />
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold bg-gradient-to-r from-gray-400 via-gray-200 to-white bg-clip-text text-transparent mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-bold bg-gradient-to-r from-gray-400 via-gray-200 to-white bg-clip-text text-transparent mb-4 sm:mb-6">
               LE MONDE DU GOÛT
             </h2>
-            <p className="font-display text-lg sm:text-2xl leading-tight tracking-wide text-sand mb-3 sm:mb-4">
+            <p className="font-display text-base sm:text-lg md:text-xl leading-tight tracking-wide text-sand mb-3 sm:mb-4">
               LE GOÛT COMME GUIDE.
               <br />
               <span className="text-ember">LE MONDE COMME DESTINATION.</span>
@@ -36,7 +36,7 @@ export default function Footer() {
               <span className="text-amber-400 text-base sm:text-lg">★★★★★</span>
               <span className="text-xs sm:text-sm">{GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5 sur Google · {GOOGLE_REVIEWS_FALLBACK.count} avis</span>
             </div>
-            <OrderButton>COMMANDER</OrderButton>
+            <OrderButton size="sm">COMMANDER</OrderButton>
           </div>
 
           <nav className="lg:col-span-3" aria-label="Navigation pied de page">
@@ -46,7 +46,7 @@ export default function Footer() {
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="font-display text-lg sm:text-xl tracking-wide text-sand transition-colors hover:text-ember"
+                    className="font-display text-base sm:text-lg tracking-wide text-sand transition-colors hover:text-ember"
                   >
                     {item.label.toUpperCase()}
                   </Link>
@@ -61,7 +61,7 @@ export default function Footer() {
               <li className="flex items-start gap-2 sm:gap-3">
                 <IconPin className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-ember" />
                 <div>
-                  <span className="font-display text-base sm:text-lg tracking-wide text-cream">SAINT-DENIS</span>
+                  <span className="font-display text-sm sm:text-base tracking-wide text-cream">SAINT-DENIS</span>
                   <address className="mt-0.5 sm:mt-1 not-italic leading-relaxed text-xs sm:text-sm">
                     {RESTAURANT.address.street}
                     <br />
@@ -87,7 +87,7 @@ export default function Footer() {
               <li className="flex items-start gap-2 sm:gap-3 border-t border-graphite pt-3 sm:pt-4">
                 <IconPin className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-ember" />
                 <div>
-                  <span className="font-display text-base sm:text-lg tracking-wide text-cream">BOBIGNY</span>
+                  <span className="font-display text-sm sm:text-base tracking-wide text-cream">BOBIGNY</span>
                   <address className="mt-0.5 sm:mt-1 not-italic leading-relaxed text-xs sm:text-sm">
                     {BOBIGNY_RESTAURANT.address.street}
                     <br />
@@ -131,7 +131,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 sm:mt-16 flex flex-col items-start justify-between gap-3 sm:gap-4 border-t border-graphite pt-5 sm:pt-6 text-xs text-muted sm:flex-row sm:items-center">
+        <div className="mt-10 sm:mt-12 flex flex-col items-start justify-between gap-3 sm:gap-4 border-t border-graphite pt-5 sm:pt-6 text-xs text-muted sm:flex-row sm:items-center">
           <p className="text-[10px] sm:text-xs">
             © {new Date().getFullYear()} Le Monde du Goût — Saint-Denis (93). Tous droits réservés.
           </p>

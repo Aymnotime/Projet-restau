@@ -6,10 +6,14 @@ build/
 # Dependencies
 node_modules/
 
+# Logs and temp files
+*.log
+*.tmp
+
 # Environment
 .env
 .env.local
-*.env.*
+.env.*
 
 # Editors
 .vscode/
@@ -21,12 +25,34 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Logs
-*.log
+# Compiled files
+*.o
+*.obj
+*.so
+*.a
+*.dll
+*.exe
+*.out
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
 
 # Coverage
 coverage/
@@ -34,20 +60,16 @@ htmlcov/
 .coverage
 
 # Testing
-.pytest_cache/
 .mypy_cache/
+.pytest_cache/
 
-# Distribution / packaging
-*.tar.gz
-*.whl
-*.egg-info/
+# Java/Maven/Gradle
+target/
+.gradle/
 
-# Temporary files
-*.tmp
-*.swp
-*.swo
+# Julia
+julia-*/
 
-# Virtual environments
-venv/
-.venv/
+# Zig
+zig*/
 ```
