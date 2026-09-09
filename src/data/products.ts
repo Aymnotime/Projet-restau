@@ -61,6 +61,12 @@ export const PRODUCTS: Product[] = [
     short: "4 steaks maison, bacon, cheddar, œuf, sauce cocktail.",
   },
   {
+    id: "big-ricain", slug: "big-ricain", name: "Le Big Ricain", category: "sandwichs", price: 14.9,
+    description: "6 steaks maison / Double bacon / Double cheddar / Œuf / Sauce cocktail.",
+    note: F, image: IMAGES.bigRicain, featured: true,
+    short: "6 steaks maison, double bacon, double cheddar, œuf, sauce cocktail.",
+  },
+  {
     id: "suissard", slug: "suissard", name: "Le Suissard", category: "sandwichs", price: 10.9,
     description: "Poulet mariné / Sauce fromagère / Jambon de dinde / Raclette.",
     note: F, image: IMAGES.suissard, featured: true,
@@ -100,6 +106,12 @@ export const PRODUCTS: Product[] = [
     short: "2 steaks maison, poulet mariné, sauce Boursin, poulet fumé.",
   },
   {
+    id: "mg-rouge", slug: "mg-rouge", name: "Le MG Rouge", category: "sandwichs", price: 11.9,
+    description: "2 steaks maison / Poulet mariné / Sauce Boursin / Fromage / Poulet fumé / Sauce spicy.",
+    note: F, image: IMAGES.mgRouge, featured: true,
+    short: "2 steaks maison, poulet mariné, sauce Boursin, poulet fumé, sauce spicy.",
+  },
+  {
     id: "africana", slug: "africana", name: "L'Africana", category: "sandwichs", price: 8.9,
     description: "Poulet mariné / Sauce Nokoss / Cheddar.",
     note: F, image: IMAGES.africana, short: "Poulet mariné, sauce Nokoss, cheddar.",
@@ -119,6 +131,12 @@ export const PRODUCTS: Product[] = [
     description: "2 steaks maison / Chèvre / Miel / Cheddar.",
     note: F, image: IMAGES.frenchy, featured: true,
     short: "2 steaks maison, chèvre, miel, cheddar.",
+  },
+  {
+    id: "frenchy-ken", slug: "frenchy-ken", name: "Le Frenchy Ken", category: "sandwichs", price: 11.9,
+    description: "2 steaks maison / Chèvre / Miel / Cheddar / Sauce spéciale.",
+    note: F, image: IMAGES.frenchyKen, featured: true,
+    short: "2 steaks maison, chèvre, miel, cheddar, sauce spéciale.",
   },
   {
     id: "flamand", slug: "flamand", name: "Le Flamand", category: "sandwichs", price: 10.9,
