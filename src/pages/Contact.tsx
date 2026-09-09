@@ -64,25 +64,25 @@ export default function Contact() {
   const err = "mt-1.5 text-xs font-semibold text-ember";
 
   return (
-    <div className="pt-24 sm:pt-28 lg:pt-36">
+    <div className="pt-20 sm:pt-24 lg:pt-28">
       <header className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <Kicker>Écrivez-nous</Kicker>
         </Reveal>
-        <h1 className="mt-3 sm:mt-5 font-display text-[clamp(2.6rem,8vw,7.5rem)] leading-[0.88] tracking-wide">
+        <h1 className="mt-2 sm:mt-3 font-display text-[clamp(2rem,7vw,6rem)] leading-[0.88] tracking-wide">
           <WordsReveal text="CONTACT" />
           <span className="text-ember"><WordsReveal text="." baseDelay={0.1} /></span>
         </h1>
         <Reveal delay={0.15}>
-          <p className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-sand">
+          <p className="mt-2 sm:mt-3 max-w-xl text-sm leading-relaxed text-sand">
             Une question, une commande spéciale, un événement ? Laissez-nous un message — ou passez nous voir, c'est
             encore mieux.
           </p>
         </Reveal>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-10 lg:px-8 lg:pb-32">
-        <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 lg:px-8 lg:pb-28">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-12 lg:gap-10">
           {/* ——— Coordonnées ——— */}
           <div className="lg:col-span-5">
             <div className="space-y-3 sm:space-y-4">

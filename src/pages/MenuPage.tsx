@@ -15,19 +15,19 @@ export default function MenuPage() {
   const items = byCategory(cat);
 
   return (
-    <div className="pt-24 sm:pt-28 lg:pt-36">
+    <div className="pt-20 sm:pt-24 lg:pt-28">
       {/* ——— En-tête ——— */}
       <header className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <Kicker>La carte</Kicker>
         </Reveal>
-        <h1 className="mt-3 sm:mt-5 font-display text-[clamp(2.8rem,9vw,8rem)] leading-[0.88] tracking-wide">
+        <h1 className="mt-2 sm:mt-3 font-display text-[clamp(2.2rem,8vw,6.5rem)] leading-[0.88] tracking-wide">
           <WordsReveal text="LE" /> <span className="text-ember"><WordsReveal text="MENU." baseDelay={0.1} /></span>
         </h1>
         <Reveal delay={0.15}>
-          <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.22em]">
+          <div className="mt-3 sm:mt-4 flex flex-wrap gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em]">
             {["Fait maison", "Frites maison incluses", "Saint-Denis (93)"].map((t) => (
-              <span key={t} className="border border-graphite bg-soot px-2.5 py-1 sm:px-3 sm:py-1.5 text-sand">
+              <span key={t} className="border border-graphite bg-soot px-2 py-1 sm:px-2.5 sm:py-1.5 text-sand">
                 {t}
               </span>
             ))}
@@ -38,7 +38,7 @@ export default function MenuPage() {
       {/* ——— Onglets catégories (sticky) ——— */}
       <nav
         aria-label="Catégories du menu"
-        className="sticky top-14 z-30 mt-6 sm:mt-8 lg:mt-10 border-y border-graphite bg-coal/90 backdrop-blur-md lg:top-20"
+        className="sticky top-16 z-30 mt-4 sm:mt-6 lg:mt-8 border-y border-graphite bg-coal/90 backdrop-blur-md lg:top-20"
       >
         <div className="no-scrollbar mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 sm:px-6 lg:px-8">
           {CATEGORIES.map((c) => {
@@ -49,13 +49,13 @@ export default function MenuPage() {
                 key={c.id}
                 onClick={() => setCat(c.id)}
                 aria-pressed={active}
-                className={`flex shrink-0 items-center gap-2.5 px-4 py-2 sm:px-5 sm:py-2.5 font-display text-base sm:text-lg tracking-[0.12em] transition-all duration-300 ${
+                className={`flex shrink-0 items-center gap-2 px-3 sm:px-4 py-2 font-display text-sm sm:text-base tracking-[0.1em] transition-all duration-300 ${
                   active ? "bg-ember text-coal" : "text-sand hover:bg-graphite/60 hover:text-cream"
                 }`}
               >
                 {c.label.toUpperCase()}
                 <span
-                  className={`px-1.5 py-0.5 text-[10px] sm:text-[11px] font-body font-bold ${
+                  className={`px-1 py-0.5 text-[9px] sm:text-[10px] font-body font-bold ${
                     active ? "bg-coal/20 text-coal" : "bg-graphite text-muted"
                   }`}
                 >
@@ -68,7 +68,7 @@ export default function MenuPage() {
       </nav>
 
       {/* ——— Contenu ——— */}
-      <main className="mx-auto max-w-7xl px-4 pb-20 pt-8 sm:px-6 sm:pb-24 sm:pt-10 lg:px-8 lg:pb-32">
+      <main className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 sm:pb-20 sm:pt-8 lg:px-8 lg:pb-28">
         <AnimatePresence mode="wait">
           <motion.div
             key={cat}
@@ -78,41 +78,40 @@ export default function MenuPage() {
             transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
             {cat === "sandwichs" && (
-              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
+              <div className="grid gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-6 md:grid-cols-2">
                 {items.map((p, idx) => {
                   const dest = inspirationOf(p.id);
                   return (
                     <article
                       key={p.id}
-                      className="group flex items-start gap-3 border-b border-graphite pb-5 pt-4 transition-colors hover:bg-cream/[0.02] sm:gap-5 sm:pb-6 sm:pt-5"
+                      className="group flex items-start gap-2 sm:gap-3 border-b border-graphite pb-4 pt-3 sm:pb-5 sm:pt-4 transition-colors hover:bg-cream/[0.02]"
                     >
                       <ProductImage
                         product={p}
-                        className="h-16 w-16 shrink-0 sm:h-20 sm:w-20 md:h-24 md:w-24"
+                        className="h-14 w-14 shrink-0 sm:h-16 sm:w-16 md:h-20 md:w-20"
                         imgClassName="transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-baseline gap-2 sm:gap-3">
-                          <span className="tnum hidden text-[9px] font-bold tracking-[0.22em] text-muted xs:inline sm:text-[10px]">
+                        <div className="flex items-baseline gap-1.5 sm:gap-2">
+                          <span className="tnum hidden text-[8px] sm:text-[9px] font-bold tracking-[0.2em] text-muted xs:inline">
                             {String(idx + 1).padStart(2, "0")}
                           </span>
-                          <h2 className="font-display text-xl tracking-wide text-cream transition-colors group-hover:text-ember sm:text-2xl md:text-3xl">
+                          <h2 className="font-display text-lg sm:text-xl md:text-2xl tracking-wide text-cream transition-colors group-hover:text-ember">
                             {p.name.toUpperCase()}
                           </h2>
                           <span className="leader" />
-                          <span className="shrink-0 font-display text-xl text-ember sm:text-2xl md:text-3xl">{formatPrice(p.price)}</span>
+                          <span className="shrink-0 font-display text-lg sm:text-xl md:text-2xl text-ember">{formatPrice(p.price)}</span>
                         </div>
-                        <p className="mt-1 text-xs leading-relaxed text-sand sm:text-sm">{p.description}</p>
-                        <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 sm:gap-x-3">
-                          {p.note && <p className="text-[10px] sm:text-xs text-muted">{p.note}</p>}
+                        <p className="mt-0.5 text-xs leading-relaxed text-sand">{p.description}</p>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 sm:gap-x-2">\n                          {p.note && <p className="text-[9px] sm:text-[10px] text-muted">{p.note}</p>}
                           {dest && (
-                            <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-ember">
+                            <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.18em] text-ember">
                               ◆ Inspiration {dest.country}
                             </span>
                           )}
                         </div>
                       </div>
-                      <OrderButton variant="ghost" size="sm" className="mt-0.5 shrink-0 !px-2 text-[10px] sm:text-xs">
+                      <OrderButton variant="ghost" size="sm" className="mt-0.5 shrink-0 !px-2 text-[9px] sm:text-[10px]">
                         COMMANDER
                       </OrderButton>
                     </article>

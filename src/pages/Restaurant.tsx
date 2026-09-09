@@ -30,43 +30,43 @@ export default function Restaurant() {
   );
 
   return (
-    <div className="pt-24 sm:pt-28 lg:pt-36">
+    <div className="pt-20 sm:pt-24 lg:pt-28">
       <header className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <Kicker>Nous trouver</Kicker>
         </Reveal>
-        <h1 className="mt-3 sm:mt-5 font-display text-[clamp(2.6rem,8vw,7.5rem)] leading-[0.88] tracking-wide">
+        <h1 className="mt-2 sm:mt-3 font-display text-[clamp(2rem,7vw,6rem)] leading-[0.88] tracking-wide">
           <WordsReveal text="LE" /> <span className="text-ember"><WordsReveal text="RESTAURANT." baseDelay={0.1} /></span>
         </h1>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6 sm:pb-24 sm:pt-12 lg:px-8 lg:pb-32">
-        <div className="grid gap-6 lg:grid-cols-12 lg:gap-10">
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 lg:px-8 lg:pb-28">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-12 lg:gap-8">
           {/* ——— Informations ——— */}
           <div className="lg:col-span-5">
             <Reveal>
-              <div className="border border-graphite bg-soot p-5 sm:p-6 md:p-8 lg:p-10">
-                <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-ember">Adresse</p>
-                <address className="mt-3 sm:mt-4 font-display text-3xl not-italic leading-[1.02] tracking-wide text-cream sm:text-4xl md:text-5xl">
+              <div className="border border-graphite bg-soot p-4 sm:p-5 md:p-6 lg:p-8">
+                <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.28em] text-ember">Adresse</p>
+                <address className="mt-2 sm:mt-3 font-display text-2xl sm:text-3xl md:text-4xl not-italic leading-[1.02] tracking-wide text-cream">
                   45 RUE DE LA
                   <br />
                   BOULANGERIE
                   <br />
                   <span className="text-ember">93200 SAINT-DENIS</span>
                 </address>
-                <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3">
+                <div className="mt-4 sm:mt-5 flex flex-wrap gap-2 sm:gap-3">
                   <a
                     href={RESTAURANT.mapsDirections}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 sm:gap-3 bg-ember px-5 py-2.5 sm:px-6 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97]"
+                    className="group inline-flex items-center gap-2 sm:gap-3 bg-ember px-4 py-2 sm:px-5 sm:py-2.5 font-display text-xs sm:text-sm tracking-[0.12em] text-coal transition-all hover:bg-ember-dark active:scale-[0.97]"
                   >
                     ITINÉRAIRE
                     <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-1" />
                   </a>
                   <a
                     href={RESTAURANT.phoneHref}
-                    className="group inline-flex items-center gap-2.5 sm:gap-3 border border-sand/40 px-5 py-2.5 sm:px-6 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-cream transition-all hover:border-ember hover:text-ember active:scale-[0.97]"
+                    className="group inline-flex items-center gap-2 sm:gap-3 border border-sand/40 px-4 py-2 sm:px-5 sm:py-2.5 font-display text-xs sm:text-sm tracking-[0.12em] text-cream transition-all hover:border-ember hover:text-ember active:scale-[0.97]"
                   >
                     <IconPhone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     APPELER
@@ -76,19 +76,19 @@ export default function Restaurant() {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div className="mt-4 sm:mt-6 grid gap-4 sm:gap-6 sm:grid-cols-2">
-                <div className="border border-graphite bg-soot p-5 sm:p-6">
-                  <IconClock className="h-7 w-7 sm:h-8 sm:w-8 text-ember" />
-                  <h2 className="mt-3 sm:mt-4 font-display text-xl sm:text-2xl tracking-wide">HORAIRES</h2>
-                  <p className="mt-2 text-xs sm:text-sm font-semibold text-sand">Tous les jours</p>
-                  <p className="font-display text-2xl sm:text-3xl text-cream">11h30 – 5h00</p>
+              <div className="mt-3 sm:mt-4 grid gap-3 sm:gap-4 sm:grid-cols-2">
+                <div className="border border-graphite bg-soot p-4 sm:p-5">
+                  <IconClock className="h-6 w-6 sm:h-7 sm:w-7 text-ember" />
+                  <h2 className="mt-2 sm:mt-3 font-display text-lg sm:text-xl tracking-wide">HORAIRES</h2>
+                  <p className="mt-1.5 text-xs sm:text-sm font-semibold text-sand">Tous les jours</p>
+                  <p className="font-display text-xl sm:text-2xl text-cream">11h30 – 5h00</p>
                 </div>
-                <div className="border border-graphite bg-soot p-5 sm:p-6">
-                  <IconPhone className="h-7 w-7 sm:h-8 sm:w-8 text-ember" />
-                  <h2 className="mt-3 sm:mt-4 font-display text-xl sm:text-2xl tracking-wide">TÉLÉPHONE</h2>
+                <div className="border border-graphite bg-soot p-4 sm:p-5">
+                  <IconPhone className="h-6 w-6 sm:h-7 sm:w-7 text-ember" />
+                  <h2 className="mt-2 sm:mt-3 font-display text-lg sm:text-xl tracking-wide">TÉLÉPHONE</h2>
                   <a
                     href={RESTAURANT.phoneHref}
-                    className="mt-2 block font-display text-2xl sm:text-3xl text-cream transition-colors hover:text-ember"
+                    className="mt-1.5 block font-display text-xl sm:text-2xl text-cream transition-colors hover:text-ember"
                   >
                     {RESTAURANT.phoneDisplay}
                   </a>
@@ -98,8 +98,8 @@ export default function Restaurant() {
             </Reveal>
 
             <Reveal delay={0.18}>
-              <div className="mt-4 sm:mt-6 flex items-start gap-3 sm:gap-4 border border-dashed border-line bg-graphite/30 p-4 sm:p-5">
-                <IconBag className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-ember" />
+              <div className="mt-3 sm:mt-4 flex items-start gap-2 sm:gap-3 border border-dashed border-line bg-graphite/30 p-3 sm:p-4">
+                <IconBag className="h-6 w-6 sm:h-7 sm:w-7 shrink-0 text-ember" />
                 <p className="text-xs sm:text-sm leading-relaxed text-sand">
                   Livraison à domicile <strong className="text-cream">uniquement dans le secteur de Saint-Denis (93)</strong>.
                   Retrait sur place tous les jours.
@@ -111,7 +111,7 @@ export default function Restaurant() {
           {/* ——— Carte interactive ——— */}
           <div className="lg:col-span-7">
             <Reveal delay={0.1} className="h-full">
-              <div className="relative h-full min-h-[360px] sm:min-h-[420px] overflow-hidden border border-graphite bg-soot">
+              <div className="relative h-full min-h-[280px] sm:min-h-[340px] md:min-h-[400px] overflow-hidden border border-graphite bg-soot">
                 <iframe
                   title="Plan d'accès — Le Monde du Goût, 45 Rue de la Boulangerie, 93200 Saint-Denis"
                   src={RESTAURANT.mapsEmbed}
@@ -120,11 +120,11 @@ export default function Restaurant() {
                   referrerPolicy="no-referrer-when-downgrade"
                   allowFullScreen
                 />
-                <div className="pointer-events-none absolute left-3 right-3 top-3 sm:left-4 sm:right-auto sm:top-4 border border-graphite bg-coal/90 p-3 sm:p-4 backdrop-blur-sm">
-                  <p className="flex items-center gap-2 font-display text-lg sm:text-xl tracking-wide text-cream">
-                    <IconPin className="h-4 w-4 sm:h-5 sm:w-5 text-ember" /> LE MONDE DU GOÛT
+                <div className="pointer-events-none absolute left-2 right-2 top-2 sm:left-3 sm:right-auto sm:top-3 border border-graphite bg-coal/90 p-2.5 sm:p-3.5 backdrop-blur-sm">
+                  <p className="flex items-center gap-1.5 sm:gap-2 font-display text-base sm:text-lg tracking-wide text-cream">
+                    <IconPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-ember" /> LE MONDE DU GOÛT
                   </p>
-                  <p className="mt-1 text-xs text-muted">
+                  <p className="mt-0.5 text-xs text-muted">
                     {RESTAURANT.address.street}, {RESTAURANT.address.zipCity}
                   </p>
                 </div>
@@ -132,9 +132,9 @@ export default function Restaurant() {
                   href={RESTAURANT.mapsDirections}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 inline-flex items-center gap-1.5 sm:gap-2 bg-ember px-3 py-2 sm:px-4 sm:py-2.5 font-display text-xs sm:text-sm tracking-[0.14em] text-coal transition-colors hover:bg-ember-dark"
+                  className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 inline-flex items-center gap-1 sm:gap-1.5 bg-ember px-2.5 py-2 sm:px-3.5 sm:py-2.5 font-display text-[10px] sm:text-xs tracking-[0.12em] text-coal transition-colors hover:bg-ember-dark"
                 >
-                  OUVRIR L'ITINÉRAIRE <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  OUVRIR L'ITINÉRAIRE <IconArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 </a>
               </div>
             </Reveal>

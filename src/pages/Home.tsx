@@ -158,7 +158,7 @@ function Hero() {
   const reduce = useReducedMotion();
 
   return (
-    <section ref={ref} className="relative flex h-svh min-h-[480px] sm:min-h-[560px] md:min-h-[620px] flex-col overflow-hidden">
+    <section ref={ref} className="relative flex h-svh min-h-[420px] sm:min-h-[500px] md:min-h-[560px] lg:min-h-[620px] flex-col overflow-hidden">
       <motion.div className="absolute inset-0" style={reduce ? undefined : { y }}>
         <div className="animate-kenburns motion-reduce:animate-none absolute inset-0">
           <img
@@ -176,34 +176,34 @@ function Hero() {
       {/* coordonnées — micro-détail */}
       <p
         aria-hidden
-        className="absolute bottom-24 sm:bottom-32 right-4 sm:right-6 hidden text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.34em] text-sand/50 [writing-mode:vertical-rl] lg:block"
+        className="absolute bottom-16 sm:bottom-24 right-3 sm:right-6 hidden text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.34em] text-sand/50 [writing-mode:vertical-rl] lg:block"
       >
         48.9362° N — 2.3574° E · Saint-Denis, France
       </p>
 
       {/* Note Google en bas à droite - bien visible */}
-      <div className="absolute bottom-16 sm:bottom-20 right-4 sm:right-6 z-30 hidden lg:block">
+      <div className="absolute bottom-12 sm:bottom-16 right-3 sm:right-6 z-30 hidden lg:block">
         <Reveal delay={0.15}>
           <a
             href={GOOGLE_REVIEWS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 rounded-lg bg-white/95 px-5 py-3 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:shadow-xl"
+            className="inline-flex items-center gap-2 sm:gap-3 rounded-lg bg-white/95 px-4 py-2.5 sm:px-5 sm:py-3 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:shadow-xl"
             aria-label={`Voir les avis Google : ${GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })} sur 5, ${GOOGLE_REVIEWS_FALLBACK.count} avis`}
           >
-            <span className="text-xl text-amber-500" aria-hidden="true">★</span>
+            <span className="text-lg sm:text-xl text-amber-500" aria-hidden="true">★</span>
             <div className="text-left">
-              <p className="font-bold text-coal">{GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5</p>
-              <p className="text-xs text-gray-600">{GOOGLE_REVIEWS_FALLBACK.count} avis Google</p>
+              <p className="font-bold text-coal text-sm sm:text-base">{GOOGLE_REVIEWS_FALLBACK.rating.toLocaleString("fr-FR", { minimumFractionDigits: 1 })}/5</p>
+              <p className="text-[10px] sm:text-xs text-gray-600">{GOOGLE_REVIEWS_FALLBACK.count} avis Google</p>
             </div>
           </a>
         </Reveal>
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-4 pb-20 sm:pb-24 lg:pb-16">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-3 sm:px-4 lg:px-8 pb-12 sm:pb-16 lg:pb-20">
         <h1 className="font-display leading-[0.88] tracking-wide text-cream">
           <MaskLines
-            className="block text-[clamp(2.2rem,10vw,10.5rem)] sm:text-[clamp(2.5rem,12vw,10.5rem)]"
+            className="block text-[clamp(2rem,9vw,8rem)] sm:text-[clamp(2.2rem,10vw,9rem)] md:text-[clamp(2.5rem,12vw,10.5rem)]"
             startDelay={0.25}
             lines={[
               <>LE GOÛT</>,
@@ -211,7 +211,7 @@ function Hero() {
             ]}
           />
           <MaskLines
-            className="mt-2 block text-[clamp(2.2rem,10vw,10.5rem)] sm:mt-3 sm:text-[clamp(2.5rem,12vw,10.5rem)]"
+            className="mt-1.5 block text-[clamp(2rem,9vw,8rem)] sm:mt-2 sm:text-[clamp(2.2rem,10vw,9rem)] md:mt-3 md:text-[clamp(2.5rem,12vw,10.5rem)]"
             startDelay={0.55}
             lines={[
               <>LE MONDE</>,
@@ -220,27 +220,27 @@ function Hero() {
           />
         </h1>
         <Reveal delay={0.85}>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-sand sm:text-base sm:mt-4 lg:text-lg">
+          <p className="mt-2.5 max-w-xl text-xs sm:text-sm leading-relaxed text-sand sm:mt-3 lg:text-base">
             Sandwichs signatures & cuisine du monde à Saint-Denis et Bobigny.
           </p>
         </Reveal>
         <Reveal delay={1}>
-          <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-4 sm:mt-6">
-            <OrderButton size="lg">COMMANDER</OrderButton>
+          <div className="mt-3.5 flex flex-wrap items-center gap-2.5 sm:gap-3 sm:mt-5">
+            <OrderButton size="md" className="min-h-10 sm:min-h-11 px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm">COMMANDER</OrderButton>
             <Link
               to="/menu"
-              className="group inline-flex items-center gap-2 sm:gap-3 border border-cream/35 px-6 py-3 sm:px-8 sm:py-4 font-display text-sm sm:text-base tracking-[0.14em] text-cream transition-all duration-300 hover:border-ember hover:bg-ember hover:text-coal"
+              className="group inline-flex items-center gap-2 border border-cream/35 px-4 py-2.5 sm:px-6 sm:py-3 font-display text-xs sm:text-sm tracking-[0.14em] text-cream transition-all duration-300 hover:border-ember hover:bg-ember hover:text-coal"
             >
               VOIR LA CARTE
-              <IconArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+              <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
         </Reveal>
         <Reveal delay={1.15}>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-sand/70">
-            <span className="flex items-center gap-1.5 sm:gap-2"><IconScooter className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-ember" /> Livraison</span>
-            <span className="flex items-center gap-1.5 sm:gap-2"><IconBag className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-ember" /> Retrait sur place</span>
-            <span className="flex items-center gap-1.5 sm:gap-2"><IconFlame className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-ember" /> Fait maison</span>
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.24em] text-sand/70">
+            <span className="flex items-center gap-1"><IconScooter className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-ember" /> Livraison</span>
+            <span className="flex items-center gap-1"><IconBag className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-ember" /> Retrait</span>
+            <span className="flex items-center gap-1"><IconFlame className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-ember" /> Fait maison</span>
           </div>
         </Reveal>
       </div>
@@ -248,10 +248,10 @@ function Hero() {
       {/* Logos partenaires en bas à droite */}
       <LogoMarquee />
 
-      <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
-        <span>Scroll pour voyager</span>
-        <span className="relative block h-6 sm:h-8 w-px overflow-hidden bg-sand/25">
-          <span className="absolute left-0 top-0 h-2.5 sm:h-3 w-px animate-drop bg-ember motion-reduce:animate-none" />
+      <div className="absolute bottom-3 sm:bottom-4 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-[7px] sm:text-[9px] font-bold uppercase tracking-[0.28em] text-sand/70">
+        <span>Scroll</span>
+        <span className="relative block h-5 sm:h-6 w-px overflow-hidden bg-sand/25">
+          <span className="absolute left-0 top-0 h-2 sm:h-2.5 w-px animate-drop bg-ember motion-reduce:animate-none" />
         </span>
       </div>
     </section>
@@ -260,10 +260,10 @@ function Hero() {
 
 function Intro() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:py-20 lg:py-24 xl:py-36">
       <SectionMark n="01" label="Le concept" right="Saint-Denis — 93" />
-      <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-8">
-        <h2 className="font-display text-[clamp(3rem,8.5vw,7.5rem)] leading-[0.9] tracking-wide lg:col-span-7">
+      <div className="mt-8 sm:mt-10 lg:mt-12 grid gap-8 lg:grid-cols-12 lg:gap-10">
+        <h2 className="font-display text-[clamp(2.2rem,7vw,5.5rem)] sm:text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.9] tracking-wide lg:col-span-7">
           <WordsReveal text="UN RESTAURANT." />
           <br />
           <span className="text-ember">
@@ -271,32 +271,32 @@ function Intro() {
           </span>{" "}
           <WordsReveal text="DU MONDE." baseDelay={0.3} />
         </h2>
-        <div className="lg:col-span-5 lg:pt-4">
+        <div className="lg:col-span-5 lg:pt-2">
           <Reveal delay={0.15}>
-            <p className="text-lg leading-relaxed text-sand">
+            <p className="text-base sm:text-lg leading-relaxed text-sand">
               Situé à Saint-Denis, Le Monde du Goût vous invite à un voyage culinaire à travers les saveurs du monde.
             </p>
           </Reveal>
           <Reveal delay={0.25}>
-            <p className="mt-5 leading-relaxed text-muted">
+            <p className="mt-4 sm:mt-5 leading-relaxed text-muted text-sm sm:text-base">
               Nos sandwichs s'inspirent de différentes traditions culinaires pour proposer une expérience généreuse,
               originale et conviviale.
             </p>
           </Reveal>
           <Reveal delay={0.35}>
-            <p className="mt-5 font-display text-2xl tracking-wide text-cream">
+            <p className="mt-4 sm:mt-5 font-display text-xl sm:text-2xl tracking-wide text-cream">
               CHAQUE RECETTE EST PENSÉE COMME UNE NOUVELLE DESTINATION.
             </p>
           </Reveal>
           <Reveal delay={0.45}>
-            <div className="mt-10 grid grid-cols-2 gap-6 border-t border-graphite pt-8">
+            <div className="mt-6 sm:mt-8 grid grid-cols-2 gap-4 sm:gap-6 border-t border-graphite pt-6 sm:pt-8">
               <div>
-                <p className="font-display text-5xl text-ember"><Counter to={19} /></p>
-                <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Recettes signatures</p>
+                <p className="font-display text-4xl sm:text-5xl text-ember"><Counter to={19} /></p>
+                <p className="mt-1.5 sm:mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Recettes signatures</p>
               </div>
               <div>
-                <p className="font-display text-5xl text-ember"><Counter to={100} suffix=" %" /></p>
-                <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Fait maison</p>
+                <p className="font-display text-4xl sm:text-5xl text-ember"><Counter to={100} suffix=" %" /></p>
+                <p className="mt-1.5 sm:mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-muted">Fait maison</p>
               </div>
             </div>
           </Reveal>
@@ -311,11 +311,11 @@ function MapSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="border-y border-graphite bg-soot/60 py-16 sm:py-24 lg:py-32">
+    <section className="border-y border-graphite bg-soot/60 py-12 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionMark n="04" label="La carte du monde" right="Saint-Denis & Bobigny" />
-        <div className="mt-8 sm:mt-10 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="font-display text-[clamp(2rem,6vw,5.5rem)] leading-[0.92] tracking-wide">
+        <div className="mt-6 sm:mt-8 flex flex-wrap items-end justify-between gap-4 sm:gap-6">
+          <h2 className="font-display text-[clamp(1.6rem,5vw,4.5rem)] sm:text-[clamp(2rem,6vw,5.5rem)] leading-[0.92] tracking-wide">
             <WordsReveal text="VOTRE PROCHAINE" />
             <br />
             <span className="text-ember"><WordsReveal text="DESTINATION ?" baseDelay={0.12} /></span>
@@ -327,8 +327,8 @@ function MapSection() {
             </p>
           </Reveal>
         </div>
-        <div className="mt-8 sm:mt-12 min-h-[320px] sm:min-h-[400px]">
-          {isInView ? <MapGate /> : <div className="flex h-[320px] sm:h-[400px] items-center justify-center text-sm text-muted">Chargement de la carte...</div>}
+        <div className="mt-6 sm:mt-8 min-h-[280px] sm:min-h-[340px] md:min-h-[400px]">
+          {isInView ? <MapGate /> : <div className="flex h-[280px] sm:h-[340px] md:h-[400px] items-center justify-center text-sm text-muted">Chargement de la carte...</div>}
         </div>
       </div>
     </section>
@@ -337,30 +337,30 @@ function MapSection() {
 
 function Chinatown() {
   return (
-    <section className="border-y border-graphite bg-soot/60 py-16 sm:py-24 lg:py-32">
+    <section className="border-y border-graphite bg-soot/60 py-12 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionMark n="03" label="Chinatown" right="Saint-Denis — 93" />
         <Reveal>
           <Kicker>Une escale à deux pas</Kicker>
-          <h2 className="mt-3 sm:mt-5 max-w-[9ch] font-display text-[clamp(2rem,6vw,6rem)] leading-[0.9] tracking-wide">
-            <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" className="whitespace-nowrap" />
+          <h2 className="mt-2 sm:mt-3 font-display text-[clamp(1.4rem,5vw,4.5rem)] sm:text-[clamp(1.8rem,6vw,5.5rem)] leading-[0.9] tracking-wide">
+            <WordsReveal text="TU CONNAIS NOTRE CHINATOWN ?" />
           </h2>
         </Reveal>
-        <div className="mt-8 sm:mt-10 grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+        <div className="mt-6 sm:mt-8 grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-12">
           <Reveal className="lg:col-span-5 lg:col-start-2">
             <figure className="relative overflow-hidden border border-graphite bg-coal">
               <LazyVideo
                 src={chinatownVideo}
                 poster={IMAGES.atelier}
                 aria-label="Découvrir le Chinatown de Saint-Denis avec Le Monde du Goût"
-                className="aspect-[9/16] max-h-[520px] sm:max-h-[600px] md:max-h-[680px] w-full object-cover"
+                className="aspect-[9/16] max-h-[420px] sm:max-h-[500px] md:max-h-[580px] w-full object-cover"
                 style={{ objectPosition: 'center 30%' }}
                 autoPlay
                 muted
                 loop
                 playsInline
               />
-              <figcaption className="flex items-center justify-between border-t border-graphite px-4 py-3 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.24em] text-muted">
+              <figcaption className="flex items-center justify-between border-t border-graphite px-3 py-2.5 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.24em] text-muted">
                 <span>Saint-Denis</span>
                 <span className="text-ember">45 rue de la Boulangerie</span>
               </figcaption>
@@ -368,13 +368,13 @@ function Chinatown() {
           </Reveal>
           <div className="lg:col-span-5">
             <Reveal delay={0.18}>
-              <p className="mt-5 sm:mt-7 max-w-md text-base sm:text-lg leading-relaxed text-sand">
+              <p className="mt-4 sm:mt-5 max-w-md text-sm sm:text-base leading-relaxed text-sand">
                 Au cœur de Saint-Denis, notre quartier est une destination à lui tout seul. Passe nous voir et découvre
                 l&apos;adresse où les saveurs du monde se retrouvent.
               </p>
             </Reveal>
             <Reveal delay={0.28}>
-              <p className="mt-4 sm:mt-6 font-display text-xl sm:text-2xl tracking-wide text-cream">
+              <p className="mt-3 sm:mt-4 font-display text-lg sm:text-xl tracking-wide text-cream">
                 LE MONDE DU GOÛT, C&apos;EST ICI.
               </p>
             </Reveal>
@@ -387,14 +387,14 @@ function Chinatown() {
 
 function Signatures() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:py-20 lg:py-24">
       <SectionMark n="05" label="Les signatures" right="06 recettes" />
-      <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
-        <h2 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
+      <div className="mt-8 flex flex-wrap items-end justify-between gap-4 sm:gap-6">
+        <h2 className="font-display text-[clamp(2rem,7vw,5.5rem)] leading-[0.92] tracking-wide">
           <WordsReveal text="LES" /> <span className="text-ember"><WordsReveal text="INCONTOURNABLES." baseDelay={0.1} /></span>
         </h2>
         <Reveal delay={0.2}>
-          <p className="max-w-xs text-sm leading-relaxed text-muted">Les recettes à découvrir sans hésiter.</p>
+          <p className="max-w-xs text-xs sm:text-sm leading-relaxed text-muted">Les recettes à découvrir sans hésiter.</p>
         </Reveal>
       </div>
 
@@ -428,16 +428,16 @@ function Signatures() {
         </div>
       </div>
 
-      <div className="mt-10 flex flex-wrap items-center justify-between gap-6 border-t border-graphite pt-8">
-          <p className="font-display text-2xl tracking-wide text-sand">
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-4 sm:gap-6 border-t border-graphite pt-6 sm:pt-8">
+          <p className="font-display text-lg sm:text-xl tracking-wide text-sand">
             19 RECETTES AU TOTAL — <span className="text-ember">TOUTES FAITES MAISON.</span>
           </p>
           <Link
             to="/menu"
-            className="group inline-flex items-center gap-3 border border-sand/40 px-7 py-3.5 font-display text-sm tracking-[0.14em] text-cream transition-all hover:border-ember hover:bg-ember hover:text-coal"
+            className="group inline-flex items-center gap-2 sm:gap-3 border border-sand/40 px-5 py-2.5 sm:px-7 sm:py-3.5 font-display text-xs sm:text-sm tracking-[0.14em] text-cream transition-all hover:border-ember hover:bg-ember hover:text-coal"
           >
             VOIR TOUTE LA CARTE
-            <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
     </section>
@@ -446,11 +446,11 @@ function Signatures() {
 
 function PosterSection() {
   return (
-    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+    <section className="border-y border-graphite bg-soot/60 py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionMark n="02" label="L'affiche du moment" right="Le Big Ricain" />
         <Reveal delay={0.1}>
-          <figure className="mt-10 overflow-hidden border border-graphite bg-coal">
+          <figure className="mt-8 overflow-hidden border border-graphite bg-coal">
             <img
               src={bigRicainPoster}
               alt="Affiche du Big Ricain, sandwich généreux aux steaks et au fromage"
@@ -460,10 +460,10 @@ function PosterSection() {
             />
           </figure>
         </Reveal>
-        <div className="mt-8 grid items-end gap-8 border-t border-graphite pt-8 lg:grid-cols-12 lg:gap-12">
+        <div className="mt-6 grid items-end gap-6 border-t border-graphite pt-6 sm:pt-8 lg:grid-cols-12 lg:gap-10">
           <Reveal className="lg:col-span-7">
             <Kicker>La recette qui fait parler</Kicker>
-            <h2 className="mt-5 font-display text-[clamp(3rem,6vw,5.5rem)] leading-[0.9] tracking-wide">
+            <h2 className="mt-4 font-display text-[clamp(2rem,6vw,5.5rem)] leading-[0.9] tracking-wide">
               <WordsReveal text="LE BIG" />
               <br />
               <span className="text-ember"><WordsReveal text="RICAIN." baseDelay={0.1} /></span>
@@ -471,14 +471,14 @@ function PosterSection() {
           </Reveal>
           <div className="lg:col-span-5 lg:flex lg:items-end lg:justify-between lg:gap-8">
             <Reveal delay={0.16}>
-              <p className="max-w-sm text-base leading-relaxed text-sand">
+              <p className="max-w-sm text-xs sm:text-sm leading-relaxed text-sand">
                 Un sandwich généreux, des steaks grillés, du fromage fondant et tout ce qu&apos;il faut pour une vraie
                 escale américaine.
               </p>
             </Reveal>
             <Reveal delay={0.26}>
-              <div className="mt-6 shrink-0 lg:mt-0">
-                <OrderButton size="md">COMMANDER</OrderButton>
+              <div className="mt-4 shrink-0 lg:mt-0">
+                <OrderButton size="sm">COMMANDER</OrderButton>
               </div>
             </Reveal>
           </div>
@@ -498,26 +498,26 @@ function SignatureInner({ p, i, featured: isFeatured = false }: { p: (typeof fea
           className={isFeatured ? "aspect-[4/3]" : "aspect-[16/11]"}
           imgClassName="transition-transform duration-700 ease-out group-hover:scale-[1.06]"
         />
-        <span className="absolute left-5 top-5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-cream">
-          <span className="h-1.5 w-1.5 bg-ember" /> N°{String(i + 1).padStart(2, "0")}
+        <span className="absolute left-3 top-3 flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.22em] text-cream">
+          <span className="h-1 w-1 sm:h-1.5 sm:w-1.5 bg-ember" /> N°{String(i + 1).padStart(2, "0")}
         </span>
         {dest && (
-          <span className="absolute bottom-4 right-5 font-display text-sm tracking-[0.18em] text-cream/85">
+          <span className="absolute bottom-2 right-3 sm:bottom-4 sm:right-5 font-display text-xs tracking-[0.18em] text-cream/85">
             ◆ {dest.country.toUpperCase()}
           </span>
         )}
       </div>
-      <div className={isFeatured ? "p-6 sm:p-8" : "p-6 sm:p-7"}>
-        <div className="flex items-baseline gap-3">
-          <h3 className="font-display text-3xl tracking-wide text-cream transition-colors duration-300 group-hover:text-ember sm:text-4xl">
+      <div className={isFeatured ? "p-4 sm:p-6 lg:p-8" : "p-4 sm:p-6"}>
+        <div className="flex items-baseline gap-2 sm:gap-3">
+          <h3 className="font-display text-xl tracking-wide text-cream transition-colors duration-300 group-hover:text-ember sm:text-2xl lg:text-3xl">
             {p.name.toUpperCase()}
           </h3>
           <span className="leader hidden sm:block" />
-          <span className="font-display text-2xl text-ember sm:text-3xl">{formatPrice(p.price)}</span>
+          <span className="font-display text-lg text-ember sm:text-xl lg:text-2xl">{formatPrice(p.price)}</span>
         </div>
-        {p.short && <p className="mt-3 text-sm leading-relaxed text-muted">{p.short}</p>}
-        <div className="mt-5">
-          <OrderButton size="sm">COMMANDER</OrderButton>
+        {p.short && <p className="mt-2 text-xs leading-relaxed text-muted">{p.short}</p>}
+        <div className="mt-4">
+          <OrderButton size="xs">COMMANDER</OrderButton>
         </div>
       </div>
     </>
@@ -527,27 +527,27 @@ function SignatureInner({ p, i, featured: isFeatured = false }: { p: (typeof fea
 function CompactSignature({ p, i }: { p: (typeof featured)[number]; i: number }) {
   const dest = inspirationOf(p.id);
   return (
-    <div className="flex items-center gap-4 p-4 sm:gap-5 sm:p-5">
-      <div className="relative h-24 w-24 shrink-0 overflow-hidden sm:h-28 sm:w-28">
+    <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-5">
+      <div className="relative h-20 w-20 shrink-0 overflow-hidden sm:h-28 sm:w-28">
         <ProductImage
           product={p}
           className="h-full w-full"
           imgClassName="transition-transform duration-500 ease-out group-hover:scale-110"
         />
-        <span className="absolute left-2 top-2 text-[9px] font-bold tracking-[0.16em] text-cream">
+        <span className="absolute left-1.5 top-1.5 text-[8px] font-bold tracking-[0.16em] text-cream sm:text-[9px]">
           {String(i + 1).padStart(2, "0")}
         </span>
       </div>
       <div className="min-w-0 flex-1">
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className="truncate font-display text-2xl tracking-wide text-cream transition-colors group-hover:text-ember sm:text-3xl">
+        <div className="flex items-baseline justify-between gap-2 sm:gap-3">
+          <h3 className="truncate font-display text-lg tracking-wide text-cream transition-colors group-hover:text-ember sm:text-2xl lg:text-3xl">
             {p.name.toUpperCase()}
           </h3>
-          <span className="shrink-0 font-display text-xl text-ember">{formatPrice(p.price)}</span>
+          <span className="shrink-0 font-display text-base text-ember sm:text-xl lg:text-2xl">{formatPrice(p.price)}</span>
         </div>
-        {dest && <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dest.country}</p>}
-        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted">{p.short}</p>
-        <div className="mt-3">
+        {dest && <p className="mt-0.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dest.country}</p>}
+        <p className="mt-1.5 line-clamp-2 text-[10px] sm:text-xs leading-relaxed text-muted">{p.short}</p>
+        <div className="mt-2.5">
           <OrderButton size="xs">COMMANDER</OrderButton>
         </div>
       </div>
@@ -558,26 +558,26 @@ function CompactSignature({ p, i }: { p: (typeof featured)[number]; i: number })
 function CompactSignatureNoButton({ p, i }: { p: (typeof featured)[number]; i: number }) {
   const dest = inspirationOf(p.id);
   return (
-    <div className="flex items-center gap-4 p-4 sm:gap-5 sm:p-5">
-      <div className="relative h-24 w-24 shrink-0 overflow-hidden sm:h-28 sm:w-28">
+    <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-5">
+      <div className="relative h-20 w-20 shrink-0 overflow-hidden sm:h-28 sm:w-28">
         <ProductImage
           product={p}
           className="h-full w-full"
           imgClassName="transition-transform duration-500 ease-out group-hover:scale-110"
         />
-        <span className="absolute left-2 top-2 text-[9px] font-bold tracking-[0.16em] text-cream">
+        <span className="absolute left-1.5 top-1.5 text-[8px] font-bold tracking-[0.16em] text-cream sm:text-[9px]">
           {String(i + 1).padStart(2, "0")}
         </span>
       </div>
       <div className="min-w-0 flex-1">
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className="truncate font-display text-2xl tracking-wide text-cream transition-colors group-hover:text-ember sm:text-3xl">
+        <div className="flex items-baseline justify-between gap-2 sm:gap-3">
+          <h3 className="truncate font-display text-lg tracking-wide text-cream transition-colors group-hover:text-ember sm:text-2xl lg:text-3xl">
             {p.name.toUpperCase()}
           </h3>
-          <span className="shrink-0 font-display text-xl text-ember">{formatPrice(p.price)}</span>
+          <span className="shrink-0 font-display text-base text-ember sm:text-xl lg:text-2xl">{formatPrice(p.price)}</span>
         </div>
-        {dest && <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dest.country}</p>}
-        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted">{p.short}</p>
+        {dest && <p className="mt-0.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dest.country}</p>}
+        <p className="mt-1.5 line-clamp-2 text-[10px] sm:text-xs leading-relaxed text-muted">{p.short}</p>
       </div>
     </div>
   );
@@ -605,12 +605,12 @@ const ATELIER = [
 
 function FaitMaison() {
   return (
-    <section className="border-y border-graphite bg-soot/60 py-24 lg:py-32">
+    <section className="border-y border-graphite bg-soot/60 py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionMark n="06" label="L'atelier" right="Rue de la Boulangerie" />
-        <div className="mt-10 grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:gap-12">
           {/* image sticky */}
-          <div className="lg:sticky lg:top-32 lg:self-start">
+          <div className="lg:sticky lg:top-24 lg:self-start">
             <Reveal>
               <figure className="relative overflow-hidden border border-graphite">
                 <div>
@@ -626,7 +626,7 @@ function FaitMaison() {
                     playsInline
                   />
                 </div>
-                <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-coal via-coal/70 to-transparent px-5 pb-4 pt-14 text-[10px] font-bold uppercase tracking-[0.26em] text-sand/80">
+                <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-coal via-coal/70 to-transparent px-3 pb-3 pt-10 text-[9px] font-bold uppercase tracking-[0.26em] text-sand/80 sm:px-5 sm:pb-4 sm:pt-14 sm:text-[10px]">
                   <span>L'atelier — fait maison</span>
                   <span className="text-ember">Saint-Denis</span>
                 </figcaption>
@@ -636,7 +636,7 @@ function FaitMaison() {
 
           {/* liste éditoriale */}
           <div>
-            <h2 className="font-display text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.94] tracking-wide">
+            <h2 className="font-display text-[clamp(2rem,6.5vw,5rem)] leading-[0.94] tracking-wide">
               <WordsReveal text="ICI, ON FAIT" />
               <br />
               <WordsReveal text="LES CHOSES" baseDelay={0.12} />
@@ -644,22 +644,22 @@ function FaitMaison() {
               <span className="text-ember"><WordsReveal text="MAISON." baseDelay={0.24} /></span>
             </h2>
             <Reveal delay={0.3}>
-              <p className="mt-6 max-w-md text-sm leading-relaxed text-muted">
+              <p className="mt-4 max-w-md text-xs sm:text-sm leading-relaxed text-muted">
                 Fait maison. Inspiré du monde. Du steak à la sauce, tout part de la cuisine du restaurant.
               </p>
             </Reveal>
-            <div className="mt-10">
+            <div className="mt-8">
               {ATELIER.map((a, i) => (
                 <Reveal key={a.t} delay={i * 0.08}>
-                  <div className="group grid grid-cols-[auto_1fr] items-start gap-6 border-t border-graphite py-7 transition-colors hover:bg-cream/[0.02] sm:gap-8">
-                    <span className="font-display text-4xl leading-none text-ember/70 transition-colors group-hover:text-ember sm:text-5xl">
+                  <div className="group grid grid-cols-[auto_1fr] items-start gap-4 border-t border-graphite py-5 transition-colors hover:bg-cream/[0.02] sm:gap-6 sm:py-7">
+                    <span className="font-display text-3xl leading-none text-ember/70 transition-colors group-hover:text-ember sm:text-4xl lg:text-5xl">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>
-                      <h3 className="font-display text-2xl tracking-wide text-cream transition-transform duration-500 group-hover:translate-x-1.5 sm:text-3xl">
+                      <h3 className="font-display text-lg tracking-wide text-cream transition-transform duration-500 group-hover:translate-x-1.5 sm:text-xl lg:text-2xl">
                         {a.t}
                       </h3>
-                      <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">{a.d}</p>
+                      <p className="mt-1.5 max-w-md text-xs leading-relaxed text-muted sm:text-sm">{a.d}</p>
                     </div>
                   </div>
                 </Reveal>
@@ -675,48 +675,48 @@ function FaitMaison() {
 
 function Travel() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:py-20 lg:py-24 sm:px-6 lg:px-8">
       <SectionMark n="07" label="Livraison & retrait" right="Saint-Denis (93)" />
-      <div className="mt-10">
-        <h2 className="font-display text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.92] tracking-wide">
+      <div className="mt-8">
+        <h2 className="font-display text-[clamp(2rem,6.5vw,5rem)] leading-[0.92] tracking-wide">
           <WordsReveal text="LE VOYAGE VIENT" /> <span className="text-ember"><WordsReveal text="À VOUS." baseDelay={0.12} /></span>
         </h2>
       </div>
-      <div className="mt-12 grid gap-6 lg:grid-cols-12">
+      <div className="mt-8 grid gap-4 sm:gap-6 lg:grid-cols-12">
         <Reveal className="lg:col-span-7">
-          <article className="group flex h-full flex-col justify-between overflow-hidden border border-graphite bg-soot p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60 sm:p-10">
+          <article className="group flex h-full flex-col justify-between overflow-hidden border border-graphite bg-soot p-5 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60 sm:p-8">
             <div>
               <div className="flex items-center justify-between">
-                <IconScooter className="h-12 w-12 text-ember transition-transform duration-500 group-hover:translate-x-2" />
-                <span className="font-display text-6xl text-cream/8 transition-colors duration-500 group-hover:text-ember/20">01</span>
+                <IconScooter className="h-8 w-8 sm:h-10 sm:w-10 text-ember transition-transform duration-500 group-hover:translate-x-2" />
+                <span className="font-display text-5xl text-cream/8 transition-colors duration-500 group-hover:text-ember/20">01</span>
               </div>
-              <h3 className="mt-8 font-display text-4xl tracking-wide text-cream sm:text-5xl">LIVRAISON À DOMICILE</h3>
-              <p className="mt-4 max-w-md leading-relaxed text-sand">
+              <h3 className="mt-5 font-display text-2xl tracking-wide text-cream sm:text-3xl lg:text-4xl">LIVRAISON À DOMICILE</h3>
+              <p className="mt-3 max-w-md leading-relaxed text-sand">
                 Commandez en ligne et faites-vous livrer vos spécialités directement à votre porte.
               </p>
-              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
                 Livraison à domicile uniquement dans le secteur de Saint-Denis (93).
               </p>
             </div>
-            <div className="mt-10">
-              <OrderButton variant="outline">COMMANDER SUR UBER EATS</OrderButton>
+            <div className="mt-6">
+              <OrderButton variant="outline" size="sm">COMMANDER SUR UBER EATS</OrderButton>
             </div>
           </article>
         </Reveal>
         <Reveal delay={0.12} className="lg:col-span-5">
-          <article className="group relative flex h-full flex-col justify-between overflow-hidden border border-graphite bg-soot p-8 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60 sm:p-10">
+          <article className="group relative flex h-full flex-col justify-between overflow-hidden border border-graphite bg-soot p-5 transition-all duration-500 hover:-translate-y-1.5 hover:border-ember/60 sm:p-8">
             <div>
               <div className="flex items-center justify-between">
-                <IconBag className="h-12 w-12 text-ember transition-transform duration-500 group-hover:-rotate-6" />
-                <span className="font-display text-6xl text-cream/8 transition-colors duration-500 group-hover:text-ember/20">02</span>
+                <IconBag className="h-8 w-8 sm:h-10 sm:w-10 text-ember transition-transform duration-500 group-hover:-rotate-6" />
+                <span className="font-display text-5xl text-cream/8 transition-colors duration-500 group-hover:text-ember/20">02</span>
               </div>
-              <h3 className="mt-8 font-display text-4xl tracking-wide text-cream sm:text-5xl">RETRAIT SUR PLACE</h3>
-              <p className="mt-4 leading-relaxed text-sand">
+              <h3 className="mt-5 font-display text-2xl tracking-wide text-cream sm:text-3xl lg:text-4xl">RETRAIT SUR PLACE</h3>
+              <p className="mt-3 leading-relaxed text-sand">
                 Préparez votre commande en ligne et venez la récupérer directement au restaurant.
               </p>
             </div>
-            <div className="mt-10">
-              <OrderButton variant="outline">COMMANDER À EMPORTER</OrderButton>
+            <div className="mt-6">
+              <OrderButton variant="outline" size="sm">COMMANDER À EMPORTER</OrderButton>
             </div>
           </article>
         </Reveal>
@@ -730,34 +730,34 @@ function FinalCta() {
     <section className="relative overflow-hidden border-t border-graphite bg-soot">
       <p
         aria-hidden
-        className="text-stroke pointer-events-none absolute left-1/2 top-4 sm:top-6 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[14vw] sm:text-[16vw] leading-none opacity-80"
+        className="text-stroke pointer-events-none absolute left-1/2 top-2 sm:top-3 w-full -translate-x-1/2 select-none whitespace-nowrap text-center font-display text-[8vw] sm:text-[10vw] md:text-[12vw] leading-none opacity-80"
       >
         BON VOYAGE
       </p>
-      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:py-28 lg:py-40 text-center sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 py-14 sm:py-16 lg:py-20 text-center sm:px-6 lg:px-8">
         <Reveal>
-          <p className="flex items-center justify-center gap-3 text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-sand/90">
-            <IconPlane className="h-4 w-4 sm:h-5 sm:w-5" /> Embarquement immédiat
+          <p className="flex items-center justify-center gap-2 text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.28em] text-sand/90">
+            <IconPlane className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" /> Embarquement immédiat
           </p>
         </Reveal>
-        <h2 className="mt-4 sm:mt-6 font-display leading-[0.88] tracking-wide text-cream">
+        <h2 className="mt-2 sm:mt-3 font-display leading-[0.88] tracking-wide text-cream">
           <MaskLines
-            className="block text-[clamp(2.5rem,9vw,9rem)] sm:text-[clamp(3.4rem,11vw,9rem)]"
+            className="block text-[clamp(1.8rem,8vw,6rem)] sm:text-[clamp(2.4rem,9vw,7rem)]"
             lines={[<>PRÊT À</>, <><span className="text-ember">VOYAGER ?</span></>]}
           />
         </h2>
         <Reveal delay={0.3}>
-          <p className="mx-auto mt-6 sm:mt-8 max-w-md text-sm sm:text-lg leading-relaxed text-sand">
+          <p className="mx-auto mt-3 sm:mt-4 max-w-md text-xs leading-relaxed text-sand">
             Choisissez votre destination. Choisissez votre sandwich. Et laissez le goût faire le reste.
           </p>
         </Reveal>
         <Reveal delay={0.4}>
-          <div className="mt-8 sm:mt-10 flex justify-center">
-            <OrderButton size="lg">COMMANDER MAINTENANT</OrderButton>
+          <div className="mt-4 sm:mt-6 flex justify-center">
+            <OrderButton size="sm">COMMANDER MAINTENANT</OrderButton>
           </div>
         </Reveal>
         <Reveal delay={0.5}>
-          <p className="mt-6 sm:mt-8 text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-muted">
+          <p className="mt-3 sm:mt-4 text-[7px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-muted">
             {RESTAURANT.address.street} · {RESTAURANT.address.zipCity} — {RESTAURANT.hoursLabel}
           </p>
         </Reveal>
@@ -776,9 +776,9 @@ export default function Home() {
     <>
       <Hero />
       <BusinessStrip />
-      <Signatures />
       <Intro />
       <PosterSection />
+      <Signatures />
       <MapSection />
       <Chinatown />
       <FaitMaison />
