@@ -2,54 +2,69 @@
 # Build artifacts
 dist/
 build/
+*.css
+*.js
+*.html
 
 # Dependencies
 node_modules/
-
-# Logs and temp files
-*.log
-*.tmp
-
-# Editors
-.vscode/
-.idea/
-
-# Environment
-.env
-.env.local
-.env.*
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+*.pot
+*.po
+*~
+.pytest_cache/
+.mypy_cache/
+.hypothesis/
 
-# Compiled files
+# Compiled and binary files
+*.class
 *.o
-*.obj
-*.exe
-*.dll
 *.so
-*.a
+*.dll
+*.exe
 *.out
+*.a
+*.obj
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+*.env.*
 
 # Coverage
 coverage/
 htmlcov/
-.coverage
-
-# MyPy
-.mypy_cache/
-
-# Pytest
-.pytest_cache/
-
-# Gradle
-.gradle/
-
-# Target (Rust, etc.)
-target/
+*.coverage
 
 # Compressed files
 *.zip
