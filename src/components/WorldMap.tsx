@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
@@ -188,6 +188,29 @@ function FlightLayer({ started, reduce, viewRef, viewStr }: {
   );
 }
 
+/* ——— ErrorBoundary pour capturer les crashes React ——— */
+class MapErrorBoundary extends React.Component<{ children: React.ReactNode; fallback: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode; fallback: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("[WorldMap] Erreur capturée par ErrorBoundary:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
 /* ——— Composant principal ——— */
 export default function WorldMap() {
   const [topo, setTopo] = useState<any>(null);
@@ -198,20 +221,29 @@ export default function WorldMap() {
   const [zoomed, setZoomed] = useState<string | null>(null);
   const [view, setView] = useState<View>(IDENTITY);
   const [compact, setCompact] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const viewRef = useRef<View>(IDENTITY);
   const rafRef = useRef(0);
   const reduce = useReducedMotion();
+  const panelRef = useRef<HTMLDivElement>(null);
 
   /* Données Natural Earth embarquées → lecture synchrone, immédiate.
      L'import est déjà résolu par le bundler avant même l'exécution
      de ce composant : pas de Promise, pas de timeout, pas de lazy. */
   useEffect(() => {
-    const result = loadWorldTopo();
-    if (result.ok) {
-      setTopo(result.data);
-    } else {
-      console.error("[WorldMap] Échec du chargement des données géographiques:", result.error);
+    try {
+      const result = loadWorldTopo();
+      if (result.ok) {
+        setTopo(result.data);
+      } else {
+        console.error("[WorldMap] Échec du chargement des données géographiques:", result.error);
+        setFailed(true);
+        setError("Données géographiques indisponibles");
+      }
+    } catch (err) {
+      console.error("[WorldMap] Exception lors du chargement des données:", err);
       setFailed(true);
+      setError("Erreur de chargement de la carte");
     }
   }, []);
 
@@ -240,7 +272,17 @@ export default function WorldMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomed]);
 
-  const countries = useMemo(() => (topo ? countriesFromTopo(topo) : []), [topo]);
+  const countries = useMemo(() => {
+    if (!topo) return [];
+    try {
+      return countriesFromTopo(topo);
+    } catch (err) {
+      console.error("[WorldMap] Erreur lors de la conversion TopoJSON:", err);
+      setError("Erreur de conversion des données géographiques");
+      return [];
+    }
+  }, [topo]);
+
   const land = useMemo(
     () =>
       countries.map((c) => {
@@ -261,11 +303,24 @@ export default function WorldMap() {
     const from = { ...viewRef.current };
     const t0 = performance.now();
     const DUR = 950;
+    const OVERSHOOT = 0.08; // 8% d'overshoot pour effet dynamique
     const step = (now: number) => {
       const p = Math.min(1, (now - t0) / DUR);
-      const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      // Fonction easing avec overshoot
+      let e: number;
+      if (p < 0.5) {
+        e = 4 * p * p * p;
+      } else {
+        e = 1 - Math.pow(-2 * p + 2, 3) / 2;
+      }
+      // Appliquer overshoot sur le dernier quart de l'animation
+      let overshootFactor = 1;
+      if (p > 0.75) {
+        const overshootProgress = (p - 0.75) / 0.25;
+        overshootFactor = 1 + OVERSHOOT * Math.sin(overshootProgress * Math.PI) * (1 - overshootProgress);
+      }
       const v = {
-        k: from.k + (target.k - from.k) * e,
+        k: from.k + (target.k - from.k) * e * overshootFactor,
         tx: from.tx + (target.tx - from.tx) * e,
         ty: from.ty + (target.ty - from.ty) * e,
       };
@@ -280,18 +335,56 @@ export default function WorldMap() {
     setZoomed(null);
     animateTo(IDENTITY);
   };
+
   const select = (id: string) => {
     setSelected(id);
     setZoomed(id);
     animateTo(zoomView(id));
+    
+    // Scroll automatique vers le panneau sur mobile
+    if (compact && panelRef.current) {
+      setTimeout(() => {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        panelRef.current?.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      }, 120);
+    }
   };
 
   const T = (p: ScreenPt): ScreenPt => [view.k * p[0] + view.tx, view.k * p[1] + view.ty];
   const viewStr = `translate(${view.tx},${view.ty}) scale(${view.k})`;
 
+  // Gestion défensive des destinations et produits
   const hoveredDest = hovered ? DESTINATIONS.find((d) => d.id === hovered) : null;
-  const selectedDest = DESTINATIONS.find((d) => d.id === selected) ?? DESTINATIONS[0];
-  const selectedProduct = getProduct(selectedDest.productId)!;
+  const selectedDest = DESTINATIONS.find((d) => d.id === selected);
+  
+  if (!selectedDest) {
+    console.error("[WorldMap] Destination sélectionnée introuvable:", selected);
+    return (
+      <div className="px-6 py-16 text-center">
+        <p className="font-display text-3xl tracking-wide text-sand">ERREUR DE DONNÉES</p>
+        <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+          La destination demandée n'existe pas. Veuillez recharger la page.
+        </p>
+      </div>
+    );
+  }
+
+  const selectedProduct = getProduct(selectedDest.productId);
+  if (!selectedProduct) {
+    console.error("[WorldMap] Produit introuvable pour la destination:", selectedDest.id, "productId:", selectedDest.productId);
+    return (
+      <div className="px-6 py-16 text-center">
+        <p className="font-display text-3xl tracking-wide text-sand">PRODUIT INDISPONIBLE</p>
+        <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+          Le produit associé à cette destination n'existe pas.
+        </p>
+      </div>
+    );
+  }
+
   const selectedIndex = DESTINATIONS.indexOf(selectedDest);
 
   /* Position de la fiche hover (en % du conteneur) */
@@ -307,305 +400,413 @@ export default function WorldMap() {
       transform: `translate(${flip ? "calc(-100% - 18px)" : "18px"}, -50%)`,
     };
   }
-  const hoveredProduct = hoveredDest ? getProduct(hoveredDest.productId)! : null;
+  const hoveredProduct = hoveredDest ? getProduct(hoveredDest.productId) : null;
+
+  // Boutons de zoom pour mobile
+  const handleZoomIn = () => {
+    if (!zoomed) return;
+    const current = zoomView(zoomed);
+    animateTo({ ...current, k: current.k * 1.3 });
+  };
+
+  const handleZoomOut = () => {
+    if (!zoomed) return;
+    const current = zoomView(zoomed);
+    animateTo({ ...current, k: Math.max(1, current.k / 1.3) });
+  };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
-      {/* ————— LA CARTE ————— */}
-      <div>
-        <div className="relative overflow-hidden border border-graphite bg-coal">
-          {failed ? (
-            /* Repli hors-ligne : aucune fausse géographie */
-            <div className="px-6 py-16 text-center">
-              <p className="font-display text-3xl tracking-wide text-sand">CARTE INDISPONIBLE</p>
-              <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-                Les données géographiques n'ont pas pu être chargées. Sélectionnez une escale
-                ci-dessous — le voyage continue.
-              </p>
-            </div>
-          ) : (
-            <div className="dot-grid relative">
-              <svg
-                viewBox={`0 0 ${W} ${H}`}
-                className="block w-full"
-                role="group"
-                aria-label="Carte du monde interactive : 9 inspirations culinaires reliées à Saint-Denis"
-              >
-                {/* terres — toujours visibles dès que les données sont prêtes */}
-                <g transform={viewStr}>
-                  <path
-                    d={grat}
-                    fill="none"
-                    stroke="#F5F1E8"
-                    strokeOpacity={0.06}
-                    strokeWidth={0.7}
-                    vectorEffect="non-scaling-stroke"
-                    className={entered && !reduce ? "rise-in" : undefined}
-                    style={entered && !reduce ? { animationDelay: "0.4s" } : undefined}
-                  />
-                  {land.map(({ c, d, cx }) => {
-                    const destId = COUNTRY_TO_DEST[c.id];
-                    const lit =
-                      !!destId &&
-                      (hovered === destId || zoomed === destId || (selected === destId && !zoomed));
-                    return (
-                      <path
-                        key={c.id}
-                        d={d}
-                        fill={lit ? "#FFFFFF" : "#F5F1E8"}
-                        fillOpacity={lit ? 1 : 0.92}
-                        stroke={lit ? "#E85D04" : "#111111"}
-                        strokeWidth={lit ? 1.3 : 0.6}
-                        vectorEffect="non-scaling-stroke"
-                        className={
-                          (entered && !reduce ? "land-in " : "") +
-                          (destId ? "cursor-pointer outline-none transition-[fill-opacity] focus-visible:fill-white" : "")
-                        }
-                        style={
-                          entered && !reduce
-                            ? { animationDelay: `${0.06 + (cx / W) * 0.62}s` }
-                            : undefined
-                        }
-                        {...(destId
-                          ? {
-                              tabIndex: 0,
-                              role: "button",
-                              "aria-pressed": zoomed === destId,
-                              "aria-label": `${DESTINATIONS.find((d) => d.id === destId)?.country} — découvrir ${
-                                getProduct(DESTINATIONS.find((d) => d.id === destId)!.productId)?.name
-                              }`,
-                              onMouseEnter: () => setHovered(destId),
-                              onMouseLeave: (e: React.MouseEvent) => {
-                                const rt = e.relatedTarget as Element | null;
-                                if (rt && rt.closest?.("[data-fiche]")) return;
-                                setHovered(null);
-                              },
-                              onFocus: () => setHovered(destId),
-                              onBlur: () => setHovered(null),
-                              onClick: () => select(destId),
-                              onKeyDown: (e: React.KeyboardEvent) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  e.preventDefault();
-                                  select(destId);
-                                }
-                              },
-                            }
-                          : {})}
-                      />
-                    );
-                  })}
-                </g>
+    <MapErrorBoundary
+      fallback={
+        <div className="px-6 py-16 text-center border border-graphite bg-soot rounded-lg">
+          <p className="font-display text-3xl tracking-wide text-sand">OUPS !</p>
+          <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+            Une erreur inattendue s'est produite. La carte n'a pas pu s'afficher correctement.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-6 inline-flex items-center gap-2 border border-ember bg-ember/10 px-4 py-2 font-display text-sm tracking-[0.14em] text-ember transition-colors hover:bg-ember hover:text-coal"
+          >
+            Recharger la page
+          </button>
+        </div>
+      }
+    >
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+        {/* ————— LA CARTE ————— */}
+        <div>
+          <div className="relative overflow-hidden border border-graphite bg-coal" style={{
+            backgroundImage: `
+              radial-gradient(circle at center, rgba(25,25,25,0) 0%, rgba(0,0,0,0.15) 100%),
+              url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")
+            `,
+            backgroundBlendMode: "overlay, normal",
+          }}>
+            {failed || error ? (
+              /* Repli hors-ligne : aucune fausse géographie */
+              <div className="px-6 py-16 text-center">
+                <p className="font-display text-3xl tracking-wide text-sand">CARTE INDISPONIBLE</p>
+                <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+                  {error || "Les données géographiques n'ont pas pu être chargées. Sélectionnez une escale ci-dessous — le voyage continue."}
+                </p>
+              </div>
+            ) : (
+              <div className="dot-grid relative" style={{ touchAction: compact ? "pan-y" : "auto" }}>
+                <svg
+                  viewBox={`0 0 ${W} ${H}`}
+                  className="block w-full"
+                  role="group"
+                  aria-label="Carte du monde interactive : 9 inspirations culinaires reliées à Saint-Denis"
+                >
+                  {/* Filtres SVG pour effets */}
+                  <defs>
+                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+                      <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodOpacity="0.3" />
+                    </filter>
+                    <radialGradient id="condensationGradient" cx="0%" cy="0%" r="100%">
+                      <stop offset="70%" stopColor="#E85D04" stopOpacity="0.6" />
+                      <stop offset="100%" stopColor="#E85D04" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
 
-                {/* arcs + avion */}
-                {topo && (
-                  <FlightLayer
-                    started={entered}
-                    reduce={reduce}
-                    viewRef={viewRef}
-                    viewStr={viewStr}
-                  />
-                )}
-
-                {/* repères & étiquettes */}
-                <g>
-                  {/* Saint-Denis */}
-                  <g transform={`translate(${T(HOME_PT)[0]},${T(HOME_PT)[1]})`}>
-                    <rect x={-5} y={-5} width={10} height={10} fill="#E85D04" transform="rotate(45)" />
-                    <rect x={-2} y={-2} width={4} height={4} fill="#111111" transform="rotate(45)" />
-                  </g>
-                  <text
-                    x={T(HOME_PT)[0] + 14}
-                    y={T(HOME_PT)[1] - 10}
-                    fill="#F5F1E8"
-                    fontSize={15}
-                    fontFamily="Bebas Neue"
-                    letterSpacing={2.4}
-                    className={`hidden sm:block${entered && !reduce ? " rise-in" : ""}`}
-                    style={entered && !reduce ? { animationDelay: "1.15s" } : undefined}
-                  >
-                    SAINT-DENIS — DÉPART
-                  </text>
-
-                  {DESTINATIONS.map((d, i) => {
-                    const [x, y] = T(DEST_PTS[d.id]);
-                    const active = hovered === d.id || zoomed === d.id || selected === d.id;
-                    const lab = LABELS[d.id];
-                    return (
-                      <g key={d.id}>
-                        {active && <circle cx={x} cy={y} r={11} fill="#E85D04" opacity={0.16} />}
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r={active ? 5 : 3.8}
-                          fill={active ? "#E85D04" : "#111111"}
-                          stroke="#E85D04"
-                          strokeWidth={1.8}
-                          style={{ transition: "r .25s ease, fill .25s ease" }}
+                  {/* terres — toujours visibles dès que les données sont prêtes */}
+                  <g transform={viewStr}>
+                    <path
+                      d={grat}
+                      fill="none"
+                      stroke="#F5F1E8"
+                      strokeOpacity={0.06}
+                      strokeWidth={0.7}
+                      vectorEffect="non-scaling-stroke"
+                      className={entered && !reduce ? "rise-in" : undefined}
+                      style={entered && !reduce ? { animationDelay: "0.4s" } : undefined}
+                    />
+                    {land.map(({ c, d, cx }) => {
+                      const destId = COUNTRY_TO_DEST[c.id];
+                      const lit =
+                        !!destId &&
+                        (hovered === destId || zoomed === destId || (selected === destId && !zoomed));
+                      return (
+                        <path
+                          key={c.id}
+                          d={d}
+                          fill={lit ? "#FFFFFF" : "#F5F1E8"}
+                          fillOpacity={lit ? 1 : 0.92}
+                          stroke={lit ? "#E85D04" : "#111111"}
+                          strokeWidth={lit ? 1.3 : 0.6}
+                          vectorEffect="non-scaling-stroke"
+                          filter={lit ? "url(#glow)" : "url(#dropShadow)"}
+                          className={
+                            (entered && !reduce ? "land-in " : "") +
+                            (destId ? "cursor-pointer outline-none transition-[fill-opacity] focus-visible:fill-white" : "")
+                          }
+                          style={
+                            entered && !reduce
+                              ? { animationDelay: `${0.06 + (cx / W) * 0.62}s` }
+                              : undefined
+                          }
+                          {...(destId
+                            ? {
+                                tabIndex: 0,
+                                role: "button",
+                                "aria-pressed": zoomed === destId,
+                                "aria-label": `${DESTINATIONS.find((d) => d.id === destId)?.country} — découvrir ${
+                                  getProduct(DESTINATIONS.find((d) => d.id === destId)?.productId || "")?.name || "Produit"
+                                }`,
+                                onMouseEnter: () => setHovered(destId),
+                                onMouseLeave: (e: React.MouseEvent) => {
+                                  const rt = e.relatedTarget as Element | null;
+                                  if (rt && rt.closest?.("[data-fiche]")) return;
+                                  setHovered(null);
+                                },
+                                onFocus: () => setHovered(destId),
+                                onBlur: () => setHovered(null),
+                                onClick: () => select(destId),
+                                onKeyDown: (e: React.KeyboardEvent) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    select(destId);
+                                  }
+                                },
+                              }
+                            : {})}
                         />
-                        {!compact && (
-                          <g
-                            className={entered && !reduce ? "rise-in" : undefined}
-                            style={entered && !reduce ? { animationDelay: `${1.1 + i * 0.07}s` } : undefined}
-                          >
-                            <line
-                              x1={x}
-                              y1={y}
-                              x2={x + lab.dx * 0.8}
-                              y2={y + lab.dy * 0.8}
-                              stroke="#D9D0C1"
-                              strokeOpacity={0.35}
-                              strokeWidth={0.8}
-                              strokeDasharray="2 3"
+                      );
+                    })}
+                  </g>
+
+                  {/* arcs + avion */}
+                  {topo && (
+                    <FlightLayer
+                      started={entered}
+                      reduce={reduce}
+                      viewRef={viewRef}
+                      viewStr={viewStr}
+                    />
+                  )}
+
+                  {/* repères & étiquettes */}
+                  <g>
+                    {/* Saint-Denis */}
+                    <g transform={`translate(${T(HOME_PT)[0]},${T(HOME_PT)[1]})`}>
+                      <rect x={-5} y={-5} width={10} height={10} fill="#E85D04" transform="rotate(45)" />
+                      <rect x={-2} y={-2} width={4} height={4} fill="#111111" transform="rotate(45)" />
+                    </g>
+                    <text
+                      x={T(HOME_PT)[0] + 14}
+                      y={T(HOME_PT)[1] - 10}
+                      fill="#F5F1E8"
+                      fontSize={15}
+                      fontFamily="Bebas Neue"
+                      letterSpacing={2.4}
+                      className={`hidden sm:block${entered && !reduce ? " rise-in" : ""}`}
+                      style={entered && !reduce ? { animationDelay: "1.15s" } : undefined}
+                    >
+                      SAINT-DENIS — DÉPART
+                    </text>
+
+                    {DESTINATIONS.map((d, i) => {
+                      const [x, y] = T(DEST_PTS[d.id]);
+                      const active = hovered === d.id || zoomed === d.id || selected === d.id;
+                      const lab = LABELS[d.id];
+                      const product = getProduct(d.productId);
+                      return (
+                        <g key={d.id}>
+                          {active && (
+                            <circle 
+                              cx={x} 
+                              cy={y} 
+                              r={11} 
+                              fill="#E85D04" 
+                              opacity={0.16}
+                              className={!reduce ? "pulse-glow" : undefined}
                             />
-                            <text
-                              x={x + lab.dx}
-                              y={y + lab.dy}
-                              textAnchor={lab.anchor}
-                              fill={active ? "#E85D04" : "#D9D0C1"}
-                              fontSize={14}
-                              fontFamily="Bebas Neue"
-                              letterSpacing={2}
-                              style={{ transition: "fill .25s ease" }}
+                          )}
+                          <circle
+                            cx={x}
+                            cy={y}
+                            r={active ? 5 : 3.8}
+                            fill={active ? "#E85D04" : "#111111"}
+                            stroke="#E85D04"
+                            strokeWidth={1.8}
+                            style={{ transition: "r .25s ease, fill .25s ease" }}
+                          />
+                          {/* Zone tactile invisible pour petits pays */}
+                          {compact && (
+                            <circle
+                              cx={x}
+                              cy={y}
+                              r={24}
+                              fill="transparent"
+                              className="cursor-pointer"
+                              onClick={() => select(d.id)}
+                              aria-hidden="true"
+                            />
+                          )}
+                          {!compact && (
+                            <g
+                              className={entered && !reduce ? "rise-in" : undefined}
+                              style={entered && !reduce ? { animationDelay: `${1.1 + i * 0.07}s` } : undefined}
                             >
-                              {d.country.toUpperCase()}
-                            </text>
-                            <text
-                              x={x + lab.dx}
-                              y={y + lab.dy + 12}
-                              textAnchor={lab.anchor}
-                              fill="#9b948a"
-                              fontSize={8.5}
-                              fontWeight={700}
-                              letterSpacing={1.6}
-                            >
-                              {getProduct(d.productId)?.name.toUpperCase()} · {formatPrice(getProduct(d.productId)?.price ?? 0).toUpperCase()}
-                            </text>
-                          </g>
-                        )}
-                      </g>
-                    );
-                  })}
-                </g>
-              </svg>
+                              <line
+                                x1={x}
+                                y1={y}
+                                x2={x + lab.dx * 0.8}
+                                y2={y + lab.dy * 0.8}
+                                stroke="#D9D0C1"
+                                strokeOpacity={0.35}
+                                strokeWidth={0.8}
+                                strokeDasharray="2 3"
+                              />
+                              <text
+                                x={x + lab.dx}
+                                y={y + lab.dy}
+                                textAnchor={lab.anchor}
+                                fill={active ? "#E85D04" : "#D9D0C1"}
+                                fontSize={14}
+                                fontFamily="Bebas Neue"
+                                letterSpacing={2}
+                                style={{ transition: "fill .25s ease" }}
+                              >
+                                {d.country.toUpperCase()}
+                              </text>
+                              <text
+                                x={x + lab.dx}
+                                y={y + lab.dy + 12}
+                                textAnchor={lab.anchor}
+                                fill="#9b948a"
+                                fontSize={8.5}
+                                fontWeight={700}
+                                letterSpacing={1.6}
+                              >
+                                {product?.name.toUpperCase() ?? ""} · {formatPrice(product?.price ?? 0).toUpperCase()}
+                              </text>
+                            </g>
+                          )}
+                        </g>
+                      );
+                    })}
+                  </g>
+                </svg>
 
-              {/* retour vue monde */}
-              <AnimatePresence>
-                {zoomed && (
-                  <motion.button
-                    initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
-                    onClick={resetZoom}
-                    className="absolute right-3 top-12 inline-flex items-center gap-2 border border-ember bg-coal/90 px-3 py-2 font-display text-sm tracking-[0.16em] text-ember backdrop-blur-sm transition-colors hover:bg-ember hover:text-coal"
-                  >
-                    <IconClose className="h-3.5 w-3.5" /> VUE MONDE
-                  </motion.button>
+                {/* Boutons de zoom pour mobile */}
+                {compact && zoomed && (
+                  <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-2">
+                    <button
+                      onClick={handleZoomIn}
+                      className="flex h-10 w-10 items-center justify-center rounded-full border border-ember bg-coal/90 text-ember backdrop-blur-sm transition-all active:scale-95 hover:bg-ember hover:text-coal"
+                      aria-label="Zoomer"
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={handleZoomOut}
+                      className="flex h-10 w-10 items-center justify-center rounded-full border border-ember bg-coal/90 text-ember backdrop-blur-sm transition-all active:scale-95 hover:bg-ember hover:text-coal"
+                      aria-label="Dézoomer"
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      </svg>
+                    </button>
+                  </div>
                 )}
-              </AnimatePresence>
 
-              {/* fiche hover (desktop) */}
-              <AnimatePresence>
-                {ficheStyle && hoveredDest && hoveredProduct && (
-                  <motion.div
-                    data-fiche
-                    initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={reduce ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.99 }}
-                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                    style={ficheStyle}
-                    onMouseLeave={() => setHovered(null)}
-                    className="absolute z-20 w-[248px] border border-graphite bg-soot shadow-[0_18px_50px_rgba(0,0,0,0.55)]"
-                  >
-                    <div className="flex gap-3 p-3">
-                      <ProductImage product={hoveredProduct} className="h-16 w-16 shrink-0" />
-                      <div className="min-w-0">
-                        <p className="mt-1 truncate font-display text-xl leading-none tracking-wide text-cream">
-                          {hoveredProduct.name.toUpperCase()}
-                        </p>
-                        <p className="mt-1 font-display text-lg text-ember">{formatPrice(hoveredProduct.price)}</p>
+                {/* retour vue monde */}
+                <AnimatePresence>
+                  {zoomed && (
+                    <motion.button
+                      initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                      onClick={resetZoom}
+                      className="absolute right-3 top-12 inline-flex items-center gap-2 border border-ember bg-coal/90 px-3 py-2 font-display text-sm tracking-[0.16em] text-ember backdrop-blur-sm transition-colors hover:bg-ember hover:text-coal active:scale-97"
+                    >
+                      <IconClose className="h-3.5 w-3.5" /> VUE MONDE
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+
+                {/* fiche hover (desktop) */}
+                <AnimatePresence>
+                  {ficheStyle && hoveredDest && hoveredProduct && (
+                    <motion.div
+                      data-fiche
+                      initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={reduce ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.99 }}
+                      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                      style={ficheStyle}
+                      onMouseLeave={() => setHovered(null)}
+                      className="absolute z-20 w-[248px] border border-graphite bg-soot shadow-[0_18px_50px_rgba(0,0,0,0.55)]"
+                    >
+                      <div className="flex gap-3 p-3">
+                        <ProductImage product={hoveredProduct} className="h-16 w-16 shrink-0" />
+                        <div className="min-w-0">
+                          <p className="mt-1 truncate font-display text-xl leading-none tracking-wide text-cream">
+                            {hoveredProduct.name.toUpperCase()}
+                          </p>
+                          <p className="mt-1 font-display text-lg text-ember">{formatPrice(hoveredProduct.price)}</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between border-t border-graphite px-3 py-2">
-                      <OrderButton size="sm" className="!px-3 !py-1.5 text-xs">COMMANDER</OrderButton>
-                      <Link to="/menu" className="link-line text-[10px] font-bold uppercase tracking-[0.2em] text-sand hover:text-ember">
-                        La carte
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          )}
+                      <div className="flex items-center justify-between border-t border-graphite px-3 py-2">
+                        <OrderButton size="sm" className="!px-3 !py-1.5 text-xs">COMMANDER</OrderButton>
+                        <Link to="/menu" className="link-line text-[10px] font-bold uppercase tracking-[0.2em] text-sand hover:text-ember">
+                          La carte
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+          </div>
+
+          {/* escales — sélection accessible (tactile & clavier) */}
+          <div className="no-scrollbar -mx-1 mt-4 flex gap-2 overflow-x-auto px-1" role="tablist" aria-label="Choisir une escale">
+            {DESTINATIONS.map((d, i) => {
+              const active = selected === d.id;
+              return (
+                <button
+                  key={d.id}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => select(d.id)}
+                  className={`group flex shrink-0 items-baseline gap-2 border px-3.5 py-2 transition-all duration-300 active:scale-97 ${
+                    active
+                      ? "border-ember bg-ember text-coal"
+                      : "border-graphite bg-soot text-sand hover:border-ember/70 hover:text-cream"
+                  }`}
+                >
+                  <span className={`font-display text-base leading-none tracking-[0.14em] ${active ? "text-coal" : "text-ember"}`}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* escales — sélection accessible (tactile & clavier) */}
-        <div className="no-scrollbar -mx-1 mt-4 flex gap-2 overflow-x-auto px-1" role="tablist" aria-label="Choisir une escale">
-          {DESTINATIONS.map((d, i) => {
-            const active = selected === d.id;
-            return (
-              <button
-                key={d.id}
-                role="tab"
-                aria-selected={active}
-                onClick={() => select(d.id)}
-                className={`group flex shrink-0 items-baseline gap-2 border px-3.5 py-2 transition-all duration-300 ${
-                  active
-                    ? "border-ember bg-ember text-coal"
-                    : "border-graphite bg-soot text-sand hover:border-ember/70 hover:text-cream"
-                }`}
+        {/* ————— PANNEAU DESTINATION ————— */}
+        <div ref={panelRef} className="lg:sticky lg:top-32 lg:self-start">
+          <div className="relative flex h-full flex-col overflow-hidden border border-graphite bg-soot">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedDest.id}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, x: 26 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0, x: -18 }}
+                transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="flex h-full flex-col"
               >
-                <span className={`font-display text-base leading-none tracking-[0.14em] ${active ? "text-coal" : "text-ember"}`}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </button>
-            );
-          })}
+                <div className="relative">
+                  <ProductImage product={selectedProduct} className="aspect-[16/10]" imgClassName="transition-transform duration-700 hover:scale-105" />
+                  <span className="absolute left-4 top-4 bg-ember px-2.5 py-1 font-display text-sm tracking-[0.2em] text-coal">
+                    ESCALE {selectedDest.code}
+                  </span>
+                  <span className="absolute bottom-3 right-4 font-display text-lg tracking-[0.2em] text-cream/80">
+                    {String(selectedIndex + 1).padStart(2, "0")} / {String(DESTINATIONS.length).padStart(2, "0")}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="mt-3 flex items-baseline justify-between gap-3">
+                    <h3 className="font-display text-4xl leading-none tracking-wide">{selectedProduct.name.toUpperCase()}</h3>
+                    <motion.p
+                      key={selectedProduct.price}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.2 }}
+                      className="font-display text-3xl text-ember"
+                    >
+                      {formatPrice(selectedProduct.price)}
+                    </motion.p>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-sand">{selectedProduct.description}</p>
+                  {selectedProduct.note && <p className="mt-1 text-xs text-muted">{selectedProduct.note}</p>}
+                  <div className="mt-auto flex flex-wrap items-center gap-3 pt-6">
+                    <OrderButton size="sm">COMMANDER</OrderButton>
+                    <Link
+                      to="/menu"
+                      className="group inline-flex items-center gap-2 px-2 py-2 font-display text-sm tracking-[0.14em] text-sand transition-colors hover:text-ember"
+                    >
+                      VOIR LA CARTE
+                      <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
-
-      {/* ————— PANNEAU DESTINATION ————— */}
-      <div className="lg:sticky lg:top-32 lg:self-start">
-        <div className="relative flex h-full flex-col overflow-hidden border border-graphite bg-soot">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={selectedDest.id}
-              initial={reduce ? { opacity: 0 } : { opacity: 0, x: 26 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, x: -18 }}
-              transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="flex h-full flex-col"
-            >
-              <div className="relative">
-                <ProductImage product={selectedProduct} className="aspect-[16/10]" imgClassName="transition-transform duration-700 hover:scale-105" />
-                <span className="absolute left-4 top-4 bg-ember px-2.5 py-1 font-display text-sm tracking-[0.2em] text-coal">
-                  ESCALE {selectedDest.code}
-                </span>
-                <span className="absolute bottom-3 right-4 font-display text-lg tracking-[0.2em] text-cream/80">
-                  {String(selectedIndex + 1).padStart(2, "0")} / {String(DESTINATIONS.length).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <div className="mt-3 flex items-baseline justify-between gap-3">
-                  <h3 className="font-display text-4xl leading-none tracking-wide">{selectedProduct.name.toUpperCase()}</h3>
-                  <p className="font-display text-3xl text-ember">{formatPrice(selectedProduct.price)}</p>
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-sand">{selectedProduct.description}</p>
-                {selectedProduct.note && <p className="mt-1 text-xs text-muted">{selectedProduct.note}</p>}
-                <div className="mt-auto flex flex-wrap items-center gap-3 pt-6">
-                  <OrderButton size="sm">COMMANDER</OrderButton>
-                  <Link
-                    to="/menu"
-                    className="group inline-flex items-center gap-2 px-2 py-2 font-display text-sm tracking-[0.14em] text-sand transition-colors hover:text-ember"
-                  >
-                    VOIR LA CARTE
-                    <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
+    </MapErrorBoundary>
   );
 }

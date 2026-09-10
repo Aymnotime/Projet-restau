@@ -195,6 +195,22 @@ body {
   50% { r: 14; opacity: 0.05; }
 }
 
+/* Pulse glow animation for active destination markers */
+@keyframes pulse-glow {
+  0%, 100% { 
+    opacity: 0.16;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.28;
+    transform: scale(1.15);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2.8s ease-in-out infinite;
+}
+
 .mobile-globe-marker--selected {
   animation: globe-marker-pulse 1.2s ease-in-out infinite;
 }

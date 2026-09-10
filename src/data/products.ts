@@ -167,10 +167,10 @@ export const DESTINATIONS: Destination[] = [
   { id: "usa", country: "USA", code: "US", lat: 40.7128, lon: -74.006, productId: "ricain" },
   { id: "inde", country: "Inde", code: "IN", lat: 28.6139, lon: 77.209, productId: "indien" },
   { id: "chine", country: "Chine", code: "CN", lat: 39.9042, lon: 116.4074, productId: "china-town" },
-  { id: "italie", country: "Italie", code: "IT", lat: 41.9028, lon: 12.4964, productId: "rital" },
+  { id: "italie", country: "Italie", code: "IT", lat: 41.9028, lon: 12.4964, productId: "mg" },
   { id: "france", country: "France", code: "FR", lat: 48.8566, lon: 2.3522, productId: "frenchy" },
   { id: "suisse", country: "Suisse", code: "CH", lat: 46.948, lon: 7.4474, productId: "suissard" },
-  { id: "afrique", country: "Afrique", code: "AF", lat: 14.7167, lon: -17.4677, productId: "africana" },
+  { id: "afrique", country: "Afrique", code: "AF", lat: 14.7167, lon: -17.4677, productId: "mg" },
 ];
 
 /** inspiration culinaire d'une recette (si associée à une destination) */
