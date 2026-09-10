@@ -17,6 +17,6 @@ export default defineConfig({
     namedExports: true,
   },
   optimizeDeps: {
-    include: ["world-atlas"],
+    include: ["world-atlas/countries-110m.json"],
   },
 });
