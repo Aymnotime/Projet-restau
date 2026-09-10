@@ -47,7 +47,13 @@ export function countriesFromTopo(topo: any): Country[] {
   try {
     const fc: any = feature(topo, topo.objects.countries);
     const feats: any[] = fc?.features ?? [];
-    return feats
+    
+    if (feats.length === 0) {
+      console.error("[geo.ts] countriesFromTopo: Aucun pays trouvé dans les données TopoJSON");
+      return [];
+    }
+    
+    const countries = feats
       .map((f) => {
         const coords = f.geometry?.coordinates ?? [];
         /* Polygon → [anneaux] ; MultiPolygon → [[anneaux], …] */
@@ -60,9 +66,15 @@ export function countriesFromTopo(topo: any): Country[] {
         };
       })
       .filter((c) => c.polygons.length > 0);
+    
+    if (countries.length === 0) {
+      console.error("[geo.ts] countriesFromTopo: Tous les pays ont été filtrés (polygones vides)");
+    }
+    
+    return countries;
   } catch (err) {
     console.error("[geo.ts] countriesFromTopo: échec du décodage", err);
-    return [];
+    throw err; // Re-lancer l'erreur pour que le composant parent puisse la gérer
   }
 }
 

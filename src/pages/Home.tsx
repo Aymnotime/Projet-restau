@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState, type VideoHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { DESTINATIONS, featured, formatPrice, getProduct, inspirationOf } from "../data/products";
 import { GOOGLE_REVIEWS_FALLBACK, GOOGLE_REVIEWS_URL, IMAGES, RESTAURANT, SITE_URL } from "../data/site";
 import {
@@ -41,11 +41,7 @@ function MapGate() {
 }
 
 function MapSectionFallback() {
-  return (
-    <div className="flex min-h-[280px] sm:min-h-[340px] md:min-h-[400px] items-center justify-center text-sm text-muted">
-      Chargement de la carte...
-    </div>
-  );
+  return null;
 }
 
 function LazyVideo({ src, ...props }: VideoHTMLAttributes<HTMLVideoElement>) {
@@ -315,9 +311,6 @@ function Intro() {
 }
 
 function MapSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section className="border-y border-graphite bg-soot/60 py-12 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -336,7 +329,7 @@ function MapSection() {
           </Reveal>
         </div>
         <div className="mt-6 sm:mt-8">
-          {isInView ? <MapGate /> : <MapSectionFallback />}
+          <MapGate />
         </div>
       </div>
     </section>
