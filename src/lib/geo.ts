@@ -18,25 +18,22 @@ export type ScreenPt = [number, number];
 
 const worldTopo: any = worldTopoJson;
 
-/* ——— Chargement des données (immédiat, jamais en échec) ——— */
-export function loadWorldTopo(): Promise<any> {
-  return new Promise((resolve, reject) => {
-    try {
-      if (!worldTopo || !worldTopo.objects || !worldTopo.objects.countries) {
-        console.error("[geo.ts] loadWorldTopo: Données TopoJSON invalides ou manquantes", {
-          hasTopo: !!worldTopo,
-          hasObjects: !!worldTopo?.objects,
-          hasCountries: !!worldTopo?.objects?.countries,
-        });
-        reject(new Error("Données TopoJSON invalides"));
-        return;
-      }
-      resolve(worldTopo);
-    } catch (err) {
-      console.error("[geo.ts] loadWorldTopo: Erreur lors du chargement des données", err);
-      reject(err);
-    }
-  });
+/* ——— Accès aux données (synchrone, jamais en échec réseau) ———
+   Reste une fonction (et non une constante exportée directement)
+   pour garder le point d'entrée stable si la source de données
+   change un jour. Ne retourne jamais de Promise qui traîne : elle
+   résout ou rejette immédiatement, sur la même tique. */
+export function loadWorldTopo(): { ok: true; data: any } | { ok: false; error: string } {
+  if (!worldTopo || !worldTopo.objects || !worldTopo.objects.countries) {
+    const msg = "Données TopoJSON invalides ou manquantes";
+    console.error("[geo.ts] loadWorldTopo:", msg, {
+      hasTopo: !!worldTopo,
+      hasObjects: !!worldTopo?.objects,
+      hasCountries: !!worldTopo?.objects?.countries,
+    });
+    return { ok: false, error: msg };
+  }
+  return { ok: true, data: worldTopo };
 }
 
 /* ——— Décodage TopoJSON → pays ——— */
@@ -47,21 +44,26 @@ export interface Country {
 }
 
 export function countriesFromTopo(topo: any): Country[] {
-  const fc: any = feature(topo, topo.objects.countries);
-  const feats: any[] = fc?.features ?? [];
-  return feats
-    .map((f) => {
-      const coords = f.geometry?.coordinates ?? [];
-      /* Polygon → [anneaux] ; MultiPolygon → [[anneaux], …] */
-      const polygons =
-        f.geometry?.type === "Polygon" ? [coords] : (coords as Pt[][][]);
-      return {
-        id: String(f.id ?? ""),
-        name: String(f.properties?.name ?? ""),
-        polygons,
-      };
-    })
-    .filter((c) => c.polygons.length > 0);
+  try {
+    const fc: any = feature(topo, topo.objects.countries);
+    const feats: any[] = fc?.features ?? [];
+    return feats
+      .map((f) => {
+        const coords = f.geometry?.coordinates ?? [];
+        /* Polygon → [anneaux] ; MultiPolygon → [[anneaux], …] */
+        const polygons =
+          f.geometry?.type === "Polygon" ? [coords] : (coords as Pt[][][]);
+        return {
+          id: String(f.id ?? ""),
+          name: String(f.properties?.name ?? ""),
+          polygons,
+        };
+      })
+      .filter((c) => c.polygons.length > 0);
+  } catch (err) {
+    console.error("[geo.ts] countriesFromTopo: échec du décodage", err);
+    return [];
+  }
 }
 
 /* ——— Projection Natural Earth I ——— */
@@ -103,7 +105,11 @@ export function countryPath(polygons: Pt[][][], proj: Projection): string {
 }
 
 export function graticulePath(proj: Projection, _step = 15): string {
-  return proj.geoPath()(geoGraticule10()) ?? "";
+  try {
+    return proj.geoPath()(geoGraticule10()) ?? "";
+  } catch {
+    return "";
+  }
 }
 
 /* ——— Arc grand-cercle (interpolation sphérique) ——— */
