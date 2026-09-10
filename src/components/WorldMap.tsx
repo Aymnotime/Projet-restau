@@ -304,23 +304,21 @@ export default function WorldMap() {
     const t0 = performance.now();
     const DUR = 950;
     const OVERSHOOT = 0.08; // 8% d'overshoot pour effet dynamique
+    
     const step = (now: number) => {
       const p = Math.min(1, (now - t0) / DUR);
-      // Fonction easing avec overshoot
+      // Fonction easing avec overshoot intégré
       let e: number;
-      if (p < 0.5) {
-        e = 4 * p * p * p;
+      if (p < 0.7) {
+        // Phase de montée normale
+        e = p / 0.7;
       } else {
-        e = 1 - Math.pow(-2 * p + 2, 3) / 2;
-      }
-      // Appliquer overshoot sur le dernier quart de l'animation
-      let overshootFactor = 1;
-      if (p > 0.75) {
-        const overshootProgress = (p - 0.75) / 0.25;
-        overshootFactor = 1 + OVERSHOOT * Math.sin(overshootProgress * Math.PI) * (1 - overshootProgress);
+        // Phase d'overshoot (dépasser puis revenir)
+        const overshootPhase = (p - 0.7) / 0.3;
+        e = 1 + OVERSHOOT * Math.sin(overshootPhase * Math.PI) * (1 - overshootPhase);
       }
       const v = {
-        k: from.k + (target.k - from.k) * e * overshootFactor,
+        k: from.k + (target.k - from.k) * e,
         tx: from.tx + (target.tx - from.tx) * e,
         ty: from.ty + (target.ty - from.ty) * e,
       };
@@ -341,15 +339,16 @@ export default function WorldMap() {
     setZoomed(id);
     animateTo(zoomView(id));
     
-    // Scroll automatique vers le panneau sur mobile
+    // Scroll automatique vers le panneau sur mobile uniquement
     if (compact && panelRef.current) {
+      // Délai plus long pour laisser l'animation de zoom se terminer partiellement
       setTimeout(() => {
         const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         panelRef.current?.scrollIntoView({
           behavior: prefersReducedMotion ? "auto" : "smooth",
           block: "start",
         });
-      }, 120);
+      }, 150);
     }
   };
 
@@ -435,13 +434,7 @@ export default function WorldMap() {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
         {/* ————— LA CARTE ————— */}
         <div>
-          <div className="relative overflow-hidden border border-graphite bg-coal" style={{
-            backgroundImage: `
-              radial-gradient(circle at center, rgba(25,25,25,0) 0%, rgba(0,0,0,0.15) 100%),
-              url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")
-            `,
-            backgroundBlendMode: "overlay, normal",
-          }}>
+          <div className="relative overflow-hidden border border-graphite bg-coal">
             {failed || error ? (
               /* Repli hors-ligne : aucune fausse géographie */
               <div className="px-6 py-16 text-center">
@@ -695,9 +688,9 @@ export default function WorldMap() {
                   )}
                 </AnimatePresence>
 
-                {/* fiche hover (desktop) */}
+                {/* fiche hover (desktop) — masquée sur mobile car inutile au tactile */}
                 <AnimatePresence>
-                  {ficheStyle && hoveredDest && hoveredProduct && (
+                  {ficheStyle && hoveredDest && hoveredProduct && !compact && (
                     <motion.div
                       data-fiche
                       initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
