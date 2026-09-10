@@ -2,38 +2,42 @@
 # Build artifacts
 dist/
 build/
+*.css
+*.js
+
 # Dependencies
 node_modules/
-# Environment
-.env
-.env.local
-.env.*
-# Editors
-.vscode/
-.idea/
+
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
 # Logs
 *.log
-# Temp files
-*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
 *.swp
 *.swo
+
 # OS
 .DS_Store
 Thumbs.db
+
 # Coverage
 coverage/
 htmlcov/
 .coverage
-# MyPy
-.mypy_cache/
-# Pytest
+
+# Testing
 .pytest_cache/
-# Venv
-venv/
-.venv/
+.mypy_cache/
 ```
