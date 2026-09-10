@@ -11,7 +11,7 @@
 import { geoNaturalEarth1, geoPath, geoGraticule10, type GeoProjection } from "d3-geo";
 import { feature } from "topojson-client";
 // Données Natural Earth 110m — réelles, embarquées à la compilation.
-import worldTopoJson from "world-atlas/countries-110m.json" with { type: "json" };
+import worldTopoJson from "world-atlas/countries-110m.json";
 
 export type Pt = [number, number]; // [lon, lat]
 export type ScreenPt = [number, number];
