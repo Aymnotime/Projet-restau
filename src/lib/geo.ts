@@ -20,7 +20,23 @@ const worldTopo: any = worldTopoJson;
 
 /* ——— Chargement des données (immédiat, jamais en échec) ——— */
 export function loadWorldTopo(): Promise<any> {
-  return Promise.resolve(worldTopo);
+  return new Promise((resolve, reject) => {
+    try {
+      if (!worldTopo || !worldTopo.objects || !worldTopo.objects.countries) {
+        console.error("[geo.ts] loadWorldTopo: Données TopoJSON invalides ou manquantes", {
+          hasTopo: !!worldTopo,
+          hasObjects: !!worldTopo?.objects,
+          hasCountries: !!worldTopo?.objects?.countries,
+        });
+        reject(new Error("Données TopoJSON invalides"));
+        return;
+      }
+      resolve(worldTopo);
+    } catch (err) {
+      console.error("[geo.ts] loadWorldTopo: Erreur lors du chargement des données", err);
+      reject(err);
+    }
+  });
 }
 
 /* ——— Décodage TopoJSON → pays ——— */

@@ -205,17 +205,34 @@ export default function WorldMap() {
   /* Données Natural Earth embarquées → disponibles immédiatement. */
   useEffect(() => {
     let on = true;
-    // Chargement synchrone des données embarquées
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    
+    // Timeout de sécurité (7 secondes) pour forcer l'état failed si le chargement traîne
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => {
+        console.error("[WorldMap] loadWorldTopo: Timeout dépassé (7s) — chargement trop lent ou bloqué");
+        reject(new Error("Timeout: chargement des données géographiques trop lent"));
+      }, 7000);
+    });
+    
+    // Chargement synchrone des données embarquées avec timeout
     try {
       const topoData = loadWorldTopo();
-      topoData.then((t) => {
-        if (on) {
-          setTopo(t);
-        }
-      }).catch(() => {
-        if (on) setFailed(true);
-      });
-    } catch {
+      Promise.race([topoData, timeoutPromise])
+        .then((t) => {
+          if (timeoutId) clearTimeout(timeoutId);
+          if (on) {
+            setTopo(t);
+          }
+        })
+        .catch((err) => {
+          if (timeoutId) clearTimeout(timeoutId);
+          console.error("[WorldMap] loadWorldTopo: Échec du chargement des données", err);
+          if (on) setFailed(true);
+        });
+    } catch (err) {
+      if (timeoutId) clearTimeout(timeoutId);
+      console.error("[WorldMap] loadWorldTopo: Erreur synchrone lors du chargement", err);
       if (on) setFailed(true);
     }
     return () => { on = false; };
@@ -230,10 +247,11 @@ export default function WorldMap() {
   }, []);
 
   /* La chorégraphie démarre dès que les données sont prêtes
-     (le montage est déjà différé à l'approche de la section). */
+     (le montage est déjà différé à l'approche de la section).
+     En cas d'échec, entered reste false pour éviter les animations. */
   useEffect(() => {
-    if (topo) setEntered(true);
-  }, [topo]);
+    if (topo || failed) setEntered(true);
+  }, [topo, failed]);
 
   /* Échap → retour vue monde */
   useEffect(() => {
@@ -508,8 +526,8 @@ export default function WorldMap() {
                 )}
               </AnimatePresence>
 
-              {/* état de chargement (bref : données embarquées) */}
-              {!topo && (
+              {/* état de chargement (bref : données embarquées) — n'afficher que si pas en échec */}
+              {!topo && !failed && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-coal/80 backdrop-blur-[2px]">
                   <svg width="120" height="24" viewBox="0 0 120 24" aria-hidden>
                     <path d="M4 18 Q 60 -8 116 14" fill="none" stroke="#E85D04" strokeWidth="1.6" strokeDasharray="5 6" className="dash-crawl" />
