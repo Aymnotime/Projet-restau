@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BOBIGNY_RESTAURANT, GOOGLE_REVIEWS_FALLBACK, GOOGLE_REVIEWS_URL, NAV, RESTAURANT } from "../data/site";
+import { BOBIGNY_RESTAURANT, BOBIGNY_REVIEWS_FALLBACK, GOOGLE_BOBIGNY_REVIEWS_URL, GOOGLE_REVIEWS_FALLBACK, GOOGLE_REVIEWS_URL, NAV, RESTAURANT } from "../data/site";
 import { OrderButton } from "./ui";
 import { IconClock, IconMail, IconPhone, IconPin, Wordmark } from "./Icons";
 

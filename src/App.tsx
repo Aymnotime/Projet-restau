@@ -9,6 +9,8 @@ import Home from "./pages/Home";
 import MenuPage from "./pages/MenuPage";
 import Histoire from "./pages/Histoire";
 import Restaurant from "./pages/Restaurant";
+import SaintDenisPage from "./pages/SaintDenis";
+import BobignyPage from "./pages/Bobigny";
 import Contact from "./pages/Contact";
 import Mentions from "./pages/Mentions";
 
@@ -52,6 +54,8 @@ function Shell() {
           <Route path="/menu" element={<Page><MenuPage /></Page>} />
           <Route path="/notre-histoire" element={<Page><Histoire /></Page>} />
           <Route path="/restaurant" element={<Page><Restaurant /></Page>} />
+          <Route path="/saint-denis" element={<Page><SaintDenisPage /></Page>} />
+          <Route path="/bobigny" element={<Page><BobignyPage /></Page>} />
           <Route path="/contact" element={<Page><Contact /></Page>} />
           <Route path="/mentions-legales" element={<Page><Mentions /></Page>} />
           <Route path="*" element={<Page><Home /></Page>} />
