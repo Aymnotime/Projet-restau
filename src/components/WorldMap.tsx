@@ -202,40 +202,17 @@ export default function WorldMap() {
   const rafRef = useRef(0);
   const reduce = useReducedMotion();
 
-  /* Données Natural Earth embarquées → disponibles immédiatement. */
+  /* Données Natural Earth embarquées → lecture synchrone, immédiate.
+     L'import est déjà résolu par le bundler avant même l'exécution
+     de ce composant : pas de Promise, pas de timeout, pas de lazy. */
   useEffect(() => {
-    let on = true;
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-    
-    // Timeout de sécurité (7 secondes) pour forcer l'état failed si le chargement traîne
-    const timeoutPromise = new Promise<never>((_, reject) => {
-      timeoutId = setTimeout(() => {
-        console.error("[WorldMap] loadWorldTopo: Timeout dépassé (7s) — chargement trop lent ou bloqué");
-        reject(new Error("Timeout: chargement des données géographiques trop lent"));
-      }, 7000);
-    });
-    
-    // Chargement synchrone des données embarquées avec timeout
-    try {
-      const topoData = loadWorldTopo();
-      Promise.race([topoData, timeoutPromise])
-        .then((t) => {
-          if (timeoutId) clearTimeout(timeoutId);
-          if (on) {
-            setTopo(t);
-          }
-        })
-        .catch((err) => {
-          if (timeoutId) clearTimeout(timeoutId);
-          console.error("[WorldMap] loadWorldTopo: Échec du chargement des données", err);
-          if (on) setFailed(true);
-        });
-    } catch (err) {
-      if (timeoutId) clearTimeout(timeoutId);
-      console.error("[WorldMap] loadWorldTopo: Erreur synchrone lors du chargement", err);
-      if (on) setFailed(true);
+    const result = loadWorldTopo();
+    if (result.ok) {
+      setTopo(result.data);
+    } else {
+      console.error("[WorldMap] Échec du chargement des données géographiques:", result.error);
+      setFailed(true);
     }
-    return () => { on = false; };
   }, []);
 
   useEffect(() => {
@@ -246,9 +223,9 @@ export default function WorldMap() {
     return () => mq.removeEventListener("change", fn);
   }, []);
 
-  /* La chorégraphie démarre dès que les données sont prêtes
-     (le montage est déjà différé à l'approche de la section).
-     En cas d'échec, entered reste false pour éviter les animations. */
+  /* La chorégraphie démarre dès que les données sont prêtes.
+     En cas d'échec, entered reste true pour afficher l'état de repli
+     immédiatement, sans laisser le spinner tourner. */
   useEffect(() => {
     if (topo || failed) setEntered(true);
   }, [topo, failed]);
@@ -340,10 +317,10 @@ export default function WorldMap() {
           {failed ? (
             /* Repli hors-ligne : aucune fausse géographie */
             <div className="px-6 py-16 text-center">
-              <p className="font-display text-3xl tracking-wide text-sand">CARTE INDISPONIBLE HORS CONNEXION</p>
+              <p className="font-display text-3xl tracking-wide text-sand">CARTE INDISPONIBLE</p>
               <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-                Les frontières chargent depuis les données Natural Earth. Sélectionnez une escale ci-dessous —
-                le voyage continue.
+                Les données géographiques n'ont pas pu être chargées. Sélectionnez une escale
+                ci-dessous — le voyage continue.
               </p>
             </div>
           ) : (
@@ -525,18 +502,6 @@ export default function WorldMap() {
                   </motion.button>
                 )}
               </AnimatePresence>
-
-              {/* état de chargement (bref : données embarquées) — n'afficher que si pas en échec */}
-              {!topo && !failed && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-coal/80 backdrop-blur-[2px]">
-                  <svg width="120" height="24" viewBox="0 0 120 24" aria-hidden>
-                    <path d="M4 18 Q 60 -8 116 14" fill="none" stroke="#E85D04" strokeWidth="1.6" strokeDasharray="5 6" className="dash-crawl" />
-                  </svg>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sand/70">
-                    Traçage des routes aériennes…
-                  </p>
-                </div>
-              )}
 
               {/* fiche hover (desktop) */}
               <AnimatePresence>
