@@ -12,4 +12,7 @@ export default defineConfig({
       port: 3002,
     },
   },
+  json: {
+    stringify: true,
+  },
 });
