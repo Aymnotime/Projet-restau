@@ -28,17 +28,14 @@ export default function MobileGlobe() {
   const animationRef = useRef(0);
 
   useEffect(() => {
-    let active = true;
-    loadWorldTopo()
-      .then((data) => {
-        if (active) setTopo(data);
-      })
-      .catch((err) => {
-        console.error("[MobileGlobe] loadWorldTopo: Échec du chargement des données", err);
-        // En cas d'échec, on ne bloque pas l'UI — le globe restera vide mais fonctionnel
-        if (active) setTopo(null);
-      });
-    return () => { active = false; };
+    const result = loadWorldTopo();
+    if (result.ok) {
+      setTopo(result.data);
+    } else {
+      console.error("[MobileGlobe] loadWorldTopo: Échec du chargement des données", result.error);
+      // En cas d'échec, on ne bloque pas l'UI — le globe restera vide mais fonctionnel
+      setTopo(null);
+    }
   }, []);
 
   useEffect(() => {
