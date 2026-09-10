@@ -205,9 +205,19 @@ export default function WorldMap() {
   /* Données Natural Earth embarquées → disponibles immédiatement. */
   useEffect(() => {
     let on = true;
-    loadWorldTopo()
-      .then((t) => on && setTopo(t))
-      .catch(() => on && setFailed(true));
+    // Chargement synchrone des données embarquées
+    try {
+      const topoData = loadWorldTopo();
+      topoData.then((t) => {
+        if (on) {
+          setTopo(t);
+        }
+      }).catch(() => {
+        if (on) setFailed(true);
+      });
+    } catch {
+      if (on) setFailed(true);
+    }
     return () => { on = false; };
   }, []);
 
