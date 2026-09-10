@@ -13,6 +13,10 @@ export default defineConfig({
     },
   },
   json: {
-    stringify: true,
+    stringify: false,
+    namedExports: true,
+  },
+  optimizeDeps: {
+    include: ["world-atlas"],
   },
 });
